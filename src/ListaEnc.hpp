@@ -4,7 +4,6 @@
 
 #include <stdexcept>  // c++ exceptions
 #include "Elemento.hpp"
-#include <iostream>
 template<typename T>
 class ListaEnc {
 
