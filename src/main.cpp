@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <ListaEnc.hpp>
 
 int main (int argc, char *argv[]) {
 
