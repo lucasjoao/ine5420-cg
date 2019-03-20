@@ -1,5 +1,8 @@
 #include <gtk/gtk.h>
-#include "ListaEnc.hpp"
+#include "objeto.hpp"
+#include "ponto.hpp"
+#include "reta.hpp"
+#include "poligono.hpp"
 
 int main (int argc, char *argv[]) {
   GtkBuilder *builder;
