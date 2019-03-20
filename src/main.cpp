@@ -2,17 +2,18 @@
 #include "ListaEnc.hpp"
 
 int main (int argc, char *argv[]) {
-
-  GtkWidget *window;
+  GtkBuilder *builder;
+  GtkWidget *mainWindow;
 
   gtk_init(&argc, &argv);
 
-  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), nullptr);
-  gtk_widget_show(window);
-  gtk_widget_set_size_request(window, 800, 600);
-  gtk_window_set_title(GTK_WINDOW(window), "INE5420 - João / Lucas");
-  gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER_ALWAYS);
+  builder = gtk_builder_new();
+  gtk_builder_add_from_file(builder, "src/ui.glade", nullptr);
+
+  mainWindow = GTK_WIDGET(gtk_builder_get_object(builder, "mainWindow"));
+  g_signal_connect(mainWindow, "destroy", G_CALLBACK(gtk_main_quit), nullptr);
+
+  gtk_widget_show(mainWindow);
 
   gtk_main();
 
