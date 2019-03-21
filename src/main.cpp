@@ -10,6 +10,15 @@
 GtkBuilder *builder;
 GtkWidget *main_window;
 
+/* ---------- AREA DE DESENHO E SUAS FUNCOES ---------- */
+
+GtkWidget *displayArea;
+cairo_surface_t *surface = nullptr;
+
+void clear_surface();
+gboolean configure_event_cb(GtkWidget *widget, GdkEventConfigure *event, gpointer data);
+gboolean draw_cb(GtkWidget *widget, cairo_t *cr, gpointer data);
+
 /* ---------- MODAIS DE INCLUSAO ---------- */
 
 GtkWidget *reta_window;
@@ -77,10 +86,15 @@ int main (int argc, char *argv[]) {
   gtk_init(&argc, &argv);
 
   builder = gtk_builder_new();
+  // TODO: add verificacao se pegou arquivo
   gtk_builder_add_from_file(builder, "src/ui.glade", nullptr);
 
   main_window = GTK_WIDGET(gtk_builder_get_object(builder, "mainWindow"));
   g_signal_connect(main_window, "destroy", G_CALLBACK(gtk_main_quit), nullptr);
+
+  displayArea = GTK_WIDGET(gtk_builder_get_object(builder, "displayArea"));
+  g_signal_connect(displayArea, "draw", G_CALLBACK(draw_cb), nullptr);
+  g_signal_connect(displayArea, "configure-event", G_CALLBACK(configure_event_cb), nullptr);
 
   gtk_widget_show(main_window);
 
@@ -199,4 +213,33 @@ void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
 
 void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
   std::cout << "Aqui" << std::endl;
+}
+
+void clear_surface() {
+  cairo_t *cr;
+  cr = cairo_create(surface);
+  cairo_set_source_rgb(cr, 1, 1, 1);
+  cairo_paint(cr);
+  cairo_destroy(cr);
+}
+
+gboolean configure_event_cb(GtkWidget *widget, GdkEventConfigure *event, gpointer data) {
+
+  if (surface) {
+    cairo_surface_destroy(surface);
+  }
+
+  surface = gdk_window_create_similar_surface(gtk_widget_get_window(widget),
+                                              CAIRO_CONTENT_COLOR,
+                                              gtk_widget_get_allocated_width(widget),
+                                              gtk_widget_get_allocated_height (widget));
+  clear_surface();
+
+  return TRUE;
+}
+
+gboolean draw_cb(GtkWidget *widget, cairo_t *cr, gpointer data) {
+  cairo_set_source_surface(cr, surface, 0, 0);
+  cairo_paint(cr);
+  return FALSE;
 }
