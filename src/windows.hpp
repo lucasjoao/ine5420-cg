@@ -2,35 +2,37 @@
 #define OBJETO_WINDOWS
 
 #include <string>
+#include "coordenada.hpp"
 
 class Windows {
 
     public:
 
-        Windows(double minX, double minY, double maxX, double maxY) : _minX(minX), _minY(minY),
-        _maxX(maxX), _maxY(maxY) {}
+        Windows(double minX, double minY, double maxX, double maxY) : 
+            _min(Coordenada(minX, minY)), _max(Coordenada(maxX, maxY)) {}
 
-
-        void movimentar(double x) {
-            _minX += x;
-            _minY += x;
-            _maxX += x;
-            _maxY += x;
+        void movimentar(double valor) {
+            _min.mover(valor);
+            _max.mover(valor);
         }
 
-        void zoom(double x) {
-            _minX -= x;
-            _minY -= x;
-            _maxX += x;
-            _maxY += x;
+        void zoom(double valor) {
+            _min.mover(-valor);
+            _max.mover(valor);
+        }
+
+        Coordenada get_min() {
+            return _min;
+        }
+
+        Coordenada get_max() {
+            return _max;
         }
 
     private:
 
-        double _minX;
-        double _minY;
-        double _maxX;
-        double _maxY;
+    Coordenada _min;
+    Coordenada _max;
 
 };
 

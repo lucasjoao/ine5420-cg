@@ -3,6 +3,10 @@
 #include "ponto.hpp"
 #include "reta.hpp"
 #include "poligono.hpp"
+#include "windows.hpp"
+#include "viewport.hpp"
+#include "display_file.hpp"
+
 #include <iostream>
 
 /* ---------- TELA PRINCIPAL ---------- */
@@ -145,6 +149,10 @@ int main (int argc, char *argv[]) {
   g_signal_connect(btn_plgn_add_ponto, "clicked", G_CALLBACK(btn_plgn_add_ponto_clicked), nullptr);
 
   /* ---------- ---------- */
+
+  auto window = new Windows(0,0, 450, 450);
+  auto viewport = new Viewport(0,0, 450, 450);
+  auto display_file = new DisplayFile(viewport, window);
 
   gtk_main();
 

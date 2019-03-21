@@ -8,10 +8,11 @@
 
 
 class DisplayFile {
+
     public:
 
-        DisplayFile() : _lista_objetos(new std::vector<Objeto>()), _viewport(new Viewport(0,0, 800, 600)) {}
-
+        DisplayFile(Viewport* viewport, Windows *window) : _lista_objetos(new std::vector<Objeto>()), _viewport(viewport),
+        _window(window) {}
 
         void adicionar_objeto(const Objeto& obj)  {
             _lista_objetos->push_back(obj);
@@ -20,17 +21,20 @@ class DisplayFile {
         }
 
         void atualizar_viewport() {
+            cairo_surface_t *surface;
+
             for (auto i = _lista_objetos->begin(); i != _lista_objetos->end(); i++) {
                 auto coord = *i->get_coordenadas();
                 auto tipo = *i->get_tipo();
 
-                _viewport->desenhar(tipo, coord);
+                _viewport->desenhar(*i, _window, surface);
             }
         }
 
     private:
         std::vector<Objeto> *_lista_objetos;
         Viewport *_viewport;
+        Windows *_window;
 
 };
 

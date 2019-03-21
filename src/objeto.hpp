@@ -36,7 +36,7 @@ class Objeto {
             return _tipo;
         };
 
-        std::vector<Coordenada> *get_coordenadas() const {
+        std::vector<Coordenada> *get_coordenadas() {
             return _coordenadas;
         };
 

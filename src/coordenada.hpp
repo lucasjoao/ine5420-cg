@@ -5,17 +5,24 @@
 
 class Coordenada {
 
-    static const int x = 0;
-    static const int y = 1;
-
     public:
         Coordenada(double x, double y) {
-            _coordenada = new std::vector<double>();
-            _coordenada->push_back(x);
-            _coordenada->push_back(y);
+            _coordenada = new double[2];
+            _coordenada[0] = x;
+            _coordenada[1] = y;
         }
 
-        std::vector<double> *_coordenada;
+        void mover(double x) {
+            _coordenada[0] += x;
+            _coordenada[1] += x;
+        }
+
+        double* get_coordenada() {
+            return _coordenada;
+        }
+    private:
+
+        double* _coordenada;
 
 };
 
