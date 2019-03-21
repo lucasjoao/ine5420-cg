@@ -265,6 +265,7 @@
     <property name="modal">True</property>
     <property name="default_width">420</property>
     <property name="default_height">300</property>
+    <property name="deletable">False</property>
     <child>
       <placeholder/>
     </child>
@@ -444,6 +445,7 @@
     <property name="modal">True</property>
     <property name="default_width">420</property>
     <property name="default_height">300</property>
+    <property name="deletable">False</property>
     <child>
       <placeholder/>
     </child>
@@ -609,6 +611,7 @@
     <property name="modal">True</property>
     <property name="default_width">420</property>
     <property name="default_height">300</property>
+    <property name="deletable">False</property>
     <child>
       <placeholder/>
     </child>

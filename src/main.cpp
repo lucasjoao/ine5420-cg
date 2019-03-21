@@ -10,6 +10,10 @@
 GtkBuilder *builder;
 GtkWidget *mainWindow;
 
+/* ---------- MODAIS DE INCLUSAO ---------- */
+GtkWidget *retaWindow;
+GtkWidget *pontoWindow;
+GtkWidget *poligonoWindow;
 
 /* ---------- BOTOES TELA PRINCIPAL ---------- */
 GtkButton* btn_zoom_in;
@@ -24,6 +28,17 @@ GtkButton* btn_ponto;
 GtkButton* btn_reta;
 GtkButton* btn_poligono;
 
+/* ---------- BOTOES MODAIS DE INCLUSAO ---------- */
+GtkButton* btn_reta_voltar;
+GtkButton* btn_reta_incluir;
+
+GtkButton* btn_ponto_voltar;
+GtkButton* btn_ponto_incluir;
+
+GtkButton* btn_plgn_voltar;
+GtkButton* btn_plgn_incluir;
+GtkButton* btn_plgn_add_ponto;
+
 /* ---------- FUNCOES DOS BOTOES DA TELA PRINCIPAL ---------- */
 void btn_zoom_in_clicked(GtkWidget *widget, gpointer data);
 void btn_zoom_out_clicked(GtkWidget *widget, gpointer data);
@@ -36,6 +51,17 @@ void btn_right_clicked(GtkWidget *widget, gpointer data);
 void btn_ponto_clicked(GtkWidget *widget, gpointer data);
 void btn_reta_clicked(GtkWidget *widget, gpointer data);
 void btn_poligono_clicked(GtkWidget *widget, gpointer data);
+
+/* ---------- FUNCOES DOS BOTOES DOS MODAIS DE INCLUSAO ---------- */
+void btn_reta_voltar_clicked(GtkWidget *widget, gpointer data);
+void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data);
+
+void btn_ponto_voltar_clicked(GtkWidget *widget, gpointer data);
+void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data);
+
+void btn_plgn_voltar_clicked(GtkWidget *widget, gpointer data);
+void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data);
+void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data);
 
 /* ---------- ---------- */
 
@@ -53,6 +79,11 @@ int main (int argc, char *argv[]) {
 
   gtk_widget_show(mainWindow);
 
+/* ---------- MODAIS DE INCLUSAO ---------- */
+
+  retaWindow = GTK_WIDGET(gtk_builder_get_object(builder, "retaWindow"));
+  pontoWindow = GTK_WIDGET(gtk_builder_get_object(builder, "pontoWindow"));
+  poligonoWindow = GTK_WIDGET(gtk_builder_get_object(builder, "poligonoWindow"));
 
 /* ---------- BOTOES TELA PRINCIPAL ---------- */
 
@@ -75,9 +106,26 @@ int main (int argc, char *argv[]) {
   g_signal_connect (btn_ponto, "clicked", G_CALLBACK (btn_ponto_clicked), NULL);
   g_signal_connect (btn_reta, "clicked", G_CALLBACK (btn_reta_clicked), NULL);
   g_signal_connect (btn_poligono, "clicked", G_CALLBACK (btn_poligono_clicked), NULL);
+
+/* ---------- BOTOES TELA PRINCIPAL ---------- */
+
+  btn_reta_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnRetaVoltar"));
+  btn_reta_incluir = GTK_BUTTON(gtk_builder_get_object(builder, "btnRetaIncluir"));
+  btn_ponto_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnPontoVoltar"));
+  btn_ponto_incluir = GTK_BUTTON(gtk_builder_get_object(builder, "btnPontoIncluir"));
+  btn_plgn_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnPoligonoVoltar"));
+  btn_plgn_incluir = GTK_BUTTON(gtk_builder_get_object(builder, "btnPoligonoIncluir"));
+  btn_plgn_add_ponto = GTK_BUTTON(gtk_builder_get_object(builder, "btnAddPontoPoligono"));
+
+  g_signal_connect(btn_reta_voltar, "clicked", G_CALLBACK(btn_reta_voltar_clicked), nullptr);
+  g_signal_connect(btn_reta_incluir, "clicked", G_CALLBACK(btn_reta_incluir_clicked), nullptr);
+  g_signal_connect(btn_ponto_voltar, "clicked", G_CALLBACK(btn_ponto_voltar_clicked), nullptr);
+  g_signal_connect(btn_ponto_incluir, "clicked", G_CALLBACK(btn_ponto_incluir_clicked), nullptr);
+  g_signal_connect(btn_plgn_voltar, "clicked", G_CALLBACK(btn_plgn_voltar_clicked), nullptr);
+  g_signal_connect(btn_plgn_add_ponto, "clicked", G_CALLBACK(btn_plgn_add_ponto_clicked), nullptr);
 /* ---------- ---------- */
-  
-  
+
+
   gtk_main();
 
   return 0;
@@ -108,13 +156,41 @@ void btn_right_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_ponto_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+  gtk_widget_show(pontoWindow);
 }
 
 void btn_reta_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+  gtk_widget_show(retaWindow);
 }
 
 void btn_poligono_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_show(poligonoWindow);
+}
+
+void btn_reta_voltar_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_hide(retaWindow);
+}
+
+void btn_ponto_voltar_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_hide(pontoWindow);
+}
+
+void btn_plgn_voltar_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_hide(poligonoWindow);
+}
+
+void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
+  std::cout << "Aqui" << std::endl;
+}
+
+void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
+  std::cout << "Aqui" << std::endl;
+}
+
+void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
+  std::cout << "Aqui" << std::endl;
+}
+
+void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
   std::cout << "Aqui" << std::endl;
 }
