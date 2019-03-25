@@ -8,22 +8,21 @@
 #include <gtk/gtk.h>
 
 class Viewport {
-    
 
     public:
 
-        Viewport(double minX, double minY, double maxX, double maxY) : 
-            _min(Coordenada(minX, minY)), _max(Coordenada(maxX, maxY)) {}   
+        Viewport(double minX, double minY, double maxX, double maxY) :
+            _min(Coordenada(minX, minY)), _max(Coordenada(maxX, maxY)) {}
 
-        void desenhar(Objeto *obj, Windows *windows, cairo_surface_t *surface);
+        void desenhar(Objeto obj, Windows *windows, cairo_surface_t *surface);
 
-        void desenhar_ponto(Objeto *obj, Windows *windows, cairo_surface_t *surface);
+        void desenhar_ponto(Objeto obj, Windows *windows, cairo_surface_t *surface);
 
-        void desenhar_reta(Objeto *obj, Windows *windows, cairo_surface_t *surface);
+        void desenhar_reta(Objeto obj, Windows *windows, cairo_surface_t *surface);
 
         void desenhar_poligono(std::vector<Coordenada> *coordenadas);
 
-        double*  transformada_viewport(double *coordenada, Coordenada *windows_min, Coordenada *windows_max);
+        double* transformada_viewport(Coordenada *coordenada, Coordenada *windows_min, Coordenada *windows_max);
 
     private:
 
@@ -31,26 +30,26 @@ class Viewport {
         Coordenada _max;
 };
 
-void Viewport::desenhar(Objeto *obj, Windows *windows, cairo_surface_t *surface) {
-    auto tipo = obj->get_tipo();
-    
+void Viewport::desenhar(Objeto obj, Windows *windows, cairo_surface_t *surface) {
+    auto tipo = obj.get_tipo();
+
     if (tipo->compare("Ponto")) {
         desenhar_ponto(obj, windows, surface);
     } else if (tipo->compare("Reta")) {
         desenhar_reta(obj, windows, surface);
-    } 
+    }
 }
 
 
-void Viewport::desenhar_ponto(Objeto *obj, Windows *windows, cairo_surface_t *surface) {
+void Viewport::desenhar_ponto(Objeto obj, Windows *windows, cairo_surface_t *surface) {
 
-    std::vector<Coordenada> *coordenadas = obj->get_coordenadas();
-    auto c_obj = coordenadas[0];
+    std::vector<Coordenada> *coordenadas = obj.get_coordenadas();
+    auto c_obj = coordenadas->at(0);
 
     auto w_min = windows->get_min();
     auto w_max = windows->get_max();
 
-    auto c = transformada_viewport(c_obj, w_min, w_max);
+    auto c = Viewport::transformada_viewport(&c_obj, &w_min, &w_max);
     auto x = 0;
     auto y = 1;
 
@@ -65,17 +64,17 @@ void Viewport::desenhar_ponto(Objeto *obj, Windows *windows, cairo_surface_t *su
     cairo_stroke(cairo);
 }
 
-void Viewport::desenhar_reta(Objeto *obj, Windows *windows, cairo_surface_t *surface) {
+void Viewport::desenhar_reta(Objeto obj, Windows *windows, cairo_surface_t *surface) {
 
 
     auto w_min = windows->get_min();
     auto w_max = windows->get_max();
 
-    auto c_obj = obj->get_coordenadas()[0]->get_coordenada();
-    auto c1 = transformada_viewport(c_obj, w_min, w_max);
-    
-    c_obj = obj->get_coordenadas()[1]->get_coordenada();
-    auto c2 = transformada_viewport(c_obj, w_min, w_max);
+    auto c_obj = obj.get_coordenadas()->at(0);
+    auto c1 = transformada_viewport(&c_obj, &w_min, &w_max);
+
+    c_obj = obj.get_coordenadas()->at(1);
+    auto c2 = transformada_viewport(&c_obj, &w_min, &w_max);
 
     auto x = 0;
     auto y = 1;
@@ -94,10 +93,10 @@ void Viewport::desenhar_reta(Objeto *obj, Windows *windows, cairo_surface_t *sur
 
 void Viewport::desenhar_poligono(std::vector<Coordenada> *coordenadas) { }
 
-double* Viewport::transformada_viewport(double *coordenada, Coordenada *windows_min, Coordenada *windows_max) {
-    auto c = coordenada;
-    
-    auto w_min = windows_min->get_cordenada();
+double* Viewport::transformada_viewport(Coordenada *coordenada, Coordenada *windows_min, Coordenada *windows_max) {
+    auto c = coordenada->get_coordenada();
+
+    auto w_min = windows_min->get_coordenada();
     auto w_max = windows_max->get_coordenada();
 
     auto x = 0;
@@ -112,6 +111,5 @@ double* Viewport::transformada_viewport(double *coordenada, Coordenada *windows_
 
     return Coordenada(xvp, yvp).get_coordenada();
 }
-
 
 #endif
