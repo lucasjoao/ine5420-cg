@@ -24,8 +24,8 @@ class DisplayFile {
             cairo_surface_t *surface;
 
             for (auto i = _lista_objetos->begin(); i != _lista_objetos->end(); i++) {
-                auto coord = *i->get_coordenadas();
-                auto tipo = *i->get_tipo();
+                auto coord = *i->coordenadas();
+                auto tipo = i->tipo();
 
                 _viewport->desenhar(*i, _window, surface);
             }

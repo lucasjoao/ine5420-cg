@@ -31,19 +31,31 @@ class Viewport {
 };
 
 void Viewport::desenhar(Objeto obj, Windows *windows, cairo_surface_t *surface) {
-    auto tipo = obj.get_tipo();
+    auto tipo = obj.tipo();
 
-    if (tipo->compare("Ponto")) {
-        desenhar_ponto(obj, windows, surface);
-    } else if (tipo->compare("Reta")) {
-        desenhar_reta(obj, windows, surface);
+    switch (tipo)
+    {
+        case tipo_t::PONTO:
+            /* code */
+            break;
+
+        case tipo_t::RETA:
+            /* code */
+            break;
+
+        case tipo_t::POLIGONO:
+            /* code */
+            break;
+
+        default:
+            break;
     }
 }
 
 
 void Viewport::desenhar_ponto(Objeto obj, Windows *windows, cairo_surface_t *surface) {
 
-    std::vector<Coordenada> *coordenadas = obj.get_coordenadas();
+    std::vector<Coordenada> *coordenadas = obj.coordenadas();
     auto c_obj = coordenadas->at(0);
 
     auto w_min = windows->get_min();
@@ -70,10 +82,10 @@ void Viewport::desenhar_reta(Objeto obj, Windows *windows, cairo_surface_t *surf
     auto w_min = windows->get_min();
     auto w_max = windows->get_max();
 
-    auto c_obj = obj.get_coordenadas()->at(0);
+    auto c_obj = obj.coordenadas()->at(0);
     auto c1 = transformada_viewport(&c_obj, &w_min, &w_max);
 
-    c_obj = obj.get_coordenadas()->at(1);
+    c_obj = obj.coordenadas()->at(1);
     auto c2 = transformada_viewport(&c_obj, &w_min, &w_max);
 
     auto x = 0;
@@ -94,22 +106,22 @@ void Viewport::desenhar_reta(Objeto obj, Windows *windows, cairo_surface_t *surf
 void Viewport::desenhar_poligono(std::vector<Coordenada> *coordenadas) { }
 
 double* Viewport::transformada_viewport(Coordenada *coordenada, Coordenada *windows_min, Coordenada *windows_max) {
-    auto c = coordenada->get_coordenada();
+    auto c = coordenada->coordenada();
 
-    auto w_min = windows_min->get_coordenada();
-    auto w_max = windows_max->get_coordenada();
+    auto w_min = windows_min->coordenada();
+    auto w_max = windows_max->coordenada();
 
     auto x = 0;
     auto y = 1;
 
-    auto vp_max = _max.get_coordenada();
-    auto vp_min = _min.get_coordenada();
+    auto vp_max = _max.coordenada();
+    auto vp_min = _min.coordenada();
 
     double xvp =  ((c[x] - w_min[x])/(w_max[x] - w_min[x]))*(vp_max[x]- vp_min[x]);
 
     double yvp = ( 1 - ((c[y] - w_min[y])/ (w_max[y] - w_min[y]))  ) * (vp_max[y] - vp_min[y]);
 
-    return Coordenada(xvp, yvp).get_coordenada();
+    return Coordenada(xvp, yvp).coordenada();
 }
 
 #endif

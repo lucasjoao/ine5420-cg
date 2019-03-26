@@ -7,8 +7,8 @@
 class Ponto : public Objeto {
     
     public:
-        Ponto(const std::string& nome,  double x, double y): Objeto(nome, "Ponto") {
-            _coordenadas->push_back(Coordenada(x,y));
+        Ponto(const std::string& nome,  Coordenada c): Objeto(nome, tipo_t::PONTO) {
+            _coordenadas->push_back(c);
         };
 
 
