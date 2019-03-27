@@ -4,47 +4,49 @@
 #include <string>
 #include "objeto.hpp"
 #include "coordenada.hpp"
-#include "windows.hpp"
+#include "window.hpp"
 #include <gtk/gtk.h>
-
+#include <iostream>
 class Viewport {
 
     public:
 
         Viewport(double minX, double minY, double maxX, double maxY) :
-            _min(Coordenada(minX, minY)), _max(Coordenada(maxX, maxY)) {}
+            _minima(Coordenada(minX, minY)), _maxima(Coordenada(maxX, maxY)) {}
 
-        void desenhar(Objeto obj, Windows *windows, cairo_surface_t *surface);
+        void desenhar(Objeto obj, Window *window, cairo_surface_t *surface);
 
-        void desenhar_ponto(Objeto obj, Windows *windows, cairo_surface_t *surface);
+        void desenhar_ponto(Objeto obj, Window *window, cairo_surface_t *surface);
 
-        void desenhar_reta(Objeto obj, Windows *windows, cairo_surface_t *surface);
+        void desenhar_reta(Objeto obj, Window *window, cairo_surface_t *surface);
 
-        void desenhar_poligono(std::vector<Coordenada> *coordenadas);
+        void desenhar_poligono(Objeto obj, Window *window, cairo_surface_t *surface);
 
-        double* transformada_viewport(Coordenada *coordenada, Coordenada *windows_min, Coordenada *windows_max);
+        void limpar_tela(cairo_surface_t *s);
+
+        Coordenada transformada_viewport(Coordenada coordenada, Window *window);
 
     private:
 
-        Coordenada _min;
-        Coordenada _max;
+        Coordenada _minima;
+        Coordenada _maxima;
 };
 
-void Viewport::desenhar(Objeto obj, Windows *windows, cairo_surface_t *surface) {
+void Viewport::desenhar(Objeto obj, Window *window, cairo_surface_t *surface) {
     auto tipo = obj.tipo();
 
     switch (tipo)
     {
         case tipo_t::PONTO:
-            /* code */
+            desenhar_ponto(obj, window, surface);
             break;
 
         case tipo_t::RETA:
-            /* code */
+            desenhar_reta(obj, window, surface);
             break;
 
         case tipo_t::POLIGONO:
-            /* code */
+            desenhar_poligono(obj, window, surface);
             break;
 
         default:
@@ -53,75 +55,59 @@ void Viewport::desenhar(Objeto obj, Windows *windows, cairo_surface_t *surface) 
 }
 
 
-void Viewport::desenhar_ponto(Objeto obj, Windows *windows, cairo_surface_t *surface) {
-
-    std::vector<Coordenada> *coordenadas = obj.coordenadas();
-    auto c_obj = coordenadas->at(0);
-
-    auto w_min = windows->get_min();
-    auto w_max = windows->get_max();
-
-    auto c = Viewport::transformada_viewport(&c_obj, &w_min, &w_max);
-    auto x = 0;
-    auto y = 1;
-
-
-    cairo_t *cairo;
-    cairo = cairo_create(surface);
-
-    cairo_set_source_rgb(cairo,c[x],c[y],0);
-    cairo_set_line_width(cairo, 1);
-    cairo_fill_preserve(cairo);
-
-    cairo_stroke(cairo);
+void Viewport::desenhar_ponto(Objeto obj, Window *window, cairo_surface_t *surface) {
+    // IMPLEMENTAR
 }
 
-void Viewport::desenhar_reta(Objeto obj, Windows *windows, cairo_surface_t *surface) {
+void Viewport::desenhar_reta(Objeto obj, Window *window, cairo_surface_t *surface) {
 
+    auto c_obj = obj.coordenada(0);
+    auto c1 = transformada_viewport(c_obj, window);
 
-    auto w_min = windows->get_min();
-    auto w_max = windows->get_max();
-
-    auto c_obj = obj.coordenadas()->at(0);
-    auto c1 = transformada_viewport(&c_obj, &w_min, &w_max);
-
-    c_obj = obj.coordenadas()->at(1);
-    auto c2 = transformada_viewport(&c_obj, &w_min, &w_max);
-
-    auto x = 0;
-    auto y = 1;
+    c_obj = obj.coordenada(1);
+    auto c2 = transformada_viewport(c_obj, window);
 
     cairo_t *cairo;
     cairo = cairo_create(surface);
     cairo_set_source_rgb(cairo,0,0,0);
     cairo_set_line_width(cairo, 1);
 
-    cairo_move_to(cairo, c1[x], c2[y]);
-    cairo_move_to(cairo, c2[x], c2[y]);
+    cairo_move_to(cairo, c1.valor(0) , c1.valor(1));
+    cairo_move_to(cairo, c2.valor(0), c2.valor(1));
 
     cairo_stroke(cairo);
-
 }
 
-void Viewport::desenhar_poligono(std::vector<Coordenada> *coordenadas) { }
+void Viewport::desenhar_poligono(Objeto obj, Window *window, cairo_surface_t *surface) { }
 
-double* Viewport::transformada_viewport(Coordenada *coordenada, Coordenada *windows_min, Coordenada *windows_max) {
-    auto c = coordenada->coordenada();
+Coordenada Viewport::transformada_viewport(Coordenada c, Window *window) {
 
-    auto w_min = windows_min->coordenada();
-    auto w_max = windows_max->coordenada();
+    auto w_min = window->coordenada(Window::minima);
+    auto w_max = window->coordenada(Window::maxima);
 
     auto x = 0;
     auto y = 1;
 
-    auto vp_max = _max.coordenada();
-    auto vp_min = _min.coordenada();
+    double xvp =  ((c.valor(x) - w_min.valor(x))/(w_max.valor(x) - w_min.valor(x)))*(_maxima.valor(x)- _minima.valor(x));
 
-    double xvp =  ((c[x] - w_min[x])/(w_max[x] - w_min[x]))*(vp_max[x]- vp_min[x]);
+    double yvp = ( 1 - ((c.valor(y) - w_min.valor(x))/ (w_max.valor(y) - w_min.valor(y)))  ) * (_maxima.valor(y) - _minima.valor(y));
 
-    double yvp = ( 1 - ((c[y] - w_min[y])/ (w_max[y] - w_min[y]))  ) * (vp_max[y] - vp_min[y]);
-
-    return Coordenada(xvp, yvp).coordenada();
+    return Coordenada(xvp, yvp);
 }
+
+void limpar_tela(cairo_surface_t *s) {
+
+  cairo_t *cr;
+
+  cr = cairo_create (s);
+
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+
+}
+
+
 
 #endif

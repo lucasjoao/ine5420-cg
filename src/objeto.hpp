@@ -7,7 +7,7 @@
 typedef std::vector<Coordenada> coordenadas_t;
 
 enum tipo_t {
-    PONTO, RETA, POLIGONO
+    PONTO, RETA, POLIGONO, WINDOW
 };
 
 class Objeto {
@@ -22,7 +22,9 @@ class Objeto {
 
         tipo_t tipo() const;
 
-        coordenadas_t * coordenadas();
+        Coordenada coordenada(size_t posicao);
+
+        size_t quantidade_coordenada();
 
         bool operator==(const Objeto& obj) const;
 
@@ -53,9 +55,14 @@ tipo_t Objeto::tipo() const {
     return _tipo;
 }
 
-coordenadas_t * Objeto::coordenadas() {
-    return _coordenadas;
+Coordenada Objeto::coordenada(size_t posicao) {
+    return _coordenadas->at(posicao);
 }
+
+size_t Objeto::quantidade_coordenada() {
+    return _coordenadas->size();
+}
+
 
 bool Objeto::operator==(const Objeto& obj) const {
     return (_nome.compare(obj._nome) == 0) && _tipo == obj._tipo; 

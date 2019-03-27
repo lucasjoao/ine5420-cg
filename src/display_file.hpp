@@ -3,7 +3,7 @@
 
 #include <string>
 #include "objeto.hpp"
-#include "windows.hpp"
+#include "window.hpp"
 #include "viewport.hpp"
 
 
@@ -11,7 +11,7 @@ class DisplayFile {
 
     public:
 
-        DisplayFile(Viewport* viewport, Windows *window) : _lista_objetos(new std::vector<Objeto>()), _viewport(viewport),
+        DisplayFile(Viewport* viewport, Window *window) : _lista_objetos(new std::vector<Objeto>()), _viewport(viewport),
         _window(window) {}
 
         void adicionar_objeto(const Objeto& obj)  {
@@ -21,20 +21,20 @@ class DisplayFile {
         }
 
         void atualizar_viewport() {
-            cairo_surface_t *surface;
+            // cairo_surface_t *surface;
 
-            for (auto i = _lista_objetos->begin(); i != _lista_objetos->end(); i++) {
-                auto coord = *i->coordenadas();
-                auto tipo = i->tipo();
+            // for (auto i = _lista_objetos->begin(); i != _lista_objetos->end(); i++) {
+            //     auto coord = *i->coordenadas();
+            //     auto tipo = i->tipo();
 
-                _viewport->desenhar(*i, _window, surface);
-            }
+            //     _viewport->desenhar(*i, _window, surface);
+            // }
         }
 
     private:
         std::vector<Objeto> *_lista_objetos;
         Viewport *_viewport;
-        Windows *_window;
+        Window *_window;
 
 };
 

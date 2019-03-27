@@ -17,11 +17,7 @@ class Coordenada {
 
         double valor(size_t posicao);
 
-        void mover(double v);
-
         void alterar(double v, size_t posicao);
-
-        double *coordenada();
 
     private:
 
@@ -36,19 +32,12 @@ Coordenada::Coordenada(double x, double y) {
     _coordenada[Coordenada::z] = 1;
 }
 
+void Coordenada::alterar(double v, size_t posicao) {
+    _coordenada[posicao] = v;
+}
+
 double Coordenada::valor(size_t posicao) {
     return _coordenada[posicao];
 }
-
-
-void Coordenada::mover(double v) {
-    _coordenada[Coordenada::x] += v;
-    _coordenada[Coordenada::y] += v;
-}
-
-double* Coordenada::coordenada() {
-    return _coordenada;
-}
-
 
 #endif
