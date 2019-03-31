@@ -30,7 +30,6 @@ class Objeto {
 
         bool operator!=(const Objeto& obj) const;
 
-
     protected:
         std::string _nome;
         tipo_t _tipo;

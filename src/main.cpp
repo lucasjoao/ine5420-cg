@@ -1,12 +1,6 @@
 #include <gtk/gtk.h>
-#include "objeto.hpp"
-#include "ponto.hpp"
-#include "reta.hpp"
-#include "poligono.hpp"
-#include "window.hpp"
-#include "viewport.hpp"
-#include "display_file.hpp"
 
+#include "controlador.hpp"
 #include <iostream>
 
 /* ---------- TELA PRINCIPAL ---------- */
@@ -55,6 +49,26 @@ GtkButton* btn_plgn_voltar;
 GtkButton* btn_plgn_incluir;
 GtkButton* btn_plgn_add_ponto;
 
+
+/* ---------- ENTRADAS MODAIS DE INCLUSAO ---------- */
+GtkEntry* entry_ponto_nome;
+GtkEntry* entry_ponto_x1;
+GtkEntry* entry_ponto_y1;
+GtkEntry* entry_ponto_z1;
+
+GtkEntry* entry_reta_nome;
+GtkEntry* entry_reta_inicio_x1;
+GtkEntry* entry_reta_inicio_y1;
+GtkEntry* entry_reta_inicio_z1;
+GtkEntry* entry_reta_final_x1;
+GtkEntry* entry_reta_final_y1;
+GtkEntry* entry_reta_final_z1;
+
+GtkEntry* entry_poligono_nome;
+GtkEntry* entry_poligono_x1;
+GtkEntry* entry_poligono_y1;
+GtkEntry* entry_poligono_z1;
+
 /* ---------- FUNCOES DOS BOTOES DA TELA PRINCIPAL ---------- */
 
 void btn_zoom_in_clicked(GtkWidget *widget, gpointer data);
@@ -83,7 +97,7 @@ void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data);
 
 /* ---------- ---------- */
 
-
+static Controlador *controlador;
 
 int main (int argc, char *argv[]) {
 
@@ -148,7 +162,29 @@ int main (int argc, char *argv[]) {
   g_signal_connect(btn_plgn_incluir, "clicked", G_CALLBACK(btn_plgn_incluir_clicked), nullptr);
   g_signal_connect(btn_plgn_add_ponto, "clicked", G_CALLBACK(btn_plgn_add_ponto_clicked), nullptr);
 
+/* ---------- ENTRADAS MODAIS DE INCLUSAO ---------- */
+
+  entry_ponto_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoNome"));
+  entry_ponto_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoX1"));
+  entry_ponto_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoY1"));
+  entry_ponto_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoZ1"));
+
+  entry_reta_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaNome"));
+  entry_reta_inicio_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaInicioX1"));
+  entry_reta_inicio_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaInicioY1"));
+  entry_reta_inicio_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaInicioZ1"));
+  entry_reta_final_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalX1"));
+  entry_reta_final_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalY1"));
+  entry_reta_final_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalZ1"));
+
+
   /* ---------- ---------- */
+
+  auto window = new Window(Coordenada(0,0), Coordenada(450,450));
+  auto viewport = new Viewport(surface, 0, 0, 450, 450);
+  auto display_file = new DisplayFile();
+
+  controlador = new Controlador(display_file, window, viewport);
 
   gtk_main();
 
@@ -205,11 +241,38 @@ void btn_plgn_voltar_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+  auto nome = gtk_entry_get_text(entry_reta_nome); 
+  auto x1 = atof(gtk_entry_get_text(entry_reta_inicio_x1));
+  auto y1 = atof(gtk_entry_get_text(entry_reta_inicio_y1));
+
+  auto x2 = atof(gtk_entry_get_text(entry_reta_final_x1));
+  auto y2 = atof(gtk_entry_get_text(entry_reta_final_y1));
+
+
+  gtk_entry_set_text(entry_reta_nome,"");
+  gtk_entry_set_text(entry_reta_inicio_x1,"");
+  gtk_entry_set_text(entry_reta_inicio_y1,"");
+  gtk_entry_set_text(entry_reta_inicio_z1,"");
+  gtk_entry_set_text(entry_reta_final_x1,"");
+  gtk_entry_set_text(entry_reta_final_y1,"");
+  gtk_entry_set_text(entry_reta_final_z1,"");
+
+
+  controlador->adicionar_reta(nome, x1, y1, x2, y2);
+
 }
 
 void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+  auto nome = gtk_entry_get_text(entry_ponto_nome); 
+  auto x1 = atof(gtk_entry_get_text(entry_ponto_x1));
+  auto y1 = atof(gtk_entry_get_text(entry_ponto_y1));
+
+  gtk_entry_set_text(entry_ponto_nome,"");
+  gtk_entry_set_text(entry_ponto_x1,"");
+  gtk_entry_set_text(entry_ponto_y1,"");
+  gtk_entry_set_text(entry_ponto_z1,"");
+
+  controlador->adicionar_ponto(nome, x1, y1);
 }
 
 void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
