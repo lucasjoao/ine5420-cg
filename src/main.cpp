@@ -177,6 +177,11 @@ int main (int argc, char *argv[]) {
   entry_reta_final_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalY1"));
   entry_reta_final_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalZ1"));
 
+  entry_poligono_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoNome"));
+  entry_poligono_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoX1"));
+  entry_poligono_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoY1"));
+  entry_poligono_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoZ1"));
+
 
   /* ---------- ---------- */
 
@@ -225,6 +230,7 @@ void btn_reta_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_poligono_clicked(GtkWidget *widget, gpointer data) {
+  controlador->adicionar_poligono(operacao_poligono_t::ADICIONAR_PONTO, 0, 0,0);
   gtk_widget_show(plgn_window);
 }
 
@@ -237,6 +243,7 @@ void btn_ponto_voltar_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_plgn_voltar_clicked(GtkWidget *widget, gpointer data) {
+  controlador->adicionar_poligono(operacao_poligono_t::CANCELAR, 0, 0,0);
   gtk_widget_hide(plgn_window);
 }
 
@@ -276,11 +283,29 @@ void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+
+  auto nome = gtk_entry_get_text(entry_poligono_nome); 
+
+  gtk_entry_set_text(entry_poligono_nome,"");
+  gtk_entry_set_text(entry_poligono_x1,"");
+  gtk_entry_set_text(entry_poligono_y1,"");
+  gtk_entry_set_text(entry_poligono_z1,"");
+
+  controlador->adicionar_poligono(operacao_poligono_t::CONCLUIR, nome, 0, 0);
+  controlador->adicionar_poligono(operacao_poligono_t::NOVO, 0, 0, 0);
 }
 
 void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+
+  auto x1 = atof(gtk_entry_get_text(entry_poligono_x1));
+  auto y1 = atof(gtk_entry_get_text(entry_poligono_y1));
+
+  gtk_entry_set_text(entry_poligono_x1,"");
+  gtk_entry_set_text(entry_poligono_y1,"");
+  gtk_entry_set_text(entry_poligono_z1,"");
+
+  controlador->adicionar_poligono(operacao_poligono_t::ADICIONAR_PONTO, 0, x1, y1);
+
 }
 
 static void clear_surface() {

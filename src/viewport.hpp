@@ -74,8 +74,8 @@ void Viewport::desenhar_ponto(Objeto &obj, Window &window) {
     cairo_set_source_rgb(cairo,0,0,0);
     cairo_set_line_width(cairo, 1);
 
-    cairo_move_to(cairo, c.valor(0)+10, c.valor(1)+10);
-	cairo_arc(cairo, c.valor(0)+10, c.valor(0)+10, 1.0, 0.0, (2*G_PI) );
+    cairo_move_to(cairo, c.valor(0), c.valor(1));
+	cairo_arc(cairo, c.valor(0), c.valor(1), 1.0, 0.0, (2*G_PI) );
 	cairo_fill(cairo);
 }
 
@@ -113,8 +113,8 @@ void Viewport::desenhar_poligono(Objeto &obj, Window &window) {
         auto c_atual = obj.coordenada(i);
         auto c2 = transformada_viewport(c_atual, window);
 
-        cairo_move_to(cairo, c_anterior.valor(0) , c_anterior.valor(1));
-        cairo_line_to(cairo, c_atual.valor(0), c_atual.valor(1));
+        cairo_move_to(cairo, c1.valor(0) , c1.valor(1));
+        cairo_line_to(cairo, c2.valor(0), c2.valor(1));
         cairo_stroke(cairo);
     }
 
@@ -124,8 +124,8 @@ void Viewport::desenhar_poligono(Objeto &obj, Window &window) {
     auto c_atual = obj.coordenada(0);
     auto c2 = transformada_viewport(c_atual, window);
 
-    cairo_move_to(cairo, c_anterior.valor(0) , c_anterior.valor(1));
-    cairo_line_to(cairo, c_atual.valor(0), c_atual.valor(1));
+    cairo_move_to(cairo, c1.valor(0) , c1.valor(1));
+    cairo_line_to(cairo, c2.valor(0), c2.valor(1));
 
     cairo_stroke(cairo);
 

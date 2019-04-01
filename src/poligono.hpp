@@ -11,7 +11,7 @@ class Poligono : public Objeto {
     public:
         Poligono(const std::string& nome): Objeto(nome, tipo_t::POLIGONO) {}
 
-        void adicionar_ponto(double x, double y) {
+        void adicionar_coordenada(double x, double y) {
             _coordenadas->push_back(Coordenada(x,y));
         }
 
