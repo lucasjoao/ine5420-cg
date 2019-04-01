@@ -182,11 +182,10 @@ int main (int argc, char *argv[]) {
   entry_poligono_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoY1"));
   entry_poligono_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoZ1"));
 
-
   /* ---------- ---------- */
 
-  auto window = new Window(Coordenada(0,0), Coordenada(450,450));
-  auto viewport = new Viewport(surface, 0, 0, 450, 450);
+  auto window = new Window(Coordenada(0,0), Coordenada(500, 500));
+  auto viewport = new Viewport(surface, 0, 0, 500, 500);
   auto display_file = new DisplayFile();
 
   controlador = new Controlador(display_file, window, viewport);

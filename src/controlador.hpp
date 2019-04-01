@@ -27,7 +27,6 @@ class Controlador {
 
     public:
 
-
         Controlador(DisplayFile* display_file, Window *window, Viewport *viewport):
             _display_file(display_file), _window(window), _viewport(viewport),
             _coordenada_poligono(new std::vector<Coordenada>()) {}
