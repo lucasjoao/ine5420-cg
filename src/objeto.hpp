@@ -11,6 +11,8 @@ enum tipo_t {
 };
 
 class Objeto {
+    public:
+        static size_t _id;
 
     public:
 
@@ -36,8 +38,36 @@ class Objeto {
         std::vector<Coordenada> _coordenadas;
 };
 
+size_t Objeto::_id = 0;
+
 Objeto::Objeto(const std::string& nome, tipo_t tipo) {
-    _nome = std::string(nome);
+    _id++;
+
+    auto apelido = std::to_string(_id) + "-";
+    switch (tipo)
+    {
+        case PONTO:
+            apelido += "PONTO";
+            break;
+
+        case RETA:
+            apelido += "RETA";
+            break;
+
+        case POLIGONO:
+            apelido += "POLIGONO";
+            break;
+
+        case WINDOW:
+            apelido += "WINDOW";
+            break;
+
+        default:
+            break;
+    }
+
+
+    _nome = apelido;
     _tipo = tipo;
     _coordenadas = coordenadas_t();
 }

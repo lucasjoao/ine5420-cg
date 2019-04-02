@@ -17,5 +17,12 @@
 
 ### Pre-requisitos
 
-* Implementar multiplicacao entre matrizes
-* Implementar multiplicacao entre coordenada e matriz
+* Implementar multiplicação entre matrizes
+* Implementar multiplicação entre coordenada e matriz
+
+## Erros
+
+* Não é possivel pegar ler os nomes dos objetos da tela (gtk_entry)
+  * Solucao provisória: gerar nomes automáticos
+
+* Adicionado coordenada (0,0) no poligono
