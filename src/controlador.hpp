@@ -55,14 +55,14 @@ class Controlador {
 
 void Controlador::adicionar_ponto(const char* nome, double x, double y) {
     auto obj = new Ponto(nome, Coordenada(x,y));
-    _display_file->adicionar_objeto(obj);
+    _display_file->adicionar_objeto(*obj);
 
     _viewport->desenhar_ponto(*obj, *_window);
 }
 
 void Controlador::adicionar_reta(const char* nome, double x1, double y1, double x2, double y2) {
     auto reta = new Reta(nome, Coordenada(x1,y1), Coordenada(x2,y2));
-    _display_file->adicionar_objeto(reta);
+    _display_file->adicionar_objeto(*reta);
     _viewport->desenhar(*reta, *_window);
 }
 
@@ -95,7 +95,7 @@ void Controlador::adicionar_poligono(operacao_poligono_t operacao, const char* n
             }
 
             _coordenada_poligono->clear();
-            _display_file->adicionar_objeto(poligono);
+            _display_file->adicionar_objeto(*poligono);
             obj = poligono;
             _viewport->desenhar(*obj, *_window);
             break;
@@ -153,7 +153,7 @@ void Controlador::atualizar_tela() {
 
     for(size_t i = 0; i < _display_file->tamanho(); i++) {
         auto obj = _display_file->objeto(i);
-        _viewport->desenhar(*obj, *_window);
+        _viewport->desenhar(obj, *_window);
     }
 }
 

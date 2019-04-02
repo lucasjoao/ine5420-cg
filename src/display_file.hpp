@@ -10,26 +10,26 @@ class DisplayFile {
 
     public:
 
-        DisplayFile() : _lista_objetos(new std::vector<Objeto*>()) {}
+        DisplayFile() : _lista_objetos(new std::vector<Objeto>()) {}
 
-        void adicionar_objeto(Objeto *obj);
+        void adicionar_objeto(Objeto &obj);
 
-        Objeto* objeto(size_t posicao);
+        Objeto& objeto(size_t posicao);
 
         void remover_objeto(const std::string& nome);
 
         size_t tamanho();
 
     private:
-        std::vector<Objeto*> *_lista_objetos;
+        std::vector<Objeto> *_lista_objetos;
 
 };
 
-void DisplayFile::adicionar_objeto(Objeto *obj) {
+void DisplayFile::adicionar_objeto(Objeto &obj) {
     _lista_objetos->push_back(obj);
 }
 
-Objeto* DisplayFile::objeto(size_t posicao) {
+Objeto& DisplayFile::objeto(size_t posicao) {
     _lista_objetos->at(posicao);
 }
 

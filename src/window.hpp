@@ -12,8 +12,8 @@ class Window: public Objeto {
     public:
 
         Window(Coordenada minima, Coordenada maxima) : Objeto("Window", tipo_t::WINDOW) {
-            _coordenadas->push_back(minima);
-            _coordenadas->push_back(maxima);
+            _coordenadas.push_back(minima);
+            _coordenadas.push_back(maxima);
         }
 
 };

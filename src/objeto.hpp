@@ -18,7 +18,7 @@ class Objeto {
 
         ~Objeto();
 
-        std::string nome() const;
+        const std::string& nome() const;
 
         tipo_t tipo() const;
 
@@ -33,20 +33,18 @@ class Objeto {
     protected:
         std::string _nome;
         tipo_t _tipo;
-        std::vector<Coordenada> *_coordenadas;
+        std::vector<Coordenada> _coordenadas;
 };
 
 Objeto::Objeto(const std::string& nome, tipo_t tipo) {
     _nome = std::string(nome);
     _tipo = tipo;
-    _coordenadas = new coordenadas_t();
+    _coordenadas = coordenadas_t();
 }
 
-Objeto::~Objeto() {
-    delete _coordenadas;
-}
+Objeto::~Objeto() {}
 
-std::string Objeto::nome() const {
+const std::string& Objeto::nome() const {
     return _nome;
 }
 
@@ -55,11 +53,11 @@ tipo_t Objeto::tipo() const {
 }
 
 Coordenada Objeto::coordenada(size_t posicao) {
-    return _coordenadas->at(posicao);
+    return _coordenadas.at(posicao);
 }
 
 size_t Objeto::quantidade_coordenada() {
-    return _coordenadas->size();
+    return _coordenadas.size();
 }
 
 
