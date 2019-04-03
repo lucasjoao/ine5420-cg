@@ -17,6 +17,11 @@ static void clear_surface();
 static gboolean configure_event_cb(GtkWidget *widget, GdkEventConfigure *event, gpointer data);
 static gboolean draw_cb(GtkWidget *widget, cairo_t *cr, gpointer data);
 
+/* ---------- LISTA OBJETO ---------- */
+GtkCellRenderer *renderer;
+GtkTreeView *tree_view;
+GtkListStore *list_store;
+
 /* ---------- MODAIS DE INCLUSAO ---------- */
 
 GtkWidget *reta_window;
@@ -116,6 +121,21 @@ int main (int argc, char *argv[]) {
 
   gtk_widget_show(main_window);
 
+  /* ---------- LISTA OBJETO ---------- */
+  tree_view = GTK_TREE_VIEW( gtk_builder_get_object( builder, "objectTreeView" ) );
+  list_store = GTK_LIST_STORE( gtk_builder_get_object( builder, "liststore1" ) );
+
+  list_store = gtk_list_store_new (1, G_TYPE_STRING);
+
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_insert_column_with_attributes(tree_view, -1, "Nome", renderer, "text", 0, NULL);
+
+  gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL (list_store));
+  gtk_tree_view_column_set_min_width ( gtk_tree_view_get_column (tree_view, 0), 100 );
+  gtk_tree_view_column_set_alignment ( gtk_tree_view_get_column (tree_view, 0), 0.5 );
+
+
+
   /* ---------- MODAIS DE INCLUSAO ---------- */
 
   reta_window = GTK_WIDGET(gtk_builder_get_object(builder, "retaWindow"));
@@ -188,7 +208,7 @@ int main (int argc, char *argv[]) {
   auto viewport = new Viewport(surface, 0, 0, 500, 500);
   auto display_file = new DisplayFile();
 
-  controlador = new Controlador(display_file, window, viewport);
+  controlador = new Controlador(display_file, window, viewport, list_store);
 
   gtk_main();
 
@@ -265,7 +285,6 @@ void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
 
 
   controlador->adicionar_reta(nome, x1, y1, x2, y2);
-
 }
 
 void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
@@ -279,6 +298,7 @@ void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_ponto_z1,"");
 
   controlador->adicionar_ponto(nome, x1, y1);
+
 }
 
 void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
@@ -292,6 +312,7 @@ void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
 
   controlador->adicionar_poligono(operacao_poligono_t::CONCLUIR, nome, 0, 0);
   controlador->adicionar_poligono(operacao_poligono_t::NOVO, 0, 0, 0);
+
 }
 
 void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {

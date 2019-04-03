@@ -2,7 +2,6 @@
 
 ## Entraga 1 (Atrasados)
 
-* Display file capaz de representar retas, polígonos e pontos (imprimir tela)
 * Funções de navegação 2D (movimentação do window)
 * Funções de Zoom (modificação do tamanho do window)
 
@@ -20,7 +19,8 @@
 * Implementar multiplicação entre matrizes
 * Implementar multiplicação entre coordenada e matriz
 
-## Erros
+## Correcoes e Erros
 
 * Não é possivel pegar ler os nomes dos objetos da tela (gtk_entry)
   * Solucao provisória: gerar nomes automáticos
+* Separar GUI do Controlador (impressao objetos)

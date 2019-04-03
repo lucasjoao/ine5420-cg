@@ -10,6 +10,8 @@
 #include "window.hpp"
 #include "viewport.hpp"
 
+#include <gtk/gtk.h>
+
 enum direcao_zoom_t {
     IN, OUT
 };
@@ -27,7 +29,8 @@ class Controlador {
 
     public:
 
-        Controlador(DisplayFile* display_file, Window *window, Viewport *viewport):
+        Controlador(DisplayFile* display_file, Window *window, Viewport *viewport, GtkListStore* list_store):
+            _list_store(list_store),
             _display_file(display_file), _window(window), _viewport(viewport),
             _coordenada_poligono(new std::vector<Coordenada>()) {}
 
@@ -42,6 +45,7 @@ class Controlador {
         void atualizar_tela();       
         void limpar_tela();
 
+        void adicionar_objeto_na_tree_view(const char* nome);
 
     private:
 
@@ -51,6 +55,7 @@ class Controlador {
 
         std::vector<Coordenada> *_coordenada_poligono;       
 
+        GtkListStore * _list_store;
 };
 
 void Controlador::adicionar_ponto(const char* nome, double x, double y) {
@@ -58,12 +63,18 @@ void Controlador::adicionar_ponto(const char* nome, double x, double y) {
     _display_file->adicionar_objeto(*obj);
 
     _viewport->desenhar_ponto(*obj, *_window);
+
+    adicionar_objeto_na_tree_view(obj->nome().c_str());
+
 }
 
 void Controlador::adicionar_reta(const char* nome, double x1, double y1, double x2, double y2) {
     auto reta = new Reta(nome, Coordenada(x1,y1), Coordenada(x2,y2));
     _display_file->adicionar_objeto(*reta);
     _viewport->desenhar(*reta, *_window);
+
+    adicionar_objeto_na_tree_view(reta->nome().c_str());
+
 }
 
 void Controlador::adicionar_poligono(operacao_poligono_t operacao, const char* nome, double x, double y) {
@@ -98,6 +109,8 @@ void Controlador::adicionar_poligono(operacao_poligono_t operacao, const char* n
             _display_file->adicionar_objeto(*poligono);
             obj = poligono;
             _viewport->desenhar(*obj, *_window);
+
+            adicionar_objeto_na_tree_view(obj->nome().c_str());
             break;
 
         case CANCELAR:
@@ -160,5 +173,14 @@ void Controlador::atualizar_tela() {
 void Controlador::limpar_tela() {
     _viewport->limpar_tela();
 }
+
+
+void Controlador::adicionar_objeto_na_tree_view(const char* nome) {
+  GtkTreeIter iter;
+
+  gtk_list_store_append(_list_store, &iter);
+  gtk_list_store_set(_list_store, &iter, 0, nome, -1);
+}
+
 
 #endif
