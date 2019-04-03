@@ -229,7 +229,7 @@ void btn_reta_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_poligono_clicked(GtkWidget *widget, gpointer data) {
-  controlador->adicionar_poligono(operacao_poligono_t::ADICIONAR_PONTO, 0, 0,0);
+  controlador->adicionar_poligono(operacao_poligono_t::NOVO, 0, 0,0);
   gtk_widget_show(plgn_window);
 }
 

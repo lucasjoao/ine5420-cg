@@ -24,5 +24,3 @@
 
 * Não é possivel pegar ler os nomes dos objetos da tela (gtk_entry)
   * Solucao provisória: gerar nomes automáticos
-
-* Adicionado coordenada (0,0) no poligono
