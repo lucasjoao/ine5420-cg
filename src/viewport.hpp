@@ -45,8 +45,7 @@ void Viewport::iniciar() {
 void Viewport::desenhar(Objeto &obj, Window &window) {
     auto tipo = obj.tipo();
 
-    switch (tipo)
-    {
+    switch (tipo) {
         case tipo_t::PONTO:
             desenhar_ponto(obj, window);
             break;

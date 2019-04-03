@@ -1,9 +1,5 @@
 # Atividade
 
-## Entraga 1 (Atrasados)
-
-* Funções de Zoom (modificação do tamanho do window)
-
 ## Entrega 2 (04/05)
 
 * Translações

@@ -217,11 +217,11 @@ int main (int argc, char *argv[]) {
 }
 
 void btn_zoom_in_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+  controlador->zoom(direcao_zoom_t::IN);
 }
 
 void btn_zoom_out_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+  controlador->zoom(direcao_zoom_t::OUT);
 }
 
 void btn_up_clicked(GtkWidget *widget, gpointer data) {

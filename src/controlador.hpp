@@ -31,7 +31,7 @@ class Controlador {
         void adicionar_reta(const char* nome, double x1, double y1, double x2, double y2);
         void adicionar_poligono(operacao_poligono_t operacao, const char* nome, double x, double y);
 
-        void zoom(direcao_zoom_t direcao, double escalar);
+        void zoom(direcao_zoom_t direca);
 
         void navagacao(direcao_navegacao_t direcao);
 
@@ -74,8 +74,7 @@ void Controlador::adicionar_poligono(operacao_poligono_t operacao, const char* n
     Poligono* poligono;
     Objeto* obj;
 
-    switch (operacao)
-    {
+    switch (operacao) {
         case NOVO:
             if (!_coordenada_poligono->empty())
                 _coordenada_poligono->empty();
@@ -109,31 +108,16 @@ void Controlador::adicionar_poligono(operacao_poligono_t operacao, const char* n
         case CANCELAR:
             _coordenada_poligono->clear();
             break;
-
-        default:
-            break;
     }
-
 }
 
-void Controlador::zoom(direcao_zoom_t direcao, double escalar) {
-    // IMPLEMENTAR
-
-    switch (direcao)
-    {
-        case IN:
-            break;
-        case OUT:
-            break;
-
-        default:
-            break;
-    }
+void Controlador::zoom(direcao_zoom_t direcao) {
+    _window->zoom(direcao, 10);
+    atualizar_tela();
 }
 
 void Controlador::navagacao(direcao_navegacao_t direcao) {
     _window->navagacao(direcao, 10);
-
     atualizar_tela();
 }
 

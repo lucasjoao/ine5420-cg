@@ -26,6 +26,8 @@ class Window: public Objeto {
 
         void navagacao(direcao_navegacao_t direcao, double escalar);
 
+        void zoom(direcao_zoom_t direcao, double escalar);
+
 };
 
 void Window::navagacao(direcao_navegacao_t direcao, double escalar) {
@@ -34,8 +36,7 @@ void Window::navagacao(direcao_navegacao_t direcao, double escalar) {
     auto x = Coordenada::x;
     auto y = Coordenada::y;
 
-    switch (direcao)
-    {
+    switch (direcao) {
         case UP:
             c_min.alterar(c_min.valor(y)-escalar, y);
             c_max.alterar(c_max.valor(y)-escalar, y);
@@ -55,12 +56,36 @@ void Window::navagacao(direcao_navegacao_t direcao, double escalar) {
             c_min.alterar(c_min.valor(x)+escalar, x);
             c_max.alterar(c_max.valor(x)+escalar, x);
             break;
-
-        default:
-            break;
-
     }
 
 }
+
+
+void Window::zoom(direcao_zoom_t direcao, double escalar) {
+    Coordenada &c_min = _coordenadas[Window::minima];
+    Coordenada &c_max = _coordenadas[Window::maxima];
+    auto x = Coordenada::x;
+    auto y = Coordenada::y;
+
+    switch (direcao) {
+
+        case IN:
+            c_min.alterar(c_min.valor(x)+escalar, x);
+            c_min.alterar(c_min.valor(y)+escalar, y);
+
+            c_max.alterar(c_max.valor(x)-escalar, x);
+            c_max.alterar(c_max.valor(y)-escalar, y);
+            break;
+
+        case OUT:
+            c_min.alterar(c_min.valor(x)-escalar, x);
+            c_min.alterar(c_min.valor(y)-escalar, y);
+
+            c_max.alterar(c_max.valor(x)+escalar, x);
+            c_max.alterar(c_max.valor(y)+escalar, y);
+            break;
+    }
+}
+
 
 #endif
