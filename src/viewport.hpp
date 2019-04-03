@@ -141,7 +141,7 @@ Coordenada Viewport::transformada_viewport(Coordenada &c, Window &window) {
 
     double xvp =  ((c.valor(x) - w_min.valor(x))/(w_max.valor(x) - w_min.valor(x)))*(_maxima.valor(x)- _minima.valor(x));
 
-    double yvp = ( 1 - ((c.valor(y) - w_min.valor(x))/ (w_max.valor(y) - w_min.valor(y)))  ) * (_maxima.valor(y) - _minima.valor(y));
+    double yvp = ( 1 - ((c.valor(y) - w_min.valor(y))/ (w_max.valor(y) - w_min.valor(y)))  ) * (_maxima.valor(y) - _minima.valor(y));
 
     return Coordenada(xvp, yvp);
 }

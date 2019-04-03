@@ -12,13 +12,6 @@
 
 #include <gtk/gtk.h>
 
-enum direcao_zoom_t {
-    IN, OUT
-};
-
-enum direcao_navegacao_t {
-    UP, DOWN, LEFT, RIGHT
-};
 
 enum operacao_poligono_t {
     NOVO, ADICIONAR_PONTO, CONCLUIR, CANCELAR
@@ -40,7 +33,7 @@ class Controlador {
 
         void zoom(direcao_zoom_t direcao, double escalar);
 
-        void navagacao(direcao_navegacao_t direcao, double escalar);
+        void navagacao(direcao_navegacao_t direcao);
 
         void atualizar_tela();       
         void limpar_tela();
@@ -138,27 +131,10 @@ void Controlador::zoom(direcao_zoom_t direcao, double escalar) {
     }
 }
 
-void Controlador::navagacao(direcao_navegacao_t direcao, double escalar) {
-    // IMPLEMENTAR
+void Controlador::navagacao(direcao_navegacao_t direcao) {
+    _window->navagacao(direcao, 10);
 
-    switch (direcao)
-    {
-        case UP:
-            break;
-
-        case DOWN:
-            break;
-
-        case LEFT:
-            break;
-
-        case RIGHT:
-            break;
-
-        default:
-            break;
-
-    }
+    atualizar_tela();
 }
 
 void Controlador::atualizar_tela() {

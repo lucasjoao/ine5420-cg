@@ -225,19 +225,19 @@ void btn_zoom_out_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_up_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+  controlador->navagacao(direcao_navegacao_t::UP);
 }
 
 void btn_down_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+  controlador->navagacao(direcao_navegacao_t::DOWN);
 }
 
 void btn_left_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+  controlador->navagacao(direcao_navegacao_t::LEFT);
 }
 
 void btn_right_clicked(GtkWidget *widget, gpointer data) {
-  std::cout << "Aqui" << std::endl;
+  controlador->navagacao(direcao_navegacao_t::RIGHT);
 }
 
 void btn_ponto_clicked(GtkWidget *widget, gpointer data) {
