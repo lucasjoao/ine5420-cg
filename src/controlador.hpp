@@ -40,6 +40,16 @@ class Controlador {
 
         void adicionar_objeto_na_tree_view(const char* nome);
 
+        void selecionar_objeto(const char* nome);
+
+        void editar_objeto_translacao(double x, double y);
+
+        void editar_objeto_escalonamento(double x, double y);
+
+        void editar_objeto_grau(double grau);
+
+        void editar_objeto_nome(const char* nome);
+
     private:
 
         DisplayFile *_display_file;
@@ -49,6 +59,7 @@ class Controlador {
         std::vector<Coordenada> *_coordenada_poligono;       
 
         GtkListStore * _list_store;
+        size_t _objeto_selecionado;
 };
 
 void Controlador::adicionar_ponto(const char* nome, double x, double y) {
@@ -134,6 +145,24 @@ void Controlador::limpar_tela() {
     _viewport->limpar_tela();
 }
 
+void Controlador::selecionar_objeto(const char* nome) {
+    for(size_t i = 0; i < _display_file->tamanho(); i++) {
+        auto obj = _display_file->objeto(i).nome();
+        if (obj.compare(nome) == 0) {
+            _objeto_selecionado = i;
+            std::cout << nome << ":" << i << std::endl;
+            break;
+        }
+    }
+}
+
+void Controlador::editar_objeto_translacao(double x, double y) {}
+
+void Controlador::editar_objeto_escalonamento(double x, double y) {}
+
+void Controlador::editar_objeto_grau(double grau) {}
+
+void Controlador::editar_objeto_nome(const char* nome) {}
 
 void Controlador::adicionar_objeto_na_tree_view(const char* nome) {
   GtkTreeIter iter;
@@ -141,6 +170,5 @@ void Controlador::adicionar_objeto_na_tree_view(const char* nome) {
   gtk_list_store_append(_list_store, &iter);
   gtk_list_store_set(_list_store, &iter, 0, nome, -1);
 }
-
 
 #endif

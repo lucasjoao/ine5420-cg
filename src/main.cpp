@@ -22,13 +22,26 @@ GtkCellRenderer *renderer;
 GtkTreeView *tree_view;
 GtkListStore *list_store;
 
+void row_activated_lista_objeto(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata);
+
+/* ---------- MODAL DE EDICAO ---------- */
+GtkWidget *edit_window;
+
+GtkButton* btn_edit_voltar;
+GtkButton* btn_edit_confirmar;
+
+GtkEntry* entry_edit_nome;
+GtkEntry* entry_translacao_x;
+GtkEntry* entry_translacao_y;
+GtkEntry* entry_escalonamento_x;
+GtkEntry* entry_escalonamento_y;
+GtkEntry* entry_rotacao_grau;
+
 /* ---------- MODAIS DE INCLUSAO ---------- */
 
 GtkWidget *reta_window;
 GtkWidget *ponto_window;
 GtkWidget *plgn_window;
-
-GtkWidget *edit_window;
 
 /* ---------- BOTOES TELA PRINCIPAL ---------- */
 
@@ -102,6 +115,10 @@ void btn_plgn_voltar_clicked(GtkWidget *widget, gpointer data);
 void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data);
 void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data);
 
+/* ---------- FUNCAO MODAL DE EDICAO ---------- */
+void btn_edit_voltar_clicked(GtkWidget *widget, gpointer data);
+void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data);
+
 /* ---------- ---------- */
 
 static Controlador *controlador;
@@ -136,16 +153,29 @@ int main (int argc, char *argv[]) {
   gtk_tree_view_column_set_min_width ( gtk_tree_view_get_column (tree_view, 0), 100 );
   gtk_tree_view_column_set_alignment ( gtk_tree_view_get_column (tree_view, 0), 0.5 );
 
+  g_signal_connect(tree_view, "row-activated", G_CALLBACK(row_activated_lista_objeto), nullptr);
 
+  /* ---------- MODAL DE EDICAO ---------- */
+  edit_window = GTK_WIDGET(gtk_builder_get_object(builder, "editWindow"));
 
+  btn_edit_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnEditVoltar"));
+  btn_edit_confirmar = GTK_BUTTON(gtk_builder_get_object(builder, "btnEditConfirmar"));
+
+  g_signal_connect(btn_edit_voltar, "clicked", G_CALLBACK(btn_edit_voltar_clicked), nullptr);
+  g_signal_connect(btn_edit_confirmar, "clicked", G_CALLBACK(btn_edit_confirmar_clicked), nullptr);
+
+  entry_edit_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryEditNome"));
+  entry_translacao_x = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoX"));
+  entry_translacao_y = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoY"));
+  entry_escalonamento_x = GTK_ENTRY(gtk_builder_get_object(builder, "entryEscalonamentoX"));
+  entry_escalonamento_y = GTK_ENTRY(gtk_builder_get_object(builder, "entryEscalonamentoY"));
+  entry_rotacao_grau = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotacaoGrau"));
 
   /* ---------- MODAIS DE INCLUSAO ---------- */
 
   reta_window = GTK_WIDGET(gtk_builder_get_object(builder, "retaWindow"));
   ponto_window = GTK_WIDGET(gtk_builder_get_object(builder, "pontoWindow"));
   plgn_window = GTK_WIDGET(gtk_builder_get_object(builder, "poligonoWindow"));
-
-  edit_window = GTK_WIDGET(gtk_builder_get_object(builder, "editWindow"));
 
   /* ---------- BOTOES TELA PRINCIPAL ---------- */
 
@@ -216,7 +246,6 @@ int main (int argc, char *argv[]) {
   controlador = new Controlador(display_file, window, viewport, list_store);
 
   gtk_main();
-
 
   return 0;
 }
@@ -333,6 +362,16 @@ void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
 
 }
 
+void btn_edit_voltar_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_hide(edit_window);
+}
+
+void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
+
+  gtk_widget_hide(edit_window);
+}
+
+
 static void clear_surface() {
   cairo_t *cr;
 
@@ -366,4 +405,18 @@ static gboolean draw_cb(GtkWidget *widget, cairo_t *cr, gpointer data) {
   gtk_widget_queue_draw(widget);
 
   return FALSE;
+}
+
+void row_activated_lista_objeto(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata) {
+
+  GtkTreeModel *model;
+  GtkTreeIter   iter;
+
+  model = gtk_tree_view_get_model(treeview);
+  if (gtk_tree_model_get_iter(model, &iter, path)) {
+      gchar *nome;
+      gtk_tree_model_get(model, &iter, 0, &nome, -1);
+      controlador->selecionar_objeto(nome);
+      gtk_widget_show(edit_window);
+  }
 }
