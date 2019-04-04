@@ -2,6 +2,234 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
+  <object class="GtkWindow" id="editWindow">
+    <property name="name">editWindow</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Editar objeto</property>
+    <child>
+      <object class="GtkFixed" id="editContainer">
+        <property name="width_request">420</property>
+        <property name="height_request">300</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="lblTranslacao">
+            <property name="width_request">70</property>
+            <property name="height_request">15</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Translação:</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">60</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lblEscalonamento">
+            <property name="width_request">100</property>
+            <property name="height_request">15</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Escalonamento:</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">130</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lblRotacao">
+            <property name="width_request">60</property>
+            <property name="height_request">15</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Rotação:</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">200</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryTranslacaoX">
+            <property name="width_request">100</property>
+            <property name="height_request">20</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">45</property>
+            <property name="y">85</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lblTranslacaoX">
+            <property name="width_request">10</property>
+            <property name="height_request">10</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">x:</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">90</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lblTranslacaoY">
+            <property name="width_request">10</property>
+            <property name="height_request">10</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">y:</property>
+          </object>
+          <packing>
+            <property name="x">240</property>
+            <property name="y">90</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryTranslacaoY">
+            <property name="width_request">100</property>
+            <property name="height_request">20</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">260</property>
+            <property name="y">85</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lblEscalonamentoX">
+            <property name="width_request">10</property>
+            <property name="height_request">10</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">x:</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">160</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryEscalonamentoX">
+            <property name="width_request">100</property>
+            <property name="height_request">20</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">45</property>
+            <property name="y">155</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lblEscalonamentoY">
+            <property name="width_request">10</property>
+            <property name="height_request">10</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">y:</property>
+          </object>
+          <packing>
+            <property name="x">240</property>
+            <property name="y">160</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryEscalonamentoY">
+            <property name="width_request">100</property>
+            <property name="height_request">20</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">260</property>
+            <property name="y">155</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lblRotacaoGrau">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Grau:</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">230</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryRotacaoGrau">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">65</property>
+            <property name="y">225</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnEditVoltar">
+            <property name="label" translatable="yes">Voltar</property>
+            <property name="width_request">100</property>
+            <property name="height_request">30</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">250</property>
+            <property name="y">300</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnEditConfirmar">
+            <property name="label" translatable="yes">Confirmar</property>
+            <property name="width_request">100</property>
+            <property name="height_request">30</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">350</property>
+            <property name="y">300</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lblNome">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Nome:</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">20</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryNome">
+            <property name="width_request">350</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+          </object>
+          <packing>
+            <property name="x">75</property>
+            <property name="y">15</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkListStore" id="liststore1"/>
   <object class="GtkWindow" id="mainWindow">
     <property name="width_request">800</property>

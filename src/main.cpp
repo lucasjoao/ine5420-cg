@@ -28,6 +28,8 @@ GtkWidget *reta_window;
 GtkWidget *ponto_window;
 GtkWidget *plgn_window;
 
+GtkWidget *edit_window;
+
 /* ---------- BOTOES TELA PRINCIPAL ---------- */
 
 GtkButton* btn_zoom_in;
@@ -136,11 +138,14 @@ int main (int argc, char *argv[]) {
 
 
 
+
   /* ---------- MODAIS DE INCLUSAO ---------- */
 
   reta_window = GTK_WIDGET(gtk_builder_get_object(builder, "retaWindow"));
   ponto_window = GTK_WIDGET(gtk_builder_get_object(builder, "pontoWindow"));
   plgn_window = GTK_WIDGET(gtk_builder_get_object(builder, "poligonoWindow"));
+
+  edit_window = GTK_WIDGET(gtk_builder_get_object(builder, "editWindow"));
 
   /* ---------- BOTOES TELA PRINCIPAL ---------- */
 
