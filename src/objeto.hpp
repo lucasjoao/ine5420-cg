@@ -26,6 +26,8 @@ class Objeto {
 
         Coordenada coordenada(size_t posicao);
 
+        Coordenada centro();
+
         size_t quantidade_coordenada();
 
         bool operator==(const Objeto& obj) const;
@@ -84,6 +86,21 @@ tipo_t Objeto::tipo() const {
 
 Coordenada Objeto::coordenada(size_t posicao) {
     return _coordenadas.at(posicao);
+}
+
+Coordenada Objeto::centro() {
+    double x = 0;
+    double y = 0;
+    size_t tamanho = quantidade_coordenada();
+
+    for(size_t i = 0; i < tamanho; i++) {
+        x += _coordenadas[i].valor(Coordenada::x);
+        y += _coordenadas[i].valor(Coordenada::y);
+    }
+
+    x = x/tamanho;
+    y = y/tamanho;
+    return Coordenada(x,y);  
 }
 
 size_t Objeto::quantidade_coordenada() {
