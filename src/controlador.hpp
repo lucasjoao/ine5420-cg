@@ -9,6 +9,7 @@
 #include "display_file.hpp"
 #include "window.hpp"
 #include "viewport.hpp"
+#include "transformacoes.hpp"
 
 #include <gtk/gtk.h>
 
@@ -150,13 +151,33 @@ void Controlador::selecionar_objeto(const char* nome) {
         auto obj = _display_file->objeto(i).nome();
         if (obj.compare(nome) == 0) {
             _objeto_selecionado = i;
-            std::cout << nome << ":" << i << std::endl;
             break;
         }
     }
 }
 
-void Controlador::editar_objeto_translacao(double x, double y) {}
+void Controlador::editar_objeto_translacao(double x, double y) {
+    double D[3][3];
+    double V[3];
+    double R[3];
+
+    auto obj = _display_file->objeto(_objeto_selecionado);
+    transformacoes::matriz_translacao(D, x,y);
+
+    for(size_t i = 0; i < obj.quantidade_coordenada(); i++) {
+        auto c = obj.coordenada(i);
+        V[0] = c.valor(0);
+        V[1] = c.valor(1);
+        V[2] = c.valor(2);
+
+        transformacoes::multiplicacao_vetor_matriz(R,V,D);
+
+        c.alterar(R[0], 0);
+        c.alterar(R[1], 1);
+        c.alterar(R[2], 2);
+    }
+    atualizar_tela();
+}
 
 void Controlador::editar_objeto_escalonamento(double x, double y) {}
 

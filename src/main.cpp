@@ -368,6 +368,17 @@ void btn_edit_voltar_clicked(GtkWidget *widget, gpointer data) {
 
 void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
 
+  auto Dx = atof(gtk_entry_get_text(entry_translacao_x));
+  auto Dy = atof(gtk_entry_get_text(entry_translacao_y));
+
+    if (Dx != 0 || Dy != 0) {
+    controlador->editar_objeto_translacao(Dx, Dy);  
+  }
+
+  gtk_entry_set_text(entry_translacao_x,"");
+  gtk_entry_set_text(entry_translacao_y,"");
+
+
   gtk_widget_hide(edit_window);
 }
 
