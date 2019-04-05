@@ -2,8 +2,6 @@
 
 ## Entrega 2 (04/05)
 
-* Translações
-* Escalonamentos em torno do centro do objeto
 * Rotações
   * Em torno do centro do mundo
   * Em torno do centro do objeto
