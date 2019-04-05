@@ -1,0 +1,19 @@
+Observacoes de Interface
+
+-> Criar objetos (inclusao):
+    Preencher campos x1 e y1 e clicar concluir
+    Clicar em voltar pra sair da janela de inclusao
+    Campos de nomes nao precisam ser preechindos pois he gerado automaticamente;
+    Coordenadas z's nao precisam ser preenchidas pois nao sao utilizadas;
+
+    Criar Poligino:
+    Adicione quantos pontos desejar e clicar em concluir para finalizar
+
+-> Editar objetos (Escalonamento e transicao):
+    Double-click no nome do objeto da lista de objeto que deseja modificar
+    Preencher campos x e y e clique em confirmar
+    Se nao quiser mudar a translacao ou o escalonamento e so deixar em branco
+
+    Edicao de nome nao implementado
+
+->  Rotacoes nao foram implementadas
