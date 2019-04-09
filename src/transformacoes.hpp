@@ -10,10 +10,12 @@ namespace transformacoes {
     void matriz_identidade(double matriz[3][3]);
 
     void matriz_translacao(double matriz[3][3] , double Dx, double Dy);
+  
     void matriz_escalonamento(double matriz[3][3] , double Sx, double Sy);
-    void matriz_rotacao(double matriz[3][3] , double grau);
-    
     void matriz_escalonamento_natural(double matriz[3][3], double Cx, double Cy , double Sx, double Sy);
+
+    void matriz_rotacao(double matriz[3][3] , double grau);
+    void matriz_rotacao_em_torno_ponto(double matriz[3][3], double grau, double Dx, double Dy);
 
     void multiplicacao_matrizes(double resposta[3][3], double A[3][3], double B[3][3]);
     void multiplicacao_vetor_matriz(double resposta[3], double V[3], double A[3][3]);
@@ -54,6 +56,20 @@ void transformacoes::matriz_escalonamento(double matriz[3][3] , double Sx, doubl
     matriz[1][1] = Sy;
 }
 
+void transformacoes::matriz_escalonamento_natural(double matriz[3][3], double Cx, double Cy , double Sx, double Sy) {
+    double D1 [3][3];
+    double D2 [3][3];
+    double S [3][3];
+    double R1 [3][3];
+
+    transformacoes::matriz_translacao(D1, -Cx, -Cy);
+    transformacoes::matriz_translacao(D2, Cx, Cy);
+    transformacoes::matriz_escalonamento(S, Sx, Sy);
+
+    transformacoes::multiplicacao_matrizes(R1, D1, S);
+    transformacoes::multiplicacao_matrizes(matriz, R1, D2);
+}
+
 void transformacoes::matriz_rotacao(double matriz[3][3] , double grau) {
     grau = grau * M_PI/180;
 
@@ -64,19 +80,18 @@ void transformacoes::matriz_rotacao(double matriz[3][3] , double grau) {
     matriz[1][1] = cos(grau);
 }
 
-void transformacoes::matriz_escalonamento_natural(double matriz[3][3], double Cx, double Cy , double Sx, double Sy) {
+void matriz_rotacao_em_torno_ponto(double matriz[3][3], double grau, double Dx, double Dy) {
     double D1 [3][3];
     double D2 [3][3];
-    double S [3][3];
-    double R1 [3][3];
+    double R [3][3];
+    double M [3][3];
 
-    transformacoes::matriz_translacao(D1, -Cx, -Cx);
-    transformacoes::matriz_translacao(D2, Cx, Cy);
-    transformacoes::matriz_escalonamento(S, Sx, Sy);
+    transformacoes::matriz_translacao(D1, -Dx, -Dy);
+    transformacoes::matriz_translacao(D2, Dx, Dy);
+    transformacoes::matriz_rotacao(R, grau);
 
-    transformacoes::multiplicacao_matrizes(R1, D1, S);
-    transformacoes::multiplicacao_matrizes(matriz, R1, D2);
-
+    transformacoes::multiplicacao_matrizes(M, D1, R);
+    transformacoes::multiplicacao_matrizes(matriz, M, D2);
 }
 
 

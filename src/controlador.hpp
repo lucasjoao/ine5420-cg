@@ -20,7 +20,6 @@ enum operacao_poligono_t {
 
 class Controlador {
 
-
     public:
 
         Controlador(DisplayFile* display_file, Window *window, Viewport *viewport, GtkListStore* list_store):
@@ -33,7 +32,6 @@ class Controlador {
         void adicionar_poligono(operacao_poligono_t operacao, const char* nome, double x, double y);
 
         void zoom(direcao_zoom_t direca);
-
         void navagacao(direcao_navegacao_t direcao);
 
         void atualizar_tela();       
@@ -42,12 +40,11 @@ class Controlador {
         void adicionar_objeto_na_tree_view(const char* nome);
 
         void selecionar_objeto(const char* nome);
-
         void editar_objeto_translacao(double x, double y);
-
         void editar_objeto_escalonamento(double x, double y);
-
-        void editar_objeto_grau(double grau);
+        void editar_objeto_rotacao_entorno_centro_mundo(double grau);
+        void editar_objeto_rotacao_entorno_centro_objeto(double grau);
+        void editar_objeto_rotacao_entorno_centro_ponto(double grau, double x, double y);
 
         void editar_objeto_nome(const char* nome);
 
@@ -204,7 +201,39 @@ void Controlador::editar_objeto_escalonamento(double x, double y) {
     atualizar_tela();
 }
 
-void Controlador::editar_objeto_grau(double grau) {}
+void Controlador::editar_objeto_rotacao_entorno_centro_objeto(double grau) {
+    auto obj = _display_file->objeto(_objeto_selecionado);
+    auto c = obj.centro();
+
+    editar_objeto_rotacao_entorno_centro_ponto(grau, c.valor(Coordenada::x), c.valor(Coordenada::y));
+}
+
+void Controlador::editar_objeto_rotacao_entorno_centro_mundo(double grau) {
+    editar_objeto_rotacao_entorno_centro_ponto(grau, 0, 0);
+}
+
+void Controlador::editar_objeto_rotacao_entorno_centro_ponto(double grau, double x, double y) {
+    double R[3][3];
+    double V[3];
+    double W[3];
+    auto obj = _display_file->objeto(_objeto_selecionado);
+
+    matriz_rotacao_em_torno_ponto(R, grau, x, y);
+
+    for(size_t i = 0; i < obj.quantidade_coordenada(); i++) {
+        auto c = obj.coordenada(i);
+        V[0] = c.valor(0);
+        V[1] = c.valor(1);
+        V[2] = c.valor(2);
+
+        transformacoes::multiplicacao_vetor_matriz(W,V,R);
+
+        c.alterar(W[0], 0);
+        c.alterar(W[1], 1);
+        c.alterar(W[2], 2);
+    }
+    atualizar_tela();
+}
 
 void Controlador::editar_objeto_nome(const char* nome) {}
 
