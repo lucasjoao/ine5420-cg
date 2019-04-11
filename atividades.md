@@ -8,7 +8,7 @@
   * Em torno de um ponto qualquer (arbitrário)
   * Modificar Interface Grafica para suportar todas as rotações
 
-## Entrega 3 (11/05)
+## Entrega 3 (11/04)
 
 * Acrescente ao seu Sistema Gráfico Interativo a capacidade de realizar rotações na Window. Para tal:
 
