@@ -42,19 +42,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="lblRotacao">
-            <property name="width_request">60</property>
-            <property name="height_request">15</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Rotação:</property>
-          </object>
-          <packing>
-            <property name="x">20</property>
-            <property name="y">200</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkEntry" id="entryTranslacaoX">
             <property name="width_request">100</property>
             <property name="height_request">20</property>
@@ -159,28 +146,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="lblRotacaoGrau">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Grau:</property>
-          </object>
-          <packing>
-            <property name="x">20</property>
-            <property name="y">230</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="entryRotacaoGrau">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="input_purpose">number</property>
-          </object>
-          <packing>
-            <property name="x">65</property>
-            <property name="y">225</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkButton" id="btnEditVoltar">
             <property name="label" translatable="yes">Voltar</property>
             <property name="width_request">100</property>
@@ -228,6 +193,45 @@
           <packing>
             <property name="x">75</property>
             <property name="y">15</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnRotacaoMundo">
+            <property name="label" translatable="yes">          Rotação
+(centro do mundo)</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">225</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnRotacaoObjeto">
+            <property name="label" translatable="yes">          Rotação
+(centro do objeto)</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">170</property>
+            <property name="y">225</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnRotacaoQualquer">
+            <property name="label" translatable="yes">          Rotação
+(ponto qualquer)</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">320</property>
+            <property name="y">225</property>
           </packing>
         </child>
       </object>
@@ -1087,6 +1091,256 @@
           <packing>
             <property name="x">280</property>
             <property name="y">215</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="rotMundoWindow">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Rotação (centro do mundo)</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="deletable">False</property>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkFixed" id="rotMundoContainer">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="lblGrausRotMundo">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Graus</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">20</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryRotMundo">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">50</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnRotMundoVoltar">
+            <property name="label" translatable="yes">Voltar</property>
+            <property name="width_request">100</property>
+            <property name="height_request">30</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">250</property>
+            <property name="y">100</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnRotMundoRotacionar">
+            <property name="label" translatable="yes">Rotacionar</property>
+            <property name="width_request">100</property>
+            <property name="height_request">30</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">350</property>
+            <property name="y">100</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="rotObjetoWindow">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Rotação (centro do objeto)</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="deletable">False</property>
+    <child>
+      <object class="GtkFixed" id="rotObjetoContainer">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="lblGrausRotObjeto">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Graus</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">20</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryRotObjeto">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">50</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnRotObjetoVoltar">
+            <property name="label" translatable="yes">Voltar</property>
+            <property name="width_request">100</property>
+            <property name="height_request">30</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">250</property>
+            <property name="y">100</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnRotObjetoRotacionar">
+            <property name="label" translatable="yes">Rotacionar</property>
+            <property name="width_request">100</property>
+            <property name="height_request">30</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">350</property>
+            <property name="y">100</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="rotPntQlqWindow">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Rotação (ponto qualquer)</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="deletable">False</property>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkFixed" id="rotPntQlqContainer">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="lblGrausRotPntQlq">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Graus</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">20</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryGrausRotPntQlq">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">50</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lbRotPntQlqPonto">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Coordenadas do ponto:</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">100</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lblRotPntQlqX1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">x1:</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">140</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lblRotPntQlqY1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">y1:</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">180</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryRotPntQlqX1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">50</property>
+            <property name="y">135</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryRotPntQlqY2">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">50</property>
+            <property name="y">175</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnRotPntQlqVoltar">
+            <property name="label" translatable="yes">Voltar</property>
+            <property name="width_request">100</property>
+            <property name="height_request">30</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">250</property>
+            <property name="y">300</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnRotPntQlqRotacionar">
+            <property name="label" translatable="yes">Rotacionar</property>
+            <property name="width_request">100</property>
+            <property name="height_request">30</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">350</property>
+            <property name="y">300</property>
           </packing>
         </child>
       </object>
