@@ -10,6 +10,7 @@
 #include "window.hpp"
 #include "viewport.hpp"
 #include "transformacoes.hpp"
+#include <iostream>
 
 #include <gtk/gtk.h>
 
@@ -33,7 +34,8 @@ class Controlador {
 
         void zoom(direcao_zoom_t direca);
         void navagacao(direcao_navegacao_t direcao);
-
+        void gerar_descricao_scn();
+        
         void atualizar_tela();       
         void limpar_tela();
 
@@ -45,8 +47,6 @@ class Controlador {
         void editar_objeto_rotacao_entorno_centro_mundo(double grau);
         void editar_objeto_rotacao_entorno_centro_objeto(double grau);
         void editar_objeto_rotacao_entorno_centro_ponto(double grau, double x, double y);
-
-        void editar_objeto_nome(const char* nome);
 
     private:
 
@@ -64,8 +64,7 @@ void Controlador::adicionar_ponto(const char* nome, double x, double y) {
     auto obj = new Ponto(nome, Coordenada(x,y));
     _display_file->adicionar_objeto(*obj);
 
-    _viewport->desenhar_ponto(*obj, *_window);
-
+    atualizar_tela();
     adicionar_objeto_na_tree_view(obj->nome().c_str());
 
 }
@@ -73,8 +72,8 @@ void Controlador::adicionar_ponto(const char* nome, double x, double y) {
 void Controlador::adicionar_reta(const char* nome, double x1, double y1, double x2, double y2) {
     auto reta = new Reta(nome, Coordenada(x1,y1), Coordenada(x2,y2));
     _display_file->adicionar_objeto(*reta);
-    _viewport->desenhar(*reta, *_window);
 
+    atualizar_tela();
     adicionar_objeto_na_tree_view(reta->nome().c_str());
 
 }
@@ -109,9 +108,10 @@ void Controlador::adicionar_poligono(operacao_poligono_t operacao, const char* n
             _coordenada_poligono->clear();
             _display_file->adicionar_objeto(*poligono);
             obj = poligono;
-            _viewport->desenhar(*obj, *_window);
 
             adicionar_objeto_na_tree_view(obj->nome().c_str());
+            atualizar_tela();
+
             break;
 
         case CANCELAR:
@@ -130,12 +130,30 @@ void Controlador::navagacao(direcao_navegacao_t direcao) {
     atualizar_tela();
 }
 
+void Controlador::gerar_descricao_scn() {
+    double D[3][3];
+
+    auto c = _window->centro();
+    auto altura = (2/_window->altura());
+    auto largura =(2/_window->largura());
+
+    transformacoes::matriz_translacao(D, c.valor(Coordenada::x), c.valor(Coordenada::y));
+
+    for(size_t i = 0; i < _display_file->tamanho(); i++) {
+        _display_file->objeto(i).normalizar(D, altura, largura);
+        
+    }
+}
+
+
 void Controlador::atualizar_tela() {
     limpar_tela();
 
+    gerar_descricao_scn();
+
     for(size_t i = 0; i < _display_file->tamanho(); i++) {
         auto obj = _display_file->objeto(i);
-        _viewport->desenhar(obj, *_window);
+        _viewport->desenhar(obj);
     }
 }
 
@@ -161,7 +179,7 @@ void Controlador::editar_objeto_translacao(double x, double y) {
     auto obj = _display_file->objeto(_objeto_selecionado);
     transformacoes::matriz_translacao(D, x,y);
 
-    for(size_t i = 0; i < obj.quantidade_coordenada(); i++) {
+    for(size_t i = 0; i < obj.tamanho(); i++) {
         auto c = obj.coordenada(i);
         V[0] = c.valor(0);
         V[1] = c.valor(1);
@@ -186,7 +204,7 @@ void Controlador::editar_objeto_escalonamento(double x, double y) {
 
     transformacoes::matriz_escalonamento_natural(S, c.valor(Coordenada::x), c.valor(Coordenada::y), x, y);
 
-    for(size_t i = 0; i < obj.quantidade_coordenada(); i++) {
+    for(size_t i = 0; i < obj.tamanho(); i++) {
         auto c = obj.coordenada(i);
         V[0] = c.valor(0);
         V[1] = c.valor(1);
@@ -220,7 +238,7 @@ void Controlador::editar_objeto_rotacao_entorno_centro_ponto(double grau, double
 
     matriz_rotacao_em_torno_ponto(R, grau, x, y);
 
-    for(size_t i = 0; i < obj.quantidade_coordenada(); i++) {
+    for(size_t i = 0; i < obj.tamanho(); i++) {
         auto c = obj.coordenada(i);
         V[0] = c.valor(0);
         V[1] = c.valor(1);
@@ -234,8 +252,6 @@ void Controlador::editar_objeto_rotacao_entorno_centro_ponto(double grau, double
     }
     atualizar_tela();
 }
-
-void Controlador::editar_objeto_nome(const char* nome) {}
 
 void Controlador::adicionar_objeto_na_tree_view(const char* nome) {
   GtkTreeIter iter;

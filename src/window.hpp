@@ -3,6 +3,7 @@
 
 #include <string>
 #include "objeto.hpp"
+#include "transformacoes.hpp"
 
 enum direcao_zoom_t {
     IN, OUT
@@ -12,80 +13,97 @@ enum direcao_navegacao_t {
     UP, DOWN, LEFT, RIGHT
 };
 
-class Window: public Objeto {
-    public:
-        static const size_t minima = 0;
-        static const size_t maxima = 1;
+class Window {
 
     public:
 
-        Window(Coordenada minima, Coordenada maxima) : Objeto("Window", tipo_t::WINDOW) {
-            _coordenadas.push_back(minima);
-            _coordenadas.push_back(maxima);
-        }
+        Window(Coordenada origem, double altura, double largura): 
+            _centro(Coordenada(origem.valor(Coordenada::x) + (largura/2), origem.valor(Coordenada::y) + (altura/2))),
+            _view_up(Coordenada(origem.valor(Coordenada::x) + (largura/2), origem.valor(Coordenada::y) + altura)),
+            _altura(altura), _largura(largura) {}
 
         void navagacao(direcao_navegacao_t direcao, double escalar);
 
         void zoom(direcao_zoom_t direcao, double escalar);
 
+        Coordenada centro();
+
+        Coordenada view_up();
+
+        double altura();
+
+        double largura();
+
+    private:
+
+        Coordenada _centro;
+        Coordenada _view_up;
+        double _altura;
+        double _largura;
 };
 
+double Window::altura() {
+    return _altura;
+}
+
+double Window::largura() {
+    return _largura;
+}
+
+
 void Window::navagacao(direcao_navegacao_t direcao, double escalar) {
-    Coordenada &c_min = _coordenadas[Window::minima];
-    Coordenada &c_max = _coordenadas[Window::maxima];
+
     auto x = Coordenada::x;
     auto y = Coordenada::y;
 
     switch (direcao) {
-        case UP:
-            c_min.alterar(c_min.valor(y)-escalar, y);
-            c_max.alterar(c_max.valor(y)-escalar, y);
+       case UP:
+            _centro.alterar(_centro.valor(y)-escalar, y);
+            _view_up.alterar(_view_up.valor(y)-escalar, y);
             break;
 
         case DOWN:
-            c_min.alterar(c_min.valor(y)+escalar, y);
-            c_max.alterar(c_max.valor(y)+escalar, y);
+            _centro.alterar(_centro.valor(y)+escalar, y);
+            _view_up.alterar(_view_up.valor(y)+escalar, y);
             break;
 
         case RIGHT:
-            c_min.alterar(c_min.valor(x)-escalar, x);
-            c_max.alterar(c_max.valor(x)-escalar, x);
+            _centro.alterar(_centro.valor(x)-escalar, x);
+            _centro.alterar(_view_up.valor(x)-escalar, x);
             break;
 
         case LEFT:
-            c_min.alterar(c_min.valor(x)+escalar, x);
-            c_max.alterar(c_max.valor(x)+escalar, x);
+            _centro.alterar(_centro.valor(x)+escalar, x);
+            _view_up.alterar(_view_up.valor(x)+escalar, x);
             break;
-    }
-
+     }    
 }
 
 
 void Window::zoom(direcao_zoom_t direcao, double escalar) {
-    Coordenada &c_min = _coordenadas[Window::minima];
-    Coordenada &c_max = _coordenadas[Window::maxima];
-    auto x = Coordenada::x;
-    auto y = Coordenada::y;
+    switch (direcao)
+    {
+    case IN:
+        _altura -= escalar;
+        _largura -= escalar;
+        break;
 
-    switch (direcao) {
+    case OUT:
+        _altura += escalar;
+        _largura += escalar;
+        break;
 
-        case IN:
-            c_min.alterar(c_min.valor(x)+escalar, x);
-            c_min.alterar(c_min.valor(y)+escalar, y);
-
-            c_max.alterar(c_max.valor(x)-escalar, x);
-            c_max.alterar(c_max.valor(y)-escalar, y);
-            break;
-
-        case OUT:
-            c_min.alterar(c_min.valor(x)-escalar, x);
-            c_min.alterar(c_min.valor(y)-escalar, y);
-
-            c_max.alterar(c_max.valor(x)+escalar, x);
-            c_max.alterar(c_max.valor(y)+escalar, y);
-            break;
+    default:
+        break;
     }
 }
 
+Coordenada Window::centro() {
+    return _centro;
+}
+
+Coordenada Window::view_up() {
+    return _view_up;
+}
 
 #endif
