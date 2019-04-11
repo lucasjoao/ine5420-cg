@@ -30,12 +30,20 @@ GtkWidget *edit_window;
 GtkButton* btn_edit_voltar;
 GtkButton* btn_edit_confirmar;
 
+GtkButton* btn_rot_mundo;
+GtkButton* btn_rot_obj;
+GtkButton* btn_rot_pnt;
+
 GtkEntry* entry_edit_nome;
 GtkEntry* entry_translacao_x;
 GtkEntry* entry_translacao_y;
 GtkEntry* entry_escalonamento_x;
 GtkEntry* entry_escalonamento_y;
-GtkEntry* entry_rotacao_grau;
+
+/* ---------- MODAIS DE ROTACAO ---------- */
+GtkWidget *rot_mundo_window;
+GtkWidget *rot_obj_window;
+GtkWidget *rot_pnt_window;
 
 /* ---------- MODAIS DE INCLUSAO ---------- */
 
@@ -69,6 +77,16 @@ GtkButton* btn_plgn_voltar;
 GtkButton* btn_plgn_incluir;
 GtkButton* btn_plgn_add_ponto;
 
+/* ---------- BOTOES MODAIS DE ROTACAO ---------- */
+
+GtkButton* btn_rot_mundo_voltar;
+GtkButton* btn_rot_mundo_rotacionar;
+
+GtkButton* btn_rot_obj_voltar;
+GtkButton* btn_rot_obj_rotacionar;
+
+GtkButton* btn_rot_pnt_voltar;
+GtkButton* btn_rot_pnt_rotacionar;
 
 /* ---------- ENTRADAS MODAIS DE INCLUSAO ---------- */
 GtkEntry* entry_ponto_nome;
@@ -88,6 +106,14 @@ GtkEntry* entry_poligono_nome;
 GtkEntry* entry_poligono_x1;
 GtkEntry* entry_poligono_y1;
 GtkEntry* entry_poligono_z1;
+
+
+/* ---------- ENTRADAS MODAIS DE ROTACAO ---------- */
+GtkEntry* entry_rot_mundo;
+GtkEntry* entry_rot_obj;
+GtkEntry* entry_rot_pnt_graus;
+GtkEntry* entry_rot_pnt_x1;
+GtkEntry* entry_rot_pnt_y1;
 
 /* ---------- FUNCOES DOS BOTOES DA TELA PRINCIPAL ---------- */
 
@@ -118,6 +144,19 @@ void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data);
 /* ---------- FUNCAO MODAL DE EDICAO ---------- */
 void btn_edit_voltar_clicked(GtkWidget *widget, gpointer data);
 void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data);
+void btn_rot_mundo_clicked(GtkWidget *widget, gpointer data);
+void btn_rot_obj_clicked(GtkWidget *widget, gpointer data);
+void btn_rot_pnt_clicked(GtkWidget *widget, gpointer data);
+
+/* ---------- FUNCOES MODAIS DE ROTACAO ---------- */
+void btn_rot_mundo_voltar_clicked(GtkWidget *widget, gpointer data);
+void btn_rot_mundo_rotacionar_clicked(GtkWidget *widget, gpointer data);
+
+void btn_rot_obj_voltar_clicked(GtkWidget *widget, gpointer data);
+void btn_rot_obj_rotacionar_clicked(GtkWidget *widget, gpointer data);
+
+void btn_rot_pnt_voltar_clicked(GtkWidget *widget, gpointer data);
+void btn_rot_pnt_rotacionar_clicked(GtkWidget *widget, gpointer data);
 
 /* ---------- ---------- */
 
@@ -160,22 +199,33 @@ int main (int argc, char *argv[]) {
 
   btn_edit_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnEditVoltar"));
   btn_edit_confirmar = GTK_BUTTON(gtk_builder_get_object(builder, "btnEditConfirmar"));
+  btn_rot_mundo = GTK_BUTTON(gtk_builder_get_object(builder, "btnRotacaoMundo"));
+  btn_rot_obj = GTK_BUTTON(gtk_builder_get_object(builder, "btnRotacaoObjeto"));
+  btn_rot_pnt = GTK_BUTTON(gtk_builder_get_object(builder, "btnRotacaoQualquer"));
 
   g_signal_connect(btn_edit_voltar, "clicked", G_CALLBACK(btn_edit_voltar_clicked), nullptr);
   g_signal_connect(btn_edit_confirmar, "clicked", G_CALLBACK(btn_edit_confirmar_clicked), nullptr);
+  g_signal_connect(btn_rot_mundo, "clicked", G_CALLBACK(btn_rot_mundo_clicked), nullptr);
+  g_signal_connect(btn_rot_obj, "clicked", G_CALLBACK(btn_rot_obj_clicked), nullptr);
+  g_signal_connect(btn_rot_pnt, "clicked", G_CALLBACK(btn_rot_pnt_clicked), nullptr);
 
   entry_edit_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryEditNome"));
   entry_translacao_x = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoX"));
   entry_translacao_y = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoY"));
   entry_escalonamento_x = GTK_ENTRY(gtk_builder_get_object(builder, "entryEscalonamentoX"));
   entry_escalonamento_y = GTK_ENTRY(gtk_builder_get_object(builder, "entryEscalonamentoY"));
-  entry_rotacao_grau = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotacaoGrau"));
 
   /* ---------- MODAIS DE INCLUSAO ---------- */
 
   reta_window = GTK_WIDGET(gtk_builder_get_object(builder, "retaWindow"));
   ponto_window = GTK_WIDGET(gtk_builder_get_object(builder, "pontoWindow"));
   plgn_window = GTK_WIDGET(gtk_builder_get_object(builder, "poligonoWindow"));
+
+  /* ---------- MODAIS DE ROTACAO ---------- */
+
+  rot_mundo_window = GTK_WIDGET(gtk_builder_get_object(builder, "rotMundoWindow"));
+  rot_obj_window = GTK_WIDGET(gtk_builder_get_object(builder, "rotObjetoWindow"));
+  rot_pnt_window = GTK_WIDGET(gtk_builder_get_object(builder, "rotPntQlqWindow"));
 
   /* ---------- BOTOES TELA PRINCIPAL ---------- */
 
@@ -199,7 +249,7 @@ int main (int argc, char *argv[]) {
   g_signal_connect(btn_reta, "clicked", G_CALLBACK(btn_reta_clicked), nullptr);
   g_signal_connect(btn_poligono, "clicked", G_CALLBACK(btn_poligono_clicked), nullptr);
 
-  /* ---------- BOTOES TELA PRINCIPAL ---------- */
+  /* ---------- BOTOES MODAIS DE INCLUSAO ---------- */
 
   btn_reta_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnRetaVoltar"));
   btn_reta_incluir = GTK_BUTTON(gtk_builder_get_object(builder, "btnRetaIncluir"));
@@ -217,7 +267,23 @@ int main (int argc, char *argv[]) {
   g_signal_connect(btn_plgn_incluir, "clicked", G_CALLBACK(btn_plgn_incluir_clicked), nullptr);
   g_signal_connect(btn_plgn_add_ponto, "clicked", G_CALLBACK(btn_plgn_add_ponto_clicked), nullptr);
 
-/* ---------- ENTRADAS MODAIS DE INCLUSAO ---------- */
+  /* ---------- BOTOES MODAIS DE ROTACAO ---------- */
+
+  btn_rot_mundo_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnRotMundoVoltar"));
+  btn_rot_mundo_rotacionar = GTK_BUTTON(gtk_builder_get_object(builder, "btnRotMundoRotacionar"));
+  btn_rot_obj_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnRotObjetoVoltar"));
+  btn_rot_obj_rotacionar = GTK_BUTTON(gtk_builder_get_object(builder, "btnRotObjetoRotacionar"));
+  btn_rot_pnt_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnRotPntQlqVoltar"));
+  btn_rot_pnt_rotacionar = GTK_BUTTON(gtk_builder_get_object(builder, "btnRotPntQlqRotacionar"));
+
+  g_signal_connect(btn_rot_mundo_voltar, "clicked", G_CALLBACK(btn_rot_mundo_voltar_clicked), nullptr);
+  g_signal_connect(btn_rot_mundo_rotacionar, "clicked", G_CALLBACK(btn_rot_mundo_rotacionar_clicked), nullptr);
+  g_signal_connect(btn_rot_obj_voltar, "clicked", G_CALLBACK(btn_rot_obj_voltar_clicked), nullptr);
+  g_signal_connect(btn_rot_obj_rotacionar, "clicked", G_CALLBACK(btn_rot_obj_rotacionar_clicked), nullptr);
+  g_signal_connect(btn_rot_pnt_voltar, "clicked", G_CALLBACK(btn_rot_pnt_voltar_clicked), nullptr);
+  g_signal_connect(btn_rot_pnt_rotacionar, "clicked", G_CALLBACK(btn_rot_pnt_rotacionar_clicked), nullptr);
+
+  /* ---------- ENTRADAS MODAIS DE INCLUSAO ---------- */
 
   entry_ponto_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoNome"));
   entry_ponto_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoX1"));
@@ -236,6 +302,14 @@ int main (int argc, char *argv[]) {
   entry_poligono_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoX1"));
   entry_poligono_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoY1"));
   entry_poligono_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoZ1"));
+
+  /* ---------- ENTRADAS MODAIS DE ROTACAO ---------- */
+
+  entry_rot_mundo = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotMundo"));
+  entry_rot_obj = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotObjeto"));
+  entry_rot_pnt_graus = GTK_ENTRY(gtk_builder_get_object(builder, "entryGrausRotPntQlq"));
+  entry_rot_pnt_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotPntQlqX1"));
+  entry_rot_pnt_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotPntQlqY2"));
 
   /* ---------- ---------- */
 
@@ -301,7 +375,7 @@ void btn_plgn_voltar_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
-  auto nome = gtk_entry_get_text(entry_reta_nome); 
+  auto nome = gtk_entry_get_text(entry_reta_nome);
   auto x1 = atof(gtk_entry_get_text(entry_reta_inicio_x1));
   auto y1 = atof(gtk_entry_get_text(entry_reta_inicio_y1));
 
@@ -322,7 +396,7 @@ void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
-  auto nome = gtk_entry_get_text(entry_ponto_nome); 
+  auto nome = gtk_entry_get_text(entry_ponto_nome);
   auto x1 = atof(gtk_entry_get_text(entry_ponto_x1));
   auto y1 = atof(gtk_entry_get_text(entry_ponto_y1));
 
@@ -337,7 +411,7 @@ void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
 
 void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
 
-  auto nome = gtk_entry_get_text(entry_poligono_nome); 
+  auto nome = gtk_entry_get_text(entry_poligono_nome);
 
   gtk_entry_set_text(entry_poligono_nome,"");
   gtk_entry_set_text(entry_poligono_x1,"");
@@ -375,11 +449,11 @@ void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
   auto Sy = atof(gtk_entry_get_text(entry_escalonamento_y));
 
   if (Dx != 0 || Dy != 0) {
-    controlador->editar_objeto_translacao(Dx, Dy);  
+    controlador->editar_objeto_translacao(Dx, Dy);
   }
 
   if (Sx != 0 || Sy != 0) {
-    controlador->editar_objeto_escalonamento(Sx, Sy);  
+    controlador->editar_objeto_escalonamento(Sx, Sy);
   }
 
   gtk_entry_set_text(entry_translacao_x,"");
@@ -389,6 +463,64 @@ void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_escalonamento_y,"");
 
   gtk_widget_hide(edit_window);
+}
+
+void btn_rot_mundo_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_hide(edit_window);
+  gtk_widget_show(rot_mundo_window);
+}
+
+void btn_rot_obj_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_hide(edit_window);
+  gtk_widget_show(rot_obj_window);
+}
+
+void btn_rot_pnt_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_hide(edit_window);
+  gtk_widget_show(rot_pnt_window);
+}
+
+void btn_rot_mundo_voltar_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_hide(rot_mundo_window);
+  gtk_widget_show(edit_window);
+}
+
+void btn_rot_mundo_rotacionar_clicked(GtkWidget *widget, gpointer data) {
+  auto graus = atof(gtk_entry_get_text(entry_rot_mundo));
+  controlador->editar_objeto_rotacao_entorno_centro_mundo(graus);
+  gtk_entry_set_text(entry_rot_mundo, "");
+  gtk_widget_hide(rot_mundo_window);
+}
+
+void btn_rot_obj_voltar_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_hide(rot_obj_window);
+  gtk_widget_show(edit_window);
+}
+
+void btn_rot_obj_rotacionar_clicked(GtkWidget *widget, gpointer data) {
+  auto graus = atof(gtk_entry_get_text(entry_rot_obj));
+  controlador->editar_objeto_rotacao_entorno_centro_objeto(graus);
+  gtk_entry_set_text(entry_rot_obj, "");
+  gtk_widget_hide(rot_obj_window);
+}
+
+void btn_rot_pnt_voltar_clicked(GtkWidget *widget, gpointer data) {
+  gtk_widget_hide(rot_pnt_window);
+  gtk_widget_show(edit_window);
+}
+
+void btn_rot_pnt_rotacionar_clicked(GtkWidget *widget, gpointer data) {
+  auto graus = atof(gtk_entry_get_text(entry_rot_pnt_graus));
+  auto x = atof(gtk_entry_get_text(entry_rot_pnt_x1));
+  auto y = atof(gtk_entry_get_text(entry_rot_pnt_y1));
+
+  controlador->editar_objeto_rotacao_entorno_centro_ponto(graus, x, y);
+
+  gtk_entry_set_text(entry_rot_pnt_graus, "");
+  gtk_entry_set_text(entry_rot_pnt_x1, "");
+  gtk_entry_set_text(entry_rot_pnt_y1, "");
+
+  gtk_widget_hide(rot_pnt_window);
 }
 
 
