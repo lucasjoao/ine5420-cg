@@ -1,13 +1,5 @@
 # Atividade
 
-## Entrega 2 (Atrasado)
-
-* Rotações
-  * Em torno do centro do mundo
-  * Em torno do centro do objeto
-  * Em torno de um ponto qualquer (arbitrário)
-  * Modificar Interface Grafica para suportar todas as rotações
-
 ## Entrega 3 (11/04)
 
 * Acrescente ao seu Sistema Gráfico Interativo a capacidade de realizar rotações na Window. Para tal:
