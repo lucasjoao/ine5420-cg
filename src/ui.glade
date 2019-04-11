@@ -490,6 +490,40 @@
             <property name="y">220</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkLabel" id="lblRotacao">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Rotacionar pela window</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">485</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryRotacao">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="input_purpose">number</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">515</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnRotacaoOk">
+            <property name="label" translatable="yes">OK</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">210</property>
+            <property name="y">515</property>
+          </packing>
+        </child>
       </object>
     </child>
   </object>
