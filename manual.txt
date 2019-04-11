@@ -6,7 +6,7 @@ Observacoes de Interface
     Campos de nomes nao precisam ser preechindos pois he gerado automaticamente;
     Coordenadas z's nao precisam ser preenchidas pois nao sao utilizadas;
 
-    Criar Poligino:
+    Criar Poligono:
     Adicione quantos pontos desejar e clicar em concluir para finalizar
 
 -> Editar objetos (Escalonamento e transicao):
