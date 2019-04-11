@@ -30,7 +30,7 @@ void DisplayFile::adicionar_objeto(Objeto &obj) {
 }
 
 Objeto& DisplayFile::objeto(size_t posicao) {
-    _lista_objetos->at(posicao);
+    return _lista_objetos->at(posicao);
 }
 
 void DisplayFile::remover_objeto(const std::string& nome) {
