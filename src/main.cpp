@@ -17,6 +17,13 @@ static void clear_surface();
 static gboolean configure_event_cb(GtkWidget *widget, GdkEventConfigure *event, gpointer data);
 static gboolean draw_cb(GtkWidget *widget, cairo_t *cr, gpointer data);
 
+
+/* ---------- ROTACAO WINDOW ---------- */
+GtkEntry* entry_rot_window;
+GtkButton* btn_rotacao_window_ok;
+
+void btn_rotacao_window_ok_clicked(GtkWidget *widget, gpointer data);
+
 /* ---------- LISTA OBJETO ---------- */
 GtkCellRenderer *renderer;
 GtkTreeView *tree_view;
@@ -179,6 +186,12 @@ int main (int argc, char *argv[]) {
 
   gtk_widget_show(main_window);
 
+  /* ---------- ROTACAO WINDOW ---------- */
+  entry_rot_window = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotacaoWindow"));
+
+  btn_rotacao_window_ok = GTK_BUTTON(gtk_builder_get_object(builder, "btnRotacaoWindowOk"));
+  g_signal_connect(btn_rotacao_window_ok, "clicked", G_CALLBACK(btn_rotacao_window_ok_clicked), nullptr);
+
   /* ---------- LISTA OBJETO ---------- */
   tree_view = GTK_TREE_VIEW( gtk_builder_get_object( builder, "objectTreeView" ) );
   list_store = GTK_LIST_STORE( gtk_builder_get_object( builder, "liststore1" ) );
@@ -322,6 +335,14 @@ int main (int argc, char *argv[]) {
   gtk_main();
 
   return 0;
+}
+
+void btn_rotacao_window_ok_clicked(GtkWidget *widget, gpointer data) {
+  auto grau = atof(gtk_entry_get_text(entry_rot_window));
+
+  if (grau) {
+    controlador->rotacao_window(grau);
+  }
 }
 
 void btn_zoom_in_clicked(GtkWidget *widget, gpointer data) {

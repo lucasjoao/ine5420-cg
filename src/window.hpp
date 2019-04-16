@@ -19,8 +19,7 @@ class Window {
 
         Window(Coordenada origem, double altura, double largura): 
             _centro(Coordenada(origem.valor(Coordenada::x) + (largura/2), origem.valor(Coordenada::y) + (altura/2))),
-            _view_up(Coordenada(origem.valor(Coordenada::x) + (largura/2), origem.valor(Coordenada::y) + altura)),
-            _altura(altura), _largura(largura) {}
+            _angulo(0), _altura(altura), _largura(largura) {}
 
         void navagacao(direcao_navegacao_t direcao, double escalar);
 
@@ -30,18 +29,16 @@ class Window {
 
         Coordenada centro();
 
-        Coordenada view_up();
-
         double altura();
 
         double largura();
 
-        double angulo_view_up();
+        double angulo();
 
     private:
 
         Coordenada _centro;
-        Coordenada _view_up;
+        double _angulo;
         double _altura;
         double _largura;
 };
@@ -54,31 +51,27 @@ double Window::largura() {
     return _largura;
 }
 
-
 void Window::navagacao(direcao_navegacao_t direcao, double escalar) {
-
     auto x = Coordenada::x;
     auto y = Coordenada::y;
 
     switch (direcao) {
        case UP:
             _centro.alterar(_centro.valor(y)+escalar, y);
-            _view_up.alterar(_view_up.valor(y)+escalar, y);
             break;
 
         case DOWN:
             _centro.alterar(_centro.valor(y)-escalar, y);
-            _view_up.alterar(_view_up.valor(y)-escalar, y);
             break;
 
         case RIGHT:
             _centro.alterar(_centro.valor(x)+escalar, x);
-            _view_up.alterar(_view_up.valor(x)+escalar, x);
+
             break;
 
         case LEFT:
             _centro.alterar(_centro.valor(x)-escalar, x);
-            _view_up.alterar(_view_up.valor(x)-escalar, x);
+
             break;
      }    
 }
@@ -102,27 +95,18 @@ void Window::zoom(direcao_zoom_t direcao, double escalar) {
 }
 
 void Window::rotacao(double grau) {
-    auto t = Transformacao();
-    t.rotacao_em_torno_ponto(grau, _centro.valor(Coordenada::x), _centro.valor(Coordenada::y));
-
-    _centro *= t;
-    _view_up *= t;
+    _angulo += grau;
+    if (_angulo >= 360) {
+        _angulo -= 360;
+    }
 }
 
 Coordenada Window::centro() {
     return _centro;
 }
 
-Coordenada Window::view_up() {
-    return _view_up;
+double Window::angulo() {
+    return _angulo;
 }
-
-double Window::angulo_view_up() {
-    double m =  (_view_up.valor(Coordenada::y)  - _centro.valor(Coordenada::y))/  
-                (_view_up.valor(Coordenada::x)  - _centro.valor(Coordenada::x));
-
-    return atan(m);
-}
-
 
 #endif

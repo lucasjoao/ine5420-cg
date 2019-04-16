@@ -39,6 +39,8 @@ class Controlador {
         void atualizar_tela();       
         void limpar_tela();
 
+        void rotacao_window(double grau);
+
         void adicionar_objeto_na_tree_view(const char* nome);
 
         void selecionar_objeto(const char* nome);
@@ -59,6 +61,11 @@ class Controlador {
         GtkListStore * _list_store;
         size_t _objeto_selecionado;
 };
+
+void Controlador::rotacao_window(double grau) {
+    _window->rotacao(grau);
+    atualizar_tela();
+}
 
 void Controlador::adicionar_ponto(const char* nome, double x, double y) {
     auto obj = new Ponto(nome, Coordenada(x,y));
@@ -137,9 +144,15 @@ void Controlador::gerar_descricao_scn() {
     auto largura = (2/_window->largura());
     auto d = Transformacao();
     auto s = Transformacao();
+    auto r = Transformacao();
+    auto angulo = _window->angulo();
+
+
     d.translacao(-wc.valor(Coordenada::x), -wc.valor(Coordenada::y));
+    r.rotacao(-angulo);
     s.escalonamento_natural(0, 0, largura, altura);
 
+    d *= r;
     d *= s;
 
     for(size_t i = 0; i < _display_file->tamanho(); i++) {

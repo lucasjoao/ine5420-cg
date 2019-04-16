@@ -494,7 +494,7 @@
           <object class="GtkLabel" id="lblRotacao">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Rotacionar pela window</property>
+            <property name="label" translatable="yes">Rotacionar window</property>
           </object>
           <packing>
             <property name="x">20</property>
@@ -502,7 +502,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="entryRotacao">
+          <object class="GtkEntry" id="entryRotacaoWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="input_purpose">number</property>
@@ -513,7 +513,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="btnRotacaoOk">
+          <object class="GtkButton" id="btnRotacaoWindowOk">
             <property name="label" translatable="yes">OK</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -1202,6 +1202,9 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="deletable">False</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkFixed" id="rotObjetoContainer">
         <property name="visible">True</property>
