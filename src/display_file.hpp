@@ -1,5 +1,5 @@
-#ifndef DISPLAY_FILE
-#define DISPLAY_FILE
+#ifndef DISPLAY_FILE_HPP
+#define DISPLAY_FILE_HPP
 
 #include <string>
 #include "objeto.hpp"

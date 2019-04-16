@@ -1,5 +1,5 @@
-#ifndef OBJETO_POLIGONO
-#define OBJETO_POLIGONO
+#ifndef OBJETO_POLIGONO_HPP
+#define OBJETO_POLIGONO_HPP
 
 
 #include <string>

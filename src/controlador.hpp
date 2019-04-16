@@ -1,5 +1,5 @@
-#ifndef CONTROLADOR
-#define CONTROLADOR
+#ifndef CONTROLADOR_HPP
+#define CONTROLADOR_HPP
 
 #include "coordenada.hpp"
 #include "objeto.hpp"
@@ -9,7 +9,7 @@
 #include "display_file.hpp"
 #include "window.hpp"
 #include "viewport.hpp"
-#include "transformacoes.hpp"
+#include "transformacao.hpp"
 #include <iostream>
 
 #include <gtk/gtk.h>
@@ -131,17 +131,21 @@ void Controlador::navagacao(direcao_navegacao_t direcao) {
 }
 
 void Controlador::gerar_descricao_scn() {
-    double D[3][3];
 
-    auto c = _window->centro();
+    auto wc = _window->centro();
     auto altura = (2/_window->altura());
-    auto largura =(2/_window->largura());
+    auto largura = (2/_window->largura());
+    auto d = Transformacao();
+    auto s = Transformacao();
+    d.translacao(-wc.valor(Coordenada::x), -wc.valor(Coordenada::y));
+    s.escalonamento_natural(0, 0, largura, altura);
 
-    transformacoes::matriz_translacao(D, c.valor(Coordenada::x), c.valor(Coordenada::y));
+    d *= s;
 
     for(size_t i = 0; i < _display_file->tamanho(); i++) {
-        _display_file->objeto(i).normalizar(D, altura, largura);
-        
+        Objeto& obj = _display_file->objeto(i);
+        obj.reset_scn();
+        obj.aplicar_tranformacao_scn(d);
     }
 }
 
@@ -171,51 +175,25 @@ void Controlador::selecionar_objeto(const char* nome) {
     }
 }
 
-void Controlador::editar_objeto_translacao(double x, double y) {
-    double D[3][3];
-    double V[3];
-    double R[3];
+void Controlador::editar_objeto_translacao(double Dx, double Dy) {
 
     auto obj = _display_file->objeto(_objeto_selecionado);
-    transformacoes::matriz_translacao(D, x,y);
-
-    for(size_t i = 0; i < obj.tamanho(); i++) {
-        auto c = obj.coordenada(i);
-        V[0] = c.valor(0);
-        V[1] = c.valor(1);
-        V[2] = c.valor(2);
-
-        transformacoes::multiplicacao_vetor_matriz(R,V,D);
-
-        c.alterar(R[0], 0);
-        c.alterar(R[1], 1);
-        c.alterar(R[2], 2);
-    }
+    auto t = Transformacao();
+    t.translacao(Dx,Dy);
+    
+    obj.aplicar_tranformacao(t);
     atualizar_tela();
 }
 
-void Controlador::editar_objeto_escalonamento(double x, double y) {
-    double S[3][3];
-    double V[3];
-    double R[3];
+void Controlador::editar_objeto_escalonamento(double Sx, double Sy) {
 
     auto obj = _display_file->objeto(_objeto_selecionado);
     auto c = obj.centro();
+    auto t = Transformacao();
 
-    transformacoes::matriz_escalonamento_natural(S, c.valor(Coordenada::x), c.valor(Coordenada::y), x, y);
+    t.escalonamento_natural(c.valor(Coordenada::x), c.valor(Coordenada::y),Sx, Sy);
+    obj.aplicar_tranformacao(t);
 
-    for(size_t i = 0; i < obj.tamanho(); i++) {
-        auto c = obj.coordenada(i);
-        V[0] = c.valor(0);
-        V[1] = c.valor(1);
-        V[2] = c.valor(2);
-
-        transformacoes::multiplicacao_vetor_matriz(R,V,S);
-
-        c.alterar(R[0], 0);
-        c.alterar(R[1], 1);
-        c.alterar(R[2], 2);
-    }
     atualizar_tela();
 }
 
@@ -230,26 +208,11 @@ void Controlador::editar_objeto_rotacao_entorno_centro_mundo(double grau) {
     editar_objeto_rotacao_entorno_centro_ponto(grau, 0, 0);
 }
 
-void Controlador::editar_objeto_rotacao_entorno_centro_ponto(double grau, double x, double y) {
-    double R[3][3];
-    double V[3];
-    double W[3];
+void Controlador::editar_objeto_rotacao_entorno_centro_ponto(double grau, double Dx, double Dy) {
     auto obj = _display_file->objeto(_objeto_selecionado);
-
-    matriz_rotacao_em_torno_ponto(R, grau, x, y);
-
-    for(size_t i = 0; i < obj.tamanho(); i++) {
-        auto c = obj.coordenada(i);
-        V[0] = c.valor(0);
-        V[1] = c.valor(1);
-        V[2] = c.valor(2);
-
-        transformacoes::multiplicacao_vetor_matriz(W,V,R);
-
-        c.alterar(W[0], 0);
-        c.alterar(W[1], 1);
-        c.alterar(W[2], 2);
-    }
+    auto t = Transformacao();
+    t.rotacao_em_torno_ponto(grau, Dx, Dy);
+    obj.aplicar_tranformacao(t);
     atualizar_tela();
 }
 

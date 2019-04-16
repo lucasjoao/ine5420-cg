@@ -3,7 +3,7 @@
 
 #include <string>
 #include "objeto.hpp"
-#include "transformacoes.hpp"
+#include <cmath>
 
 enum direcao_zoom_t {
     IN, OUT
@@ -26,6 +26,8 @@ class Window {
 
         void zoom(direcao_zoom_t direcao, double escalar);
 
+        void rotacao(double grau);
+
         Coordenada centro();
 
         Coordenada view_up();
@@ -33,6 +35,8 @@ class Window {
         double altura();
 
         double largura();
+
+        double angulo_view_up();
 
     private:
 
@@ -58,27 +62,26 @@ void Window::navagacao(direcao_navegacao_t direcao, double escalar) {
 
     switch (direcao) {
        case UP:
-            _centro.alterar(_centro.valor(y)-escalar, y);
-            _view_up.alterar(_view_up.valor(y)-escalar, y);
-            break;
-
-        case DOWN:
             _centro.alterar(_centro.valor(y)+escalar, y);
             _view_up.alterar(_view_up.valor(y)+escalar, y);
             break;
 
-        case RIGHT:
-            _centro.alterar(_centro.valor(x)-escalar, x);
-            _centro.alterar(_view_up.valor(x)-escalar, x);
+        case DOWN:
+            _centro.alterar(_centro.valor(y)-escalar, y);
+            _view_up.alterar(_view_up.valor(y)-escalar, y);
             break;
 
-        case LEFT:
+        case RIGHT:
             _centro.alterar(_centro.valor(x)+escalar, x);
             _view_up.alterar(_view_up.valor(x)+escalar, x);
             break;
+
+        case LEFT:
+            _centro.alterar(_centro.valor(x)-escalar, x);
+            _view_up.alterar(_view_up.valor(x)-escalar, x);
+            break;
      }    
 }
-
 
 void Window::zoom(direcao_zoom_t direcao, double escalar) {
     switch (direcao)
@@ -98,6 +101,14 @@ void Window::zoom(direcao_zoom_t direcao, double escalar) {
     }
 }
 
+void Window::rotacao(double grau) {
+    auto t = Transformacao();
+    t.rotacao_em_torno_ponto(grau, _centro.valor(Coordenada::x), _centro.valor(Coordenada::y));
+
+    _centro *= t;
+    _view_up *= t;
+}
+
 Coordenada Window::centro() {
     return _centro;
 }
@@ -105,5 +116,13 @@ Coordenada Window::centro() {
 Coordenada Window::view_up() {
     return _view_up;
 }
+
+double Window::angulo_view_up() {
+    double m =  (_view_up.valor(Coordenada::y)  - _centro.valor(Coordenada::y))/  
+                (_view_up.valor(Coordenada::x)  - _centro.valor(Coordenada::x));
+
+    return atan(m);
+}
+
 
 #endif

@@ -1,9 +1,8 @@
-#ifndef OBJETO
-#define OBJETO
+#ifndef OBJETO_HPP
+#define OBJETO_HPP
 
 #include <string>
 #include "coordenada.hpp"
-#include "transformacoes.hpp"
 
 typedef std::vector<Coordenada> coordenadas_t;
 
@@ -37,7 +36,11 @@ class Objeto {
 
         size_t tamanho_scn();
 
-        void normalizar(double matriz[3][3], double altura, double largura);
+        size_t reset_scn();
+
+        void aplicar_tranformacao(const Transformacao &t);
+
+        void aplicar_tranformacao_scn(const Transformacao &t);
 
         bool operator==(const Objeto& obj) const;
 
@@ -136,31 +139,29 @@ size_t Objeto::tamanho_scn() {
     return _coordenadas_scn.size();
 }
 
-void Objeto::normalizar(double matriz[3][3], double altura, double largura) {
-    double T[3][3];
-    double S[3][3];
-    double V[3];
-    double R[3];
+void Objeto::aplicar_tranformacao_scn(const Transformacao &t) {
 
-    _coordenadas_scn.clear();
-
-    transformacoes::matriz_escalonamento_natural(
-        S, centro().valor(Coordenada::x), centro().valor(Coordenada::y), largura, altura
-    );
-    transformacoes::multiplicacao_matrizes(T, matriz, S);
-
-    for(size_t i = 0; i < tamanho(); i++) {
-        auto c = coordenada(i);
-        V[0] = c.valor(0);
-        V[1] = c.valor(1);
-        V[2] = c.valor(2);
-
-        transformacoes::multiplicacao_vetor_matriz(R,V,T);
-
-        _coordenadas_scn.push_back(Coordenada(R[0], R[1]));
+    for (size_t i = 0; i < tamanho(); i++) {
+        Coordenada &c = _coordenadas_scn[i];
+        c *= t;
     }
 }
 
+size_t Objeto::reset_scn() {
+    _coordenadas_scn.clear();
+
+    for (size_t i = 0; i < tamanho(); i++) {
+        _coordenadas_scn.push_back(
+            Coordenada(_coordenadas[i].valor(Coordenada::x), _coordenadas[i].valor(Coordenada::y))
+        );
+    }
+}
+
+void Objeto::aplicar_tranformacao(const Transformacao &t) {
+    for (size_t i = 0; i < tamanho(); i++) {
+        _coordenadas[i] *= t;
+    }
+}
 
 bool Objeto::operator==(const Objeto& obj) const {
     return (_nome.compare(obj._nome) == 0) && _tipo == obj._tipo; 

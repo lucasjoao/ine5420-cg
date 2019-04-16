@@ -1,5 +1,5 @@
-#ifndef OBJETO_PONTO
-#define OBJETO_PONTO
+#ifndef OBJETO_PONTO_HPP
+#define OBJETO_PONTO_HPP
 
 #include "objeto.hpp"
 

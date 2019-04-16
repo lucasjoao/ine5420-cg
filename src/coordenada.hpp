@@ -1,7 +1,9 @@
-#ifndef COORDENADA
-#define COORDENADA
+#ifndef COORDENADA_HPP
+#define COORDENADA_HPP
 
 #include <vector>
+
+#include "transformacao.hpp"
 
 class Coordenada {
 
@@ -18,6 +20,16 @@ class Coordenada {
         double valor(size_t posicao);
 
         void alterar(double v, size_t posicao);
+
+        void carregar(double v[3]);
+
+        void carregar(Coordenada &c);
+
+        void operator*=(const Transformacao &t);
+
+        double tamanho();
+
+        double angulo();
 
     private:
 
@@ -38,6 +50,29 @@ void Coordenada::alterar(double v, size_t posicao) {
 
 double Coordenada::valor(size_t posicao) {
     return _coordenada[posicao];
+}
+
+void Coordenada::carregar(double v[3]) {
+    _coordenada[0] = v[0];    
+    _coordenada[1] = v[1];    
+    _coordenada[2] = v[2];    
+}
+
+void Coordenada::carregar(Coordenada &c) {
+    _coordenada[0] = c.valor(0);    
+    _coordenada[1] = c.valor(1);    
+    _coordenada[2] = c.valor(2);    
+}
+
+
+void Coordenada::operator*=(const Transformacao &t) {
+    double R[3];
+
+    for (int i = 0; i < 3; i++) {
+            R[i] = valor(0)*t.valor(0,i) + valor(1)*t.valor(1,i) + valor(2)*t.valor(2,i); 
+    }
+
+    carregar(R);
 }
 
 #endif

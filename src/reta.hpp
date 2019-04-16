@@ -1,5 +1,5 @@
-#ifndef OBJETO_RETA
-#define OBJETO_RETA
+#ifndef OBJETO_RETA_HPP
+#define OBJETO_RETA_HPP
 
 #include <string>
 #include "objeto.hpp"
