@@ -28,15 +28,15 @@ class Controlador {
             _display_file(display_file), _window(window), _viewport(viewport),
             _coordenada_poligono(new std::vector<Coordenada>()) {}
 
-        void adicionar_ponto(const char* nome,double x, double y);
-        void adicionar_reta(const char* nome, double x1, double y1, double x2, double y2);
-        void adicionar_poligono(operacao_poligono_t operacao, const char* nome, double x, double y);
+        void adicionar_ponto(const std::string nome,double x, double y);
+        void adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2);
+        void adicionar_poligono(operacao_poligono_t operacao, const std::string nome, double x, double y);
 
         void zoom(direcao_zoom_t direca);
         void navagacao(direcao_navegacao_t direcao);
         void gerar_descricao_scn();
-        
-        void atualizar_tela();       
+
+        void atualizar_tela();
         void limpar_tela();
 
         void rotacao_window(double grau);
@@ -56,7 +56,7 @@ class Controlador {
         Window *_window;
         Viewport *_viewport;
 
-        std::vector<Coordenada> *_coordenada_poligono;       
+        std::vector<Coordenada> *_coordenada_poligono;
 
         GtkListStore * _list_store;
         size_t _objeto_selecionado;
@@ -67,7 +67,7 @@ void Controlador::rotacao_window(double grau) {
     atualizar_tela();
 }
 
-void Controlador::adicionar_ponto(const char* nome, double x, double y) {
+void Controlador::adicionar_ponto(const std::string nome, double x, double y) {
     auto obj = new Ponto(nome, Coordenada(x,y));
     _display_file->adicionar_objeto(*obj);
 
@@ -76,7 +76,7 @@ void Controlador::adicionar_ponto(const char* nome, double x, double y) {
 
 }
 
-void Controlador::adicionar_reta(const char* nome, double x1, double y1, double x2, double y2) {
+void Controlador::adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2) {
     auto reta = new Reta(nome, Coordenada(x1,y1), Coordenada(x2,y2));
     _display_file->adicionar_objeto(*reta);
 
@@ -85,7 +85,7 @@ void Controlador::adicionar_reta(const char* nome, double x1, double y1, double 
 
 }
 
-void Controlador::adicionar_poligono(operacao_poligono_t operacao, const char* nome, double x, double y) {
+void Controlador::adicionar_poligono(operacao_poligono_t operacao, const std::string nome, double x, double y) {
     Poligono* poligono;
     Objeto* obj;
 
@@ -193,7 +193,7 @@ void Controlador::editar_objeto_translacao(double Dx, double Dy) {
     auto obj = _display_file->objeto(_objeto_selecionado);
     auto t = Transformacao();
     t.translacao(Dx,Dy);
-    
+
     obj.aplicar_tranformacao(t);
     atualizar_tela();
 }

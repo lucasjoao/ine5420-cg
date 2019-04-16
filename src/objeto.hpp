@@ -16,20 +16,20 @@ class Objeto {
 
     public:
 
-        Objeto(const std::string& nome, tipo_t tipo);
+        Objeto(const std::string nome, tipo_t tipo);
 
         ~Objeto();
 
-        const std::string& nome() const;
+        const std::string nome() const;
 
         tipo_t tipo() const;
 
         Coordenada coordenada(size_t posicao);
-        
+
         Coordenada coordenada_scn(size_t posicao);
 
         Coordenada centro();
-        
+
         Coordenada centro_scn();
 
         size_t tamanho();
@@ -55,29 +55,34 @@ class Objeto {
 
 size_t Objeto::_id = 0;
 
-Objeto::Objeto(const std::string& nome, tipo_t tipo) {
-    _id++;
+Objeto::Objeto(const std::string nome, tipo_t tipo) {
+    if (nome.empty()) {
+        _id++;
 
-    auto apelido = std::to_string(_id) + "-";
-    switch (tipo)
-    {
-        case PONTO:
-            apelido += "PONTO";
-            break;
+        auto apelido = std::to_string(_id) + "-";
+        switch (tipo)
+        {
+            case PONTO:
+                apelido += "PONTO";
+                break;
 
-        case RETA:
-            apelido += "RETA";
-            break;
+            case RETA:
+                apelido += "RETA";
+                break;
 
-        case POLIGONO:
-            apelido += "POLIGONO";
-            break;
+            case POLIGONO:
+                apelido += "POLIGONO";
+                break;
 
-        default:
-            break;
+            default:
+                break;
+        }
+
+        _nome = apelido;
+    } else {
+        _nome = nome;
     }
 
-    _nome = apelido;
     _tipo = tipo;
     _coordenadas = coordenadas_t();
     _coordenadas_scn = coordenadas_t();
@@ -85,7 +90,7 @@ Objeto::Objeto(const std::string& nome, tipo_t tipo) {
 
 Objeto::~Objeto() {}
 
-const std::string& Objeto::nome() const {
+const std::string Objeto::nome() const {
     return _nome;
 }
 
@@ -113,7 +118,7 @@ Coordenada Objeto::centro() {
 
     x = x/tamanho;
     y = y/tamanho;
-    return Coordenada(x,y);  
+    return Coordenada(x,y);
 }
 
 Coordenada Objeto::centro_scn() {
@@ -128,7 +133,7 @@ Coordenada Objeto::centro_scn() {
 
     x = x/tamanho;
     y = y/tamanho;
-    return Coordenada(x,y);  
+    return Coordenada(x,y);
 }
 
 size_t Objeto::tamanho() {
@@ -164,7 +169,7 @@ void Objeto::aplicar_tranformacao(const Transformacao &t) {
 }
 
 bool Objeto::operator==(const Objeto& obj) const {
-    return (_nome.compare(obj._nome) == 0) && _tipo == obj._tipo; 
+    return (_nome.compare(obj._nome) == 0) && _tipo == obj._tipo;
 }
 
 bool Objeto::operator!=(const Objeto& obj) const {

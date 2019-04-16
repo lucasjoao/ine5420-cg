@@ -378,7 +378,7 @@ void btn_reta_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_poligono_clicked(GtkWidget *widget, gpointer data) {
-  controlador->adicionar_poligono(operacao_poligono_t::NOVO, 0, 0,0);
+  controlador->adicionar_poligono(operacao_poligono_t::NOVO, "", 0, 0);
   gtk_widget_show(plgn_window);
 }
 
@@ -391,12 +391,12 @@ void btn_ponto_voltar_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_plgn_voltar_clicked(GtkWidget *widget, gpointer data) {
-  controlador->adicionar_poligono(operacao_poligono_t::CANCELAR, 0, 0,0);
+  controlador->adicionar_poligono(operacao_poligono_t::CANCELAR, "", 0, 0);
   gtk_widget_hide(plgn_window);
 }
 
 void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
-  auto nome = gtk_entry_get_text(entry_reta_nome);
+  std::string nome = gtk_entry_get_text(entry_reta_nome);
   auto x1 = atof(gtk_entry_get_text(entry_reta_inicio_x1));
   auto y1 = atof(gtk_entry_get_text(entry_reta_inicio_y1));
 
@@ -417,7 +417,7 @@ void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
-  auto nome = gtk_entry_get_text(entry_ponto_nome);
+  std::string nome = gtk_entry_get_text(entry_ponto_nome);
   auto x1 = atof(gtk_entry_get_text(entry_ponto_x1));
   auto y1 = atof(gtk_entry_get_text(entry_ponto_y1));
 
@@ -432,7 +432,7 @@ void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
 
 void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
 
-  auto nome = gtk_entry_get_text(entry_poligono_nome);
+  std::string nome = gtk_entry_get_text(entry_poligono_nome);
 
   gtk_entry_set_text(entry_poligono_nome,"");
   gtk_entry_set_text(entry_poligono_x1,"");
@@ -440,7 +440,7 @@ void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_poligono_z1,"");
 
   controlador->adicionar_poligono(operacao_poligono_t::CONCLUIR, nome, 0, 0);
-  controlador->adicionar_poligono(operacao_poligono_t::NOVO, 0, 0, 0);
+  controlador->adicionar_poligono(operacao_poligono_t::NOVO, "", 0, 0);
 
 }
 
@@ -453,7 +453,7 @@ void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_poligono_y1,"");
   gtk_entry_set_text(entry_poligono_z1,"");
 
-  controlador->adicionar_poligono(operacao_poligono_t::ADICIONAR_PONTO, 0, x1, y1);
+  controlador->adicionar_poligono(operacao_poligono_t::ADICIONAR_PONTO, "", x1, y1);
 
 }
 
