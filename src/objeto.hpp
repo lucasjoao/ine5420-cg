@@ -36,7 +36,7 @@ class Objeto {
 
         size_t tamanho_scn();
 
-        size_t reset_scn();
+        void reset_scn();
 
         void aplicar_tranformacao(const Transformacao &t);
 
@@ -152,7 +152,7 @@ void Objeto::aplicar_tranformacao_scn(const Transformacao &t) {
     }
 }
 
-size_t Objeto::reset_scn() {
+void Objeto::reset_scn() {
     _coordenadas_scn.clear();
 
     for (size_t i = 0; i < tamanho(); i++) {
