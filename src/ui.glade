@@ -174,28 +174,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="lblNome">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Nome:</property>
-          </object>
-          <packing>
-            <property name="x">20</property>
-            <property name="y">20</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="entryEditNome">
-            <property name="width_request">350</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-          </object>
-          <packing>
-            <property name="x">75</property>
-            <property name="y">15</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkButton" id="btnRotacaoMundo">
             <property name="label" translatable="yes">          Rotação
 (centro do mundo)</property>

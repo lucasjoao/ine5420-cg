@@ -41,7 +41,6 @@ GtkButton* btn_rot_mundo;
 GtkButton* btn_rot_obj;
 GtkButton* btn_rot_pnt;
 
-GtkEntry* entry_edit_nome;
 GtkEntry* entry_translacao_x;
 GtkEntry* entry_translacao_y;
 GtkEntry* entry_escalonamento_x;
@@ -222,7 +221,6 @@ int main (int argc, char *argv[]) {
   g_signal_connect(btn_rot_obj, "clicked", G_CALLBACK(btn_rot_obj_clicked), nullptr);
   g_signal_connect(btn_rot_pnt, "clicked", G_CALLBACK(btn_rot_pnt_clicked), nullptr);
 
-  entry_edit_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryEditNome"));
   entry_translacao_x = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoX"));
   entry_translacao_y = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoY"));
   entry_escalonamento_x = GTK_ENTRY(gtk_builder_get_object(builder, "entryEscalonamentoX"));
@@ -463,17 +461,11 @@ void btn_edit_voltar_clicked(GtkWidget *widget, gpointer data) {
 
 void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
 
-  std::string nome = gtk_entry_get_text(entry_edit_nome);
-
   auto Dx = atof(gtk_entry_get_text(entry_translacao_x));
   auto Dy = atof(gtk_entry_get_text(entry_translacao_y));
 
   auto Sx = atof(gtk_entry_get_text(entry_escalonamento_x));
   auto Sy = atof(gtk_entry_get_text(entry_escalonamento_y));
-
-  if (!nome.empty()) {
-    controlador->editar_objeto_nome(nome);
-  }
 
   if (Dx != 0 || Dy != 0) {
     controlador->editar_objeto_translacao(Dx, Dy);
@@ -482,8 +474,6 @@ void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
   if (Sx != 0 || Sy != 0) {
     controlador->editar_objeto_escalonamento(Sx, Sy);
   }
-
-  gtk_entry_set_text(entry_edit_nome,"");
 
   gtk_entry_set_text(entry_translacao_x,"");
   gtk_entry_set_text(entry_translacao_y,"");

@@ -22,8 +22,6 @@ class Objeto {
 
         const std::string nome() const;
 
-        void set_nome(std::string nome);
-
         tipo_t tipo() const;
 
         Coordenada coordenada(size_t posicao);
@@ -94,10 +92,6 @@ Objeto::~Objeto() {}
 
 const std::string Objeto::nome() const {
     return _nome;
-}
-
-void Objeto::set_nome(std::string nome) {
-    _nome = nome;
 }
 
 tipo_t Objeto::tipo() const {
