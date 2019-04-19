@@ -389,8 +389,7 @@ void btn_load_file_clicked(GtkWidget *widget, gpointer data) {
 
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
     chooser = GTK_FILE_CHOOSER(dialog);
-    std::cout << gtk_file_chooser_get_filename(chooser);
-    // g_free
+    controlador->carregar_arquivo(gtk_file_chooser_get_filename(chooser));
   }
 
   gtk_widget_destroy(dialog);

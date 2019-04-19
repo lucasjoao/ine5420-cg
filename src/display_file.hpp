@@ -20,6 +20,8 @@ class DisplayFile {
 
         size_t tamanho();
 
+        void limpar();
+
     private:
         std::vector<Objeto> *_lista_objetos;
 
@@ -39,6 +41,10 @@ void DisplayFile::remover_objeto(const std::string& nome) {
 
 size_t DisplayFile::tamanho() {
     return _lista_objetos->size();
+}
+
+void DisplayFile::limpar() {
+    _lista_objetos->clear();
 }
 
 #endif

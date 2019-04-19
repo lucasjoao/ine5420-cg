@@ -16,7 +16,6 @@
 
 #include <gtk/gtk.h>
 
-
 enum operacao_poligono_t {
     NOVO, ADICIONAR_PONTO, CONCLUIR, CANCELAR
 };
@@ -28,7 +27,8 @@ class Controlador {
         Controlador(DisplayFile* display_file, Window *window, Viewport *viewport, GtkListStore* list_store):
             _list_store(list_store),
             _display_file(display_file), _window(window), _viewport(viewport),
-            _coordenada_poligono(new std::vector<Coordenada>()) {}
+            _coordenada_poligono(new std::vector<Coordenada>()),
+            _descritor_objeto(new DescritorObjeto()) {}
 
         void adicionar_ponto(const std::string nome,double x, double y);
         void adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2);
@@ -53,6 +53,7 @@ class Controlador {
         void editar_objeto_rotacao_entorno_centro_ponto(double grau, double x, double y);
 
         void salvar_arquivo(std::string filename);
+        void carregar_arquivo(std::string filename);
 
     private:
 
@@ -64,6 +65,10 @@ class Controlador {
 
         GtkListStore * _list_store;
         size_t _objeto_selecionado;
+
+        DescritorObjeto *_descritor_objeto;
+
+        void criar_obj_do_arquivo(std::vector<std::string> obj);
 };
 
 void Controlador::rotacao_window(double grau) {
@@ -168,7 +173,7 @@ void Controlador::gerar_descricao_scn() {
 
 
 void Controlador::atualizar_tela() {
-    limpar_tela();
+    _viewport->limpar_tela();
 
     gerar_descricao_scn();
 
@@ -180,6 +185,8 @@ void Controlador::atualizar_tela() {
 
 void Controlador::limpar_tela() {
     _viewport->limpar_tela();
+    gtk_list_store_clear(_list_store);
+    _display_file->limpar();
 }
 
 void Controlador::selecionar_objeto(const char* nome) {
@@ -241,17 +248,74 @@ void Controlador::adicionar_objeto_na_tree_view(const char* nome) {
 }
 
 void Controlador::salvar_arquivo(std::string filename) {
-    auto *descritor_objeto = new DescritorObjeto();
     std::ofstream file;
 
     file.open(filename);
 
     for (size_t i = 0; i < _display_file->tamanho(); i++) {
         auto obj = _display_file->objeto(i);
-        file << descritor_objeto->descreve_objeto(obj);
+        file << _descritor_objeto->descreve_objeto(obj);
     }
 
     file.close();
+}
+
+void Controlador::carregar_arquivo(std::string filename) {
+    limpar_tela();
+
+    std::ifstream file;
+    std::string line;
+
+    file.open(filename);
+
+    // obj ira possuir todas as linhas do arquivo que representam um objeto
+    std::vector<std::string> obj;
+    while (getline(file, line)) {
+        obj.push_back(line);
+        if (line.find(_descritor_objeto->end_of_object) != std::string::npos) {
+            criar_obj_do_arquivo(obj);
+            obj.clear();
+        }
+    }
+
+    file.close();
+}
+
+// vector obj
+// posicao 0 possui o seu tipo
+// posicao 1 possui o nome do objeto
+// posicao 2 ate penultima possui os vertices
+// ultima posicao possui um indicador de fim do objeto
+// ver DescritorObjeto::descreve_objeto
+void Controlador::criar_obj_do_arquivo(std::vector<std::string> obj) {
+
+    if (obj.at(0) == "pon") {
+
+        auto point = _descritor_objeto->split_line_in_vector(obj.at(2));
+        adicionar_ponto(obj.at(1), point.at(0), point.at(1));
+
+    } else if (obj.at(0) == "ret") {
+
+        auto point0 = _descritor_objeto->split_line_in_vector(obj.at(2));
+        auto point1 = _descritor_objeto->split_line_in_vector(obj.at(3));
+        adicionar_reta(obj.at(1), point0.at(0), point0.at(1),
+                       point1.at(0), point1.at(1));
+
+    } else if (obj.at(0) == "pol") {
+
+        adicionar_poligono(NOVO, "", 0, 0);
+
+        // lembrar que:
+        // primeiro vertice sempre iniciara na posicao 2 do vetor obj
+        // e terminara na penultima posicao do vetor obj
+        for (size_t i = 2; i < obj.size() - 1; i++) {
+            auto point = _descritor_objeto->split_line_in_vector(obj.at(i));
+            adicionar_poligono(ADICIONAR_PONTO, "", point.at(0), point.at(1));
+        }
+
+        adicionar_poligono(CONCLUIR, obj.at(1), 0, 0);
+
+    }
 }
 
 #endif
