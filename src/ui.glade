@@ -502,6 +502,30 @@
             <property name="y">515</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkButton" id="btnImport">
+            <property name="label" translatable="yes">Abrir arquivo</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">20</property>
+            <property name="y">560</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnSave">
+            <property name="label" translatable="yes">Salvar arquivo</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">145</property>
+            <property name="y">560</property>
+          </packing>
+        </child>
       </object>
     </child>
   </object>

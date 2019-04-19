@@ -17,6 +17,9 @@ static void clear_surface();
 static gboolean configure_event_cb(GtkWidget *widget, GdkEventConfigure *event, gpointer data);
 static gboolean draw_cb(GtkWidget *widget, cairo_t *cr, gpointer data);
 
+/* ---------- ARQUIVOS ---------- */
+GtkButton* btn_save_file;
+GtkButton* btn_load_file;
 
 /* ---------- ROTACAO WINDOW ---------- */
 GtkEntry* entry_rot_window;
@@ -121,6 +124,10 @@ GtkEntry* entry_rot_pnt_graus;
 GtkEntry* entry_rot_pnt_x1;
 GtkEntry* entry_rot_pnt_y1;
 
+/* ---------- FUNCOES DOS BOTOES DE ARQUIVOS ---------- */
+void btn_save_file_clicked(GtkWidget *widget, gpointer data);
+void btn_load_file_clicked(GtkWidget *widget, gpointer data);
+
 /* ---------- FUNCOES DOS BOTOES DA TELA PRINCIPAL ---------- */
 
 void btn_zoom_in_clicked(GtkWidget *widget, gpointer data);
@@ -184,6 +191,13 @@ int main (int argc, char *argv[]) {
   g_signal_connect(displayArea, "configure-event", G_CALLBACK(configure_event_cb), nullptr);
 
   gtk_widget_show(main_window);
+
+  /* ---------- ARQUIVOS ---------- */
+  btn_save_file = GTK_BUTTON(gtk_builder_get_object(builder, "btnSave"));
+  btn_load_file = GTK_BUTTON(gtk_builder_get_object(builder, "btnImport"));
+
+  g_signal_connect(btn_save_file, "clicked", G_CALLBACK(btn_save_file_clicked), nullptr);
+  g_signal_connect(btn_load_file, "clicked", G_CALLBACK(btn_load_file_clicked), nullptr);
 
   /* ---------- ROTACAO WINDOW ---------- */
   entry_rot_window = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotacaoWindow"));
@@ -333,6 +347,14 @@ int main (int argc, char *argv[]) {
   gtk_main();
 
   return 0;
+}
+
+void btn_save_file_clicked(GtkWidget *widget, gpointer data) {
+  // TODO: dialog
+}
+
+void btn_load_file_clicked(GtkWidget *widget, gpointer data) {
+  // TODO: dialog
 }
 
 void btn_rotacao_window_ok_clicked(GtkWidget *widget, gpointer data) {
