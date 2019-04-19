@@ -289,19 +289,19 @@ void Controlador::carregar_arquivo(std::string filename) {
 // ver DescritorObjeto::descreve_objeto
 void Controlador::criar_obj_do_arquivo(std::vector<std::string> obj) {
 
-    if (obj.at(0) == "pon") {
+    if (obj.at(0) == _descritor_objeto->ponto) {
 
         auto point = _descritor_objeto->split_line_in_vector(obj.at(2));
         adicionar_ponto(obj.at(1), point.at(0), point.at(1));
 
-    } else if (obj.at(0) == "ret") {
+    } else if (obj.at(0) == _descritor_objeto->reta) {
 
         auto point0 = _descritor_objeto->split_line_in_vector(obj.at(2));
         auto point1 = _descritor_objeto->split_line_in_vector(obj.at(3));
         adicionar_reta(obj.at(1), point0.at(0), point0.at(1),
                        point1.at(0), point1.at(1));
 
-    } else if (obj.at(0) == "pol") {
+    } else if (obj.at(0) == _descritor_objeto->poligono) {
 
         adicionar_poligono(NOVO, "", 0, 0);
 

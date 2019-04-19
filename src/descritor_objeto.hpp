@@ -9,9 +9,13 @@ class DescritorObjeto {
 
   public:
 
-    std::string descreve_objeto(Objeto obj);
-
     const std::string end_of_object = "\t\t\t FIM OBJETO \t\t\t";
+    const std::string ponto = "pon";
+    const std::string reta = "ret";
+    const std::string poligono = "pol";
+    const std::string vertice = "ver ";
+
+    std::string descreve_objeto(Objeto obj);
 
     std::vector<double> split_line_in_vector(std::string line);
 
@@ -22,13 +26,13 @@ class DescritorObjeto {
 
     switch (obj.tipo()) {
       case PONTO:
-        text += "pon";
+        text += ponto;
         break;
       case RETA:
-        text += "ret";
+        text += reta;
         break;
       case POLIGONO:
-        text += "pol";
+        text += poligono;
         break;
       default:
         break;
@@ -38,7 +42,7 @@ class DescritorObjeto {
 
     for(size_t i = 0; i < obj.tamanho(); i++) {
       auto coordenada = obj.coordenada(i);
-      text += "ver ";
+      text += vertice;
       text += std::to_string(coordenada.valor(0)) + " ";
       text += std::to_string(coordenada.valor(1)) + "\n";
     }
