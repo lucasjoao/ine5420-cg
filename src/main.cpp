@@ -350,11 +350,51 @@ int main (int argc, char *argv[]) {
 }
 
 void btn_save_file_clicked(GtkWidget *widget, gpointer data) {
-  // TODO: dialog
+  GtkWidget *dialog;
+  GtkFileChooser *chooser;
+
+  dialog = gtk_file_chooser_dialog_new("Salvar arquivo",
+                                        GTK_WINDOW(main_window),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        "Cancelar",
+                                        GTK_RESPONSE_CANCEL,
+                                        "Salvar",
+                                        GTK_RESPONSE_ACCEPT,
+                                        nullptr);
+  chooser = GTK_FILE_CHOOSER(dialog);
+
+  gtk_file_chooser_set_do_overwrite_confirmation(chooser, TRUE);
+
+  gtk_file_chooser_set_current_name(chooser, "arquivo.obj");
+
+  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
+    std::cout << gtk_file_chooser_get_filename(chooser);
+    // g_free
+  }
+
+  gtk_widget_destroy(dialog);
 }
 
 void btn_load_file_clicked(GtkWidget *widget, gpointer data) {
-  // TODO: dialog
+  GtkWidget *dialog;
+  GtkFileChooser *chooser;
+
+  dialog = gtk_file_chooser_dialog_new("Abrir arquivo",
+                                        GTK_WINDOW(main_window),
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        "Cancelar",
+                                        GTK_RESPONSE_CANCEL,
+                                        "Abrir",
+                                        GTK_RESPONSE_ACCEPT,
+                                        nullptr);
+
+  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
+    chooser = GTK_FILE_CHOOSER(dialog);
+    std::cout << gtk_file_chooser_get_filename(chooser);
+    // g_free
+  }
+
+  gtk_widget_destroy(dialog);
 }
 
 void btn_rotacao_window_ok_clicked(GtkWidget *widget, gpointer data) {
