@@ -10,7 +10,9 @@
 #include "window.hpp"
 #include "viewport.hpp"
 #include "transformacao.hpp"
+#include "descritor_objeto.hpp"
 #include <iostream>
+#include <fstream>
 
 #include <gtk/gtk.h>
 
@@ -49,6 +51,8 @@ class Controlador {
         void editar_objeto_rotacao_entorno_centro_mundo(double grau);
         void editar_objeto_rotacao_entorno_centro_objeto(double grau);
         void editar_objeto_rotacao_entorno_centro_ponto(double grau, double x, double y);
+
+        void salvar_arquivo(std::string filename);
 
     private:
 
@@ -234,6 +238,20 @@ void Controlador::adicionar_objeto_na_tree_view(const char* nome) {
 
   gtk_list_store_append(_list_store, &iter);
   gtk_list_store_set(_list_store, &iter, 0, nome, -1);
+}
+
+void Controlador::salvar_arquivo(std::string filename) {
+    auto *descritor_objeto = new DescritorObjeto();
+    std::ofstream file;
+
+    file.open(filename);
+
+    for (size_t i = 0; i < _display_file->tamanho(); i++) {
+        auto obj = _display_file->objeto(i);
+        file << descritor_objeto->descreve_objeto(obj);
+    }
+
+    file.close();
 }
 
 #endif

@@ -368,8 +368,7 @@ void btn_save_file_clicked(GtkWidget *widget, gpointer data) {
   gtk_file_chooser_set_current_name(chooser, "arquivo.obj");
 
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
-    std::cout << gtk_file_chooser_get_filename(chooser);
-    // g_free
+    controlador->salvar_arquivo(gtk_file_chooser_get_filename(chooser));
   }
 
   gtk_widget_destroy(dialog);
