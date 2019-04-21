@@ -10,7 +10,12 @@ enum tipo_t {
     PONTO, RETA, POLIGONO
 };
 
+class Clipping;
+
 class Objeto {
+
+    friend class Clipping;
+  
     public:
         static size_t _id;
 
@@ -42,11 +47,14 @@ class Objeto {
 
         void aplicar_tranformacao_scn(const Transformacao &t);
 
+        bool visivel();
+
         bool operator==(const Objeto& obj) const;
 
         bool operator!=(const Objeto& obj) const;
 
     protected:
+        bool _visivel{true};
         std::string _nome;
         tipo_t _tipo;
         std::vector<Coordenada> _coordenadas;
@@ -167,6 +175,11 @@ void Objeto::aplicar_tranformacao(const Transformacao &t) {
         _coordenadas[i] *= t;
     }
 }
+
+bool Objeto::visivel() {
+    return _visivel;
+}
+
 
 bool Objeto::operator==(const Objeto& obj) const {
     return (_nome.compare(obj._nome) == 0) && _tipo == obj._tipo;

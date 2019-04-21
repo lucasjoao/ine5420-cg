@@ -11,6 +11,7 @@
 #include "viewport.hpp"
 #include "transformacao.hpp"
 #include "descritor_objeto.hpp"
+#include "clipping.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -37,7 +38,9 @@ class Controlador {
         void zoom(direcao_zoom_t direca);
         void navagacao(direcao_navegacao_t direcao);
         void gerar_descricao_scn();
+        void clipping(int alg);
 
+        void redesenhar();
         void atualizar_tela();
         void limpar_tela();
 
@@ -156,7 +159,6 @@ void Controlador::gerar_descricao_scn() {
     auto r = Transformacao();
     auto angulo = _window->angulo();
 
-
     d.translacao(-wc.valor(Coordenada::x), -wc.valor(Coordenada::y));
     r.rotacao(-angulo);
     s.escalonamento_natural(0, 0, largura, altura);
@@ -171,16 +173,29 @@ void Controlador::gerar_descricao_scn() {
     }
 }
 
-
-void Controlador::atualizar_tela() {
+void Controlador::redesenhar() {
     _viewport->limpar_tela();
-
-    gerar_descricao_scn();
 
     for(size_t i = 0; i < _display_file->tamanho(); i++) {
         auto obj = _display_file->objeto(i);
-        _viewport->desenhar(obj);
+
+        if (obj.visivel())
+            _viewport->desenhar(obj);
     }
+}
+
+void Controlador::clipping(int alg) {
+    auto c = Clipping();
+    for(size_t i = 0; i < _display_file->tamanho(); i++) {
+        Objeto& obj = _display_file->objeto(i);
+        c.clipping(obj, alg);
+    }
+}
+
+void Controlador::atualizar_tela() {
+    gerar_descricao_scn();
+    clipping(0);
+    redesenhar();
 }
 
 void Controlador::limpar_tela() {
