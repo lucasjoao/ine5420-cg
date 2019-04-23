@@ -31,6 +31,8 @@ class Coordenada {
 
         double angulo();
 
+        static double coeficiente_anguluar(Coordenada &c1, Coordenada &c2);
+
     private:
 
         double* _coordenada;
@@ -62,6 +64,10 @@ void Coordenada::carregar(Coordenada &c) {
     _coordenada[0] = c.valor(0);    
     _coordenada[1] = c.valor(1);    
     _coordenada[2] = c.valor(2);    
+}
+
+double Coordenada::coeficiente_anguluar(Coordenada &c1, Coordenada &c2) {
+    return (c2.valor(y) - c1.valor(x))/(c2.valor(x) - c1.valor(x));
 }
 
 
