@@ -82,28 +82,34 @@ void Clipping::reta_alg0(Objeto& obj) {
     auto c1 = codigo_ponto(p1);
     auto c2 = codigo_ponto(p2);
 
-
     if (c1 & c2) {
         obj._visivel = false;
     } else if ( (c1 | c2) == 0) {
         obj._visivel = true;
     } else {
         auto m = Coordenada::coeficiente_anguluar(p1, p2);
-        auto novo_p1 = calcular_intersecao(p1, c1, m);
 
-        if (novo_p1.valor(x) < w_min.valor(x) || novo_p1.valor(x) > w_max.valor(x)) {
-            obj._visivel = false;
-            return;
-        }
+        auto novo_p1 = calcular_intersecao(p1, c1, m);
         auto novo_p2 = calcular_intersecao(p2, c2, m);
 
-        if (novo_p2.valor(x) < w_min.valor(x) || novo_p2.valor(x) > w_max.valor(x)) {
+        c1 = codigo_ponto(novo_p1);
+        c2 = codigo_ponto(novo_p2);
+
+        if (c1)
+            novo_p1 = calcular_intersecao(novo_p1, c1, m);
+        if (c2)
+            novo_p2 = calcular_intersecao(novo_p2, c2, m);
+
+        c1 = codigo_ponto(novo_p1);
+        c2 = codigo_ponto(novo_p2);
+
+        if (c1 || c2) {
             obj._visivel = false;
-            return;
+        } else {
+            obj._visivel = true;
+            obj._coordenadas_scn[0] = novo_p1;
+            obj._coordenadas_scn[1] = novo_p2;
         }
-        obj._visivel = true;
-        obj._coordenadas_scn[0] = novo_p1;
-        obj._coordenadas_scn[1] = novo_p2;
     }
 }
 
@@ -114,14 +120,16 @@ Coordenada Clipping::calcular_intersecao(Coordenada &p, codigo_t c, double coef_
 
     if (c & _esquerda) {
         novo_y = coef_angular*(w_min.valor(x) - p.valor(x)) + p.valor(y);       
+        novo_x = w_min.valor(x);
     } else if (c &_direita) {
         novo_y = coef_angular*(w_max.valor(x) - p.valor(x)) + p.valor(y);
-    }
-
-    if (c & _cima) {
+        novo_x = w_max.valor(x);
+    } else if (c & _cima) {
         novo_x = (1/coef_angular)*(w_max.valor(y) - p.valor(y)) + p.valor(x);
+        novo_y = w_max.valor(y);
     } else if (c & _baixo) {
         novo_x = (1/coef_angular)*(w_min.valor(y) - p.valor(y)) + p.valor(x);
+        novo_y = w_min.valor(y);
     }
     return Coordenada(novo_x, novo_y);
 }

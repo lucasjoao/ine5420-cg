@@ -67,7 +67,7 @@ void Coordenada::carregar(Coordenada &c) {
 }
 
 double Coordenada::coeficiente_anguluar(Coordenada &c1, Coordenada &c2) {
-    return (c2.valor(y) - c1.valor(x))/(c2.valor(x) - c1.valor(x));
+    return (c2.valor(y) - c1.valor(y))/(c2.valor(x) - c1.valor(x));
 }
 
 
