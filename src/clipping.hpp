@@ -3,6 +3,7 @@
 
 #include "objeto.hpp"
 #include <iostream>
+#include <algorithm>
 
 typedef unsigned int codigo_t;
 
@@ -30,6 +31,7 @@ class Clipping {
         /* Cohen-Sutherland Clipping */
         void reta_alg0(Objeto& obj);
 
+        /* Liang-Barsky Line Clipping */
         void reta_alg1(Objeto& obj);
 
         void poligono(Objeto& obj);
@@ -152,7 +154,80 @@ codigo_t Clipping::codigo_ponto(Coordenada &c) {
     return codigo;
 }
 
-void Clipping::reta_alg1(Objeto& obj) {std::cout << "clipping::reta_alg1" << std::endl;}
+void Clipping::reta_alg1(Objeto& obj) {
+    auto c1 = obj.coordenada_scn(0);
+    auto c2 = obj.coordenada_scn(1);
+
+    double dx = c2.valor(x) - c1.valor(x);
+    double dy = c2.valor(y) - c1.valor(y);
+
+    double p1 = -dx;
+    double p2 = dx;
+    double p3 = -dy;
+    double p4 = dy;
+
+    double q1 = c1.valor(x) - w_min.valor(x);
+    double q2 = w_max.valor(x) - c1.valor(x);
+    double q3 = c1.valor(y) - w_min.valor(y);
+    double q4 = w_max.valor(y) - c1.valor(y);
+
+    double r1 = q1/p1;
+    double r2 = q2/p2;
+    double r3 = q3/p3;
+    double r4 = q4/p4;
+
+    double z1 = 0;
+    double z2 = 1;
+
+    if (p1) {
+        if (p1 < 0) {
+            z1 = std::max(z1, r1);
+        } else {
+            z2 = std::min(z2, r1);
+        }
+    }
+
+    if (p2) {
+        if (p2 < 0) {
+                z1 = std::max(z1, r2);
+            } else {
+                z2 = std::min(z2, r2);
+            }
+    }
+
+    if (p3) {
+        if (p3 < 0) {
+            z1 = std::max(z1, r3);
+        } else {
+            z2 = std::min(z2, r3);
+        }
+    }
+
+    if (p4) {
+        if (p4 < 0) {
+            z1 = std::max(z1, r4);
+        } else {
+            z2 = std::min(z2, r4);
+        }
+    }
+
+    double novo_x, novo_y;
+    if (z1 > z2) {
+        obj._visivel = false;
+    } else {
+        obj._visivel = true;
+        if (z1 > 0) {
+            novo_x = c1.valor(x) + z1 * dx;
+            novo_y = c1.valor(y) + z1 * dy;
+            obj._coordenadas_scn[0] = Coordenada(novo_x, novo_y);
+        }
+        if (z2 < 1) {
+            novo_x = c1.valor(x) + z2 * dx;
+            novo_y = c1.valor(y) + z2 * dy;
+            obj._coordenadas_scn[1] = Coordenada(novo_x, novo_y);
+        }
+    }
+}
 
 void Clipping::poligono(Objeto& obj) {std::cout << "clipping::poligono" << std::endl;}
 
