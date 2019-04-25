@@ -529,6 +529,49 @@ abrir arquivo</property>
             <property name="y">552</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkCheckButton">
+            <property name="label" translatable="yes">Cohen-Sutherland</property>
+            <property name="width_request">50</property>
+            <property name="height_request">10</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="x">150</property>
+            <property name="y">175</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="width_request">50</property>
+            <property name="height_request">10</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Clipping-Reta</property>
+          </object>
+          <packing>
+            <property name="x">155</property>
+            <property name="y">150</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton">
+            <property name="label" translatable="yes">Liang-Barsky</property>
+            <property name="width_request">50</property>
+            <property name="height_request">10</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="x">150</property>
+            <property name="y">200</property>
+          </packing>
+        </child>
       </object>
     </child>
   </object>
