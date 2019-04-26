@@ -123,6 +123,7 @@ GtkEntry* entry_poligono_nome;
 GtkEntry* entry_poligono_x1;
 GtkEntry* entry_poligono_y1;
 GtkEntry* entry_poligono_z1;
+GtkToggleButton *cb_plgn_preenchido;
 
 
 /* ---------- ENTRADAS MODAIS DE ROTACAO ---------- */
@@ -161,6 +162,7 @@ void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data);
 void btn_plgn_voltar_clicked(GtkWidget *widget, gpointer data);
 void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data);
 void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data);
+void cb_plgn_preenchido_toggled(GtkToggleButton *toggle_button, gpointer user_data);
 
 /* ---------- FUNCAO MODAL DE EDICAO ---------- */
 void btn_edit_voltar_clicked(GtkWidget *widget, gpointer data);
@@ -291,6 +293,7 @@ int main (int argc, char *argv[]) {
   btn_plgn_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnPoligonoVoltar"));
   btn_plgn_incluir = GTK_BUTTON(gtk_builder_get_object(builder, "btnPoligonoIncluir"));
   btn_plgn_add_ponto = GTK_BUTTON(gtk_builder_get_object(builder, "btnAddPontoPoligono"));
+  cb_plgn_preenchido =  GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "cbPoligonoPreenchido"));
 
   g_signal_connect(btn_reta_voltar, "clicked", G_CALLBACK(btn_reta_voltar_clicked), nullptr);
   g_signal_connect(btn_reta_incluir, "clicked", G_CALLBACK(btn_reta_incluir_clicked), nullptr);
@@ -299,6 +302,7 @@ int main (int argc, char *argv[]) {
   g_signal_connect(btn_plgn_voltar, "clicked", G_CALLBACK(btn_plgn_voltar_clicked), nullptr);
   g_signal_connect(btn_plgn_incluir, "clicked", G_CALLBACK(btn_plgn_incluir_clicked), nullptr);
   g_signal_connect(btn_plgn_add_ponto, "clicked", G_CALLBACK(btn_plgn_add_ponto_clicked), nullptr);
+  g_signal_connect(cb_plgn_preenchido, "toggled", G_CALLBACK(cb_plgn_preenchido_toggled), nullptr);
 
   /* ---------- BOTOES MODAIS DE ROTACAO ---------- */
 
@@ -676,4 +680,12 @@ void choose_cohen_sutherland(GtkToggleButton *toggle_button, gpointer user_data)
 void choose_liang_barsky(GtkToggleButton *toggle_button, gpointer user_data) {
   controlador->selecionar_algoritmo_clipping_reta(1);
   gtk_toggle_button_set_active (cb_alg_cohen_sutherland, FALSE);
+}
+
+void cb_plgn_preenchido_toggled(GtkToggleButton *toggle_button, gpointer user_data) {
+  if (gtk_toggle_button_get_active(cb_plgn_preenchido)) {
+    std::cout << "TODO: mandar pro controlador que foi selecionado";
+  } else {
+    std::cout << "não selecionado";
+  }
 }
