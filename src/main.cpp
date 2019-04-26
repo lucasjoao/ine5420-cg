@@ -338,8 +338,8 @@ int main (int argc, char *argv[]) {
 
   /* ---------- ---------- */
 
-  auto window = new Window(Coordenada(0,0), 500, 500);
-  auto viewport = new Viewport(surface, 0, 0, 500, 500);
+  auto window = new Window(Coordenada(0,0), 480, 480);
+  auto viewport = new Viewport(surface, 0, 0, 480, 480);
   auto display_file = new DisplayFile();
 
   controlador = new Controlador(display_file, window, viewport, list_store);

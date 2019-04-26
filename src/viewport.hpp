@@ -27,6 +27,8 @@ class Viewport {
 
         void limpar_tela();
 
+        void desenhar_viewport();
+
         Coordenada transformada_viewport(Coordenada &coordenada);
 
     private:
@@ -39,7 +41,7 @@ class Viewport {
 };
 
 void Viewport::iniciar() {
-
+    desenhar_viewport();
 }
 
 void Viewport::desenhar(Objeto &obj) {
@@ -63,6 +65,24 @@ void Viewport::desenhar(Objeto &obj) {
     }
 }
 
+void Viewport::desenhar_viewport() {
+    cairo_t *cairo;
+
+    cairo = cairo_create (_surface);
+
+    cairo_move_to(cairo, 10, 10);
+    cairo_line_to(cairo, 10, 490);
+    cairo_stroke(cairo);
+    cairo_move_to(cairo, 10, 490);
+    cairo_line_to(cairo, 490, 490);
+    cairo_stroke(cairo);
+    cairo_move_to(cairo, 490, 490);
+    cairo_line_to(cairo, 490, 10);
+    cairo_stroke(cairo);
+    cairo_move_to(cairo, 490, 10);
+    cairo_line_to(cairo, 10, 10);
+    cairo_stroke(cairo);
+}
 
 void Viewport::desenhar_ponto(Objeto &obj) {
 	auto c_obj = obj.coordenada_scn(0);
@@ -73,8 +93,8 @@ void Viewport::desenhar_ponto(Objeto &obj) {
     cairo_set_source_rgb(cairo,0,0,0);
     cairo_set_line_width(cairo, 1);
 
-    cairo_move_to(cairo, c.valor(0), c.valor(1));
-	cairo_arc(cairo, c.valor(0), c.valor(1), 1.0, 0.0, (2*G_PI) );
+    cairo_move_to(cairo, c.valor(0)+10, c.valor(1)+10);
+	cairo_arc(cairo, c.valor(0)+10, c.valor(1)+10, 1.0, 0.0, (2*G_PI) );
 	cairo_fill(cairo);
 }
 
@@ -91,8 +111,8 @@ void Viewport::desenhar_reta(Objeto &obj) {
     cairo_set_source_rgb(cairo,0,0,0);
     cairo_set_line_width(cairo, 1);
 
-    cairo_move_to(cairo, c1.valor(0) , c1.valor(1));
-    cairo_line_to(cairo, c2.valor(0), c2.valor(1));
+    cairo_move_to(cairo, c1.valor(0) + 10, c1.valor(1) + 10);
+    cairo_line_to(cairo, c2.valor(0) + 10, c2.valor(1) + 10);
 
     cairo_stroke(cairo);
 }
@@ -112,8 +132,8 @@ void Viewport::desenhar_poligono(Objeto &obj) {
         auto c_atual = obj.coordenada_scn(i);
         auto c2 = transformada_viewport(c_atual);
 
-        cairo_move_to(cairo, c1.valor(0) , c1.valor(1));
-        cairo_line_to(cairo, c2.valor(0), c2.valor(1));
+        cairo_move_to(cairo, c1.valor(0) + 10, c1.valor(1) + 10);
+        cairo_line_to(cairo, c2.valor(0) + 10, c2.valor(1) + 10);
         cairo_stroke(cairo);
     }
 
@@ -123,8 +143,8 @@ void Viewport::desenhar_poligono(Objeto &obj) {
     auto c_atual = obj.coordenada_scn(0);
     auto c2 = transformada_viewport(c_atual);
 
-    cairo_move_to(cairo, c1.valor(0) , c1.valor(1));
-    cairo_line_to(cairo, c2.valor(0), c2.valor(1));
+    cairo_move_to(cairo, c1.valor(0) + 10, c1.valor(1) + 10);
+    cairo_line_to(cairo, c2.valor(0) + 10, c2.valor(1) + 10);
 
     cairo_stroke(cairo);
 
@@ -152,7 +172,6 @@ void Viewport::limpar_tela() {
 
   cairo_set_source_rgb (cr, 1, 1, 1);
   cairo_paint (cr);
-
   cairo_destroy (cr);
 }
 

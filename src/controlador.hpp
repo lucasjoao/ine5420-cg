@@ -175,6 +175,7 @@ void Controlador::gerar_descricao_scn() {
 
 void Controlador::redesenhar() {
     _viewport->limpar_tela();
+    _viewport->desenhar_viewport();
 
     for(size_t i = 0; i < _display_file->tamanho(); i++) {
         auto obj = _display_file->objeto(i);
