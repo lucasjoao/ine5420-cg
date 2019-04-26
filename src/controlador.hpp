@@ -38,7 +38,7 @@ class Controlador {
         void zoom(direcao_zoom_t direca);
         void navagacao(direcao_navegacao_t direcao);
         void gerar_descricao_scn();
-        void clipping(int alg);
+        void clipping();
 
         void redesenhar();
         void atualizar_tela();
@@ -55,6 +55,8 @@ class Controlador {
         void editar_objeto_rotacao_entorno_centro_objeto(double grau);
         void editar_objeto_rotacao_entorno_centro_ponto(double grau, double x, double y);
 
+        void selecionar_algoritmo_clipping_reta(int alg);
+
         void salvar_arquivo(std::string filename);
         void carregar_arquivo(std::string filename);
 
@@ -70,6 +72,8 @@ class Controlador {
         size_t _objeto_selecionado;
 
         DescritorObjeto *_descritor_objeto;
+
+        int _alg_clipping_reta;
 
         void criar_obj_do_arquivo(std::vector<std::string> obj);
 };
@@ -185,17 +189,17 @@ void Controlador::redesenhar() {
     }
 }
 
-void Controlador::clipping(int alg) {
+void Controlador::clipping() {
     auto c = Clipping();
     for(size_t i = 0; i < _display_file->tamanho(); i++) {
         Objeto& obj = _display_file->objeto(i);
-        c.clipping(obj, alg);
+        c.clipping(obj, _alg_clipping_reta);
     }
 }
 
 void Controlador::atualizar_tela() {
     gerar_descricao_scn();
-    clipping(0);
+    clipping();
     redesenhar();
 }
 
@@ -262,6 +266,12 @@ void Controlador::adicionar_objeto_na_tree_view(const char* nome) {
   gtk_list_store_append(_list_store, &iter);
   gtk_list_store_set(_list_store, &iter, 0, nome, -1);
 }
+
+void Controlador::selecionar_algoritmo_clipping_reta(int alg) {
+    _alg_clipping_reta = alg;
+    atualizar_tela();
+}
+
 
 void Controlador::salvar_arquivo(std::string filename) {
     std::ofstream file;

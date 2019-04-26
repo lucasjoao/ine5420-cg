@@ -530,7 +530,7 @@ abrir arquivo</property>
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton">
+          <object class="GtkCheckButton" id="cb_alg_cohen_sutherland">
             <property name="label" translatable="yes">Cohen-Sutherland</property>
             <property name="width_request">50</property>
             <property name="height_request">10</property>
@@ -558,7 +558,7 @@ abrir arquivo</property>
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton">
+          <object class="GtkCheckButton" id="cb_alg_liang_barsky">
             <property name="label" translatable="yes">Liang-Barsky</property>
             <property name="width_request">50</property>
             <property name="height_request">10</property>

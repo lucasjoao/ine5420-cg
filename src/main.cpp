@@ -8,6 +8,14 @@
 GtkBuilder *builder;
 GtkWidget *main_window;
 
+/* ----------- ESCOLHA DO CLIPPING DE RETA ------------ */
+
+GtkToggleButton *cb_alg_liang_barsky;
+GtkToggleButton *cb_alg_cohen_sutherland;
+
+void choose_liang_barsky(GtkToggleButton *toggle_button, gpointer user_data);
+void choose_cohen_sutherland(GtkToggleButton *toggle_button, gpointer user_data);
+
 /* ---------- AREA DE DESENHO E SUAS FUNCOES ---------- */
 
 GtkWidget *displayArea;
@@ -336,6 +344,14 @@ int main (int argc, char *argv[]) {
   entry_rot_pnt_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotPntQlqX1"));
   entry_rot_pnt_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRotPntQlqY2"));
 
+  /* ----------- ESCOLHA DO CLIPPING DE RETA ------------ */
+
+  cb_alg_cohen_sutherland = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "cb_alg_cohen_sutherland"));
+  cb_alg_liang_barsky = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "cb_alg_liang_barsky"));
+
+  g_signal_connect (cb_alg_cohen_sutherland, "toggled", G_CALLBACK (choose_cohen_sutherland), nullptr);
+  g_signal_connect (cb_alg_liang_barsky, "toggled", G_CALLBACK (choose_liang_barsky), nullptr);
+
   /* ---------- ---------- */
 
   auto window = new Window(Coordenada(0,0), 480, 480);
@@ -650,4 +666,14 @@ void row_activated_lista_objeto(GtkTreeView *treeview, GtkTreePath *path, GtkTre
       controlador->selecionar_objeto(nome);
       gtk_widget_show(edit_window);
   }
+}
+
+void choose_cohen_sutherland(GtkToggleButton *toggle_button, gpointer user_data) {
+  controlador->selecionar_algoritmo_clipping_reta(0);
+  gtk_toggle_button_set_active (cb_alg_liang_barsky, FALSE);
+}
+
+void choose_liang_barsky(GtkToggleButton *toggle_button, gpointer user_data) {
+  controlador->selecionar_algoritmo_clipping_reta(1);
+  gtk_toggle_button_set_active (cb_alg_cohen_sutherland, FALSE);
 }
