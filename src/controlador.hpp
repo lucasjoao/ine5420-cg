@@ -125,7 +125,7 @@ void Controlador::adicionar_poligono(operacao_poligono_t operacao, const std::st
             if (_coordenada_poligono->size() < 1)
                 return;
 
-            poligono = new Poligono(nome);
+            poligono = new Poligono(nome, _poligono_preenchido);
             for(size_t i = 0; i < _coordenada_poligono->size(); i++) {
                 poligono->adicionar_coordenada(
                     _coordenada_poligono->at(i).valor(0), _coordenada_poligono->at(i).valor(1)

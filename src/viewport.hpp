@@ -124,6 +124,9 @@ void Viewport::desenhar_poligono(Objeto &obj) {
     cairo_set_source_rgb(cairo,0,0,0);
     cairo_set_line_width(cairo, 1);
 
+    if (obj.preenchido()) {
+        cairo_fill(cairo);
+    }
 
     for(size_t i = 1; i < obj.tamanho_scn(); i++) {
         auto c_anterior = obj.coordenada_scn(i-1);

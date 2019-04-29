@@ -15,7 +15,7 @@ class Clipping;
 class Objeto {
 
     friend class Clipping;
-  
+
     public:
         static size_t _id;
 
@@ -53,12 +53,17 @@ class Objeto {
 
         bool operator!=(const Objeto& obj) const;
 
+        void set_preenchido(bool valor);
+
+        bool preenchido();
+
     protected:
         bool _visivel{true};
         std::string _nome;
         tipo_t _tipo;
         std::vector<Coordenada> _coordenadas;
         std::vector<Coordenada> _coordenadas_scn;
+        bool _preenchido;
 };
 
 size_t Objeto::_id = 0;
@@ -187,6 +192,14 @@ bool Objeto::operator==(const Objeto& obj) const {
 
 bool Objeto::operator!=(const Objeto& obj) const {
     return !operator==(obj);
+}
+
+void Objeto::set_preenchido(bool valor) {
+    _preenchido = valor;
+}
+
+bool Objeto::preenchido() {
+    return _preenchido;
 }
 
 #endif
