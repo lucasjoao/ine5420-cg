@@ -57,6 +57,8 @@ class Controlador {
 
         void selecionar_algoritmo_clipping_reta(int alg);
 
+        void poligono_preenchido(bool valor);
+
         void salvar_arquivo(std::string filename);
         void carregar_arquivo(std::string filename);
 
@@ -74,6 +76,8 @@ class Controlador {
         DescritorObjeto *_descritor_objeto;
 
         int _alg_clipping_reta;
+
+        bool _poligono_preenchido;
 
         void criar_obj_do_arquivo(std::vector<std::string> obj);
 };
@@ -270,6 +274,10 @@ void Controlador::adicionar_objeto_na_tree_view(const char* nome) {
 void Controlador::selecionar_algoritmo_clipping_reta(int alg) {
     _alg_clipping_reta = alg;
     atualizar_tela();
+}
+
+void Controlador::poligono_preenchido(bool valor) {
+    _poligono_preenchido = valor;
 }
 
 

@@ -683,9 +683,6 @@ void choose_liang_barsky(GtkToggleButton *toggle_button, gpointer user_data) {
 }
 
 void cb_plgn_preenchido_toggled(GtkToggleButton *toggle_button, gpointer user_data) {
-  if (gtk_toggle_button_get_active(cb_plgn_preenchido)) {
-    std::cout << "TODO: mandar pro controlador que foi selecionado";
-  } else {
-    std::cout << "não selecionado";
-  }
+  auto valor = gtk_toggle_button_get_active(cb_plgn_preenchido);
+  controlador->poligono_preenchido(valor);
 }
