@@ -124,33 +124,25 @@ void Viewport::desenhar_poligono(Objeto &obj) {
     cairo_set_source_rgb(cairo,0,0,0);
     cairo_set_line_width(cairo, 1);
 
-    if (obj.preenchido()) {
+    auto c_inicial = obj.coordenada_scn(0);
+    auto c0 = transformada_viewport(c_inicial);
+    cairo_move_to(cairo, c0.valor(0) + 10, c0.valor(1) + 10);
+
+    for (size_t i = 1; i < obj.tamanho_scn(); i++) {
+        auto c_atual = obj.coordenada_scn(i);
+        auto c1 = transformada_viewport(c_atual);
+        cairo_line_to(cairo, c1.valor(0) + 10, c1.valor(1) + 10);
+    }
+
+    // fecha o poligono
+    cairo_line_to(cairo, c0.valor(0) + 10, c0.valor(1) + 10);
+
+    // se o poligono eh de dois pontos ou menos, entao nao desenha com fill
+    if (obj.preenchido() && obj.tamanho_scn() > 2) {
         cairo_fill(cairo);
     }
 
-    for(size_t i = 1; i < obj.tamanho_scn(); i++) {
-        auto c_anterior = obj.coordenada_scn(i-1);
-        auto c1 = transformada_viewport(c_anterior);
-
-        auto c_atual = obj.coordenada_scn(i);
-        auto c2 = transformada_viewport(c_atual);
-
-        cairo_move_to(cairo, c1.valor(0) + 10, c1.valor(1) + 10);
-        cairo_line_to(cairo, c2.valor(0) + 10, c2.valor(1) + 10);
-        cairo_stroke(cairo);
-    }
-
-    auto c_anterior = obj.coordenada_scn(obj.tamanho_scn()-1);
-    auto c1 = transformada_viewport(c_anterior);
-
-    auto c_atual = obj.coordenada_scn(0);
-    auto c2 = transformada_viewport(c_atual);
-
-    cairo_move_to(cairo, c1.valor(0) + 10, c1.valor(1) + 10);
-    cairo_line_to(cairo, c2.valor(0) + 10, c2.valor(1) + 10);
-
     cairo_stroke(cairo);
-
 }
 
 Coordenada Viewport::transformada_viewport(Coordenada &c) {
