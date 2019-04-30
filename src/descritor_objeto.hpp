@@ -47,6 +47,7 @@ class DescritorObjeto {
       text += std::to_string(coordenada.valor(1)) + "\n";
     }
 
+    text += obj.preenchido() ? "1\n" : "0\n";
     text += end_of_object + "\n";
 
     return text;

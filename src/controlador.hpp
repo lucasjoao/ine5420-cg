@@ -58,6 +58,7 @@ class Controlador {
         void selecionar_algoritmo_clipping_reta(int alg);
 
         void poligono_preenchido(bool valor);
+        bool get_poligono_preenchido();
 
         void salvar_arquivo(std::string filename);
         void carregar_arquivo(std::string filename);
@@ -280,6 +281,9 @@ void Controlador::poligono_preenchido(bool valor) {
     _poligono_preenchido = valor;
 }
 
+bool Controlador::get_poligono_preenchido() {
+    return _poligono_preenchido;
+}
 
 void Controlador::salvar_arquivo(std::string filename) {
     std::ofstream file;
@@ -318,7 +322,8 @@ void Controlador::carregar_arquivo(std::string filename) {
 // vector obj
 // posicao 0 possui o seu tipo
 // posicao 1 possui o nome do objeto
-// posicao 2 ate penultima possui os vertices
+// posicao 2 ate antepenultima possui os vertices
+// penultima posicao indica se eh preenchido (1) ou nao (0) - so para poligonos
 // ultima posicao possui um indicador de fim do objeto
 // ver DescritorObjeto::descreve_objeto
 void Controlador::criar_obj_do_arquivo(std::vector<std::string> obj) {
@@ -341,11 +346,12 @@ void Controlador::criar_obj_do_arquivo(std::vector<std::string> obj) {
 
         // lembrar que:
         // primeiro vertice sempre iniciara na posicao 2 do vetor obj
-        // e terminara na penultima posicao do vetor obj
-        for (size_t i = 2; i < obj.size() - 1; i++) {
+        // e terminara na antepenultima posicao do vetor obj
+        for (size_t i = 2; i < obj.size() - 2; i++) {
             auto point = _descritor_objeto->split_line_in_vector(obj.at(i));
             adicionar_poligono(ADICIONAR_PONTO, "", point.at(0), point.at(1));
         }
+        poligono_preenchido(obj.at(obj.size() - 2) == "1");
 
         adicionar_poligono(CONCLUIR, obj.at(1), 0, 0);
 

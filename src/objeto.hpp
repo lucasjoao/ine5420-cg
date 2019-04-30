@@ -99,6 +99,7 @@ Objeto::Objeto(const std::string nome, tipo_t tipo) {
     _tipo = tipo;
     _coordenadas = coordenadas_t();
     _coordenadas_scn = coordenadas_t();
+    _preenchido = false;
 }
 
 Objeto::~Objeto() {}

@@ -456,6 +456,8 @@ void btn_reta_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_poligono_clicked(GtkWidget *widget, gpointer data) {
+  // evitar valores incorretos provenientes de arquivos
+  gtk_toggle_button_set_active(cb_plgn_preenchido, controlador->get_poligono_preenchido());
   controlador->adicionar_poligono(operacao_poligono_t::NOVO, "", 0, 0);
   gtk_widget_show(plgn_window);
 }
