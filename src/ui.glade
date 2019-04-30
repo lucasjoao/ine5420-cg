@@ -754,7 +754,7 @@ abrir arquivo</property>
         </child>
         <child>
           <object class="GtkCheckButton" id="cbPoligonoPreenchido">
-            <property name="label" translatable="yes">Preenchido</property>
+            <property name="label" translatable="yes">Preenchido (mín. 3 pontos)</property>
             <property name="height_request">30</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
