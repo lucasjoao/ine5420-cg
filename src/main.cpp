@@ -364,6 +364,12 @@ int main (int argc, char *argv[]) {
 
   controlador = new Controlador(display_file, window, viewport, list_store);
 
+  controlador->adicionar_curva();
+  controlador->adicionar_ponto("p1",-50,-50);
+  controlador->adicionar_ponto("p2",50,400);
+  controlador->adicionar_ponto("p3",400,400);
+  controlador->adicionar_ponto("p4",50,400);
+
   gtk_main();
 
   return 0;

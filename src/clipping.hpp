@@ -36,6 +36,8 @@ class Clipping {
 
         void poligono(Objeto& obj);
 
+        void curva(Objeto& obj);
+
         codigo_t codigo_ponto(Coordenada &c);
 
         Coordenada calcular_intersecao(Coordenada &p, codigo_t c, double m);
@@ -59,6 +61,10 @@ void Clipping::clipping(Objeto& obj, int alg) {
 
         case tipo_t::POLIGONO:
             poligono(obj);
+            break;
+
+        case tipo_t::CURVA_BEZIER:
+            curva(obj);
             break;
 
         default:
@@ -230,5 +236,26 @@ void Clipping::reta_alg1(Objeto& obj) {
 }
 
 void Clipping::poligono(Objeto& obj) {std::cout << "clipping::poligono" << std::endl;}
+
+void Clipping::curva(Objeto& obj)
+{
+    auto list_coord = obj._coordenadas_scn;
+    obj._coordenadas_scn.clear();
+    for (int i = 0; i < list_coord.size(); i++) {
+        auto c = list_coord[i];
+
+        if (w_min.valor(x) <= c.valor(x) && c.valor(x) <= w_max.valor(x)) {
+            if (w_min.valor(y) <= c.valor(y) && c.valor(y) <= w_max.valor(y)) {
+                obj._coordenadas_scn.push_back(c);
+            }
+        }
+    }
+    if (obj._coordenadas_scn.size()) {
+        obj._visivel = true;
+    } else {
+        obj._visivel = false;
+    }
+}
+
 
 #endif

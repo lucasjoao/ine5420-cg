@@ -25,6 +25,8 @@ class Viewport {
 
         void desenhar_poligono(Objeto &obj);
 
+        void desenhar_curva(Objeto &obj);
+
         void limpar_tela();
 
         void desenhar_viewport();
@@ -59,6 +61,8 @@ void Viewport::desenhar(Objeto &obj) {
         case tipo_t::POLIGONO:
             desenhar_poligono(obj);
             break;
+        case tipo_t::CURVA_BEZIER:
+            desenhar_curva(obj);
 
         default:
             break;
@@ -144,6 +148,24 @@ void Viewport::desenhar_poligono(Objeto &obj) {
 
     cairo_stroke(cairo);
 }
+
+void Viewport::desenhar_curva(Objeto &obj) {
+    cairo_t *cairo;
+    cairo = cairo_create(_surface);
+    cairo_set_source_rgb(cairo,0,0,0);
+    cairo_set_line_width(cairo, 1);
+
+    auto c_inicial = obj.coordenada_scn(0);
+    auto c0 = transformada_viewport(c_inicial);
+    cairo_move_to(cairo, c0.valor(0) + 10, c0.valor(1) + 10);
+
+    for (size_t i = 1; i < obj.tamanho_scn(); i++) {
+        auto c_atual = obj.coordenada_scn(i);
+        auto c1 = transformada_viewport(c_atual);
+        cairo_line_to(cairo, c1.valor(0) + 10, c1.valor(1) + 10);
+    }
+    cairo_stroke(cairo);
+} 
 
 Coordenada Viewport::transformada_viewport(Coordenada &c) {
 

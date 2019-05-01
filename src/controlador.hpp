@@ -6,6 +6,7 @@
 #include "ponto.hpp"
 #include "reta.hpp"
 #include "poligono.hpp"
+#include "curva.hpp"
 #include "display_file.hpp"
 #include "window.hpp"
 #include "viewport.hpp"
@@ -34,6 +35,7 @@ class Controlador {
         void adicionar_ponto(const std::string nome,double x, double y);
         void adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2);
         void adicionar_poligono(operacao_poligono_t operacao, const std::string nome, double x, double y);
+        void adicionar_curva();
 
         void zoom(direcao_zoom_t direca);
         void navagacao(direcao_navegacao_t direcao);
@@ -94,7 +96,6 @@ void Controlador::adicionar_ponto(const std::string nome, double x, double y) {
 
     atualizar_tela();
     adicionar_objeto_na_tree_view(obj->nome().c_str());
-
 }
 
 void Controlador::adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2) {
@@ -147,6 +148,19 @@ void Controlador::adicionar_poligono(operacao_poligono_t operacao, const std::st
             break;
     }
 }
+
+void Controlador::adicionar_curva() {
+    Curva *c = new Curva("Curva");
+    c->adicionar_ponto_controle(-50,-50);
+    c->adicionar_ponto_controle(50,400);
+    c->adicionar_ponto_controle(400,400);
+    c->adicionar_ponto_controle(400,50);
+
+    c->gerar_curva(100);
+    _display_file->adicionar_objeto(*c);
+    adicionar_objeto_na_tree_view(c->nome().c_str());
+}
+
 
 void Controlador::zoom(direcao_zoom_t direcao) {
     _window->zoom(direcao, 10);
