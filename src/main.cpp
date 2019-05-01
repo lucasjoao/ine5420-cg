@@ -67,7 +67,7 @@ GtkWidget *rot_pnt_window;
 GtkWidget *reta_window;
 GtkWidget *ponto_window;
 GtkWidget *plgn_window;
-
+GtkWidget *curva_window;
 /* ---------- BOTOES TELA PRINCIPAL ---------- */
 
 GtkButton* btn_zoom_in;
@@ -81,7 +81,7 @@ GtkButton* btn_right;
 GtkButton* btn_ponto;
 GtkButton* btn_reta;
 GtkButton* btn_poligono;
-
+GtkButton* btn_curva;
 /* ---------- BOTOES MODAIS DE INCLUSAO ---------- */
 
 GtkButton* btn_reta_voltar;
@@ -94,6 +94,10 @@ GtkButton* btn_plgn_voltar;
 GtkButton* btn_plgn_incluir;
 GtkButton* btn_plgn_add_ponto;
 
+GtkButton* btn_curva_voltar;
+GtkButton* btn_curva_incluir;
+GtkButton* btn_curva_add_ponto;
+
 /* ---------- BOTOES MODAIS DE ROTACAO ---------- */
 
 GtkButton* btn_rot_mundo_voltar;
@@ -104,6 +108,9 @@ GtkButton* btn_rot_obj_rotacionar;
 
 GtkButton* btn_rot_pnt_voltar;
 GtkButton* btn_rot_pnt_rotacionar;
+
+/* ---------- LABELS MODAIS DE INCLUSAO ---------- */
+GtkLabel* lbl_quantidade_ponto_curva;
 
 /* ---------- ENTRADAS MODAIS DE INCLUSAO ---------- */
 GtkEntry* entry_ponto_nome;
@@ -125,8 +132,12 @@ GtkEntry* entry_poligono_y1;
 GtkEntry* entry_poligono_z1;
 GtkToggleButton *cb_plgn_preenchido;
 
+GtkEntry* entry_curva_nome;
+GtkEntry* entry_curva_x1;
+GtkEntry* entry_curva_y1;
+GtkEntry* entry_curva_z1;
 
-/* ---------- ENTRADAS MODAIS DE ROTACAO ---------- */
+/* ---------- ENTRADAS MODAIS DE ROTACAO ---------- */;
 GtkEntry* entry_rot_mundo;
 GtkEntry* entry_rot_obj;
 GtkEntry* entry_rot_pnt_graus;
@@ -150,7 +161,7 @@ void btn_right_clicked(GtkWidget *widget, gpointer data);
 void btn_ponto_clicked(GtkWidget *widget, gpointer data);
 void btn_reta_clicked(GtkWidget *widget, gpointer data);
 void btn_poligono_clicked(GtkWidget *widget, gpointer data);
-
+void btn_curva_clicked(GtkWidget *widget, gpointer data);
 /* ---------- FUNCOES DOS BOTOES DOS MODAIS DE INCLUSAO ---------- */
 
 void btn_reta_voltar_clicked(GtkWidget *widget, gpointer data);
@@ -163,6 +174,10 @@ void btn_plgn_voltar_clicked(GtkWidget *widget, gpointer data);
 void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data);
 void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data);
 void cb_plgn_preenchido_toggled(GtkToggleButton *toggle_button, gpointer user_data);
+
+void btn_curva_voltar_clicked(GtkWidget *widget, gpointer data);
+void btn_curva_incluir_clicked(GtkWidget *widget, gpointer data);
+void btn_curva_add_ponto_clicked(GtkWidget *widget, gpointer data);
 
 /* ---------- FUNCAO MODAL DE EDICAO ---------- */
 void btn_edit_voltar_clicked(GtkWidget *widget, gpointer data);
@@ -255,6 +270,7 @@ int main (int argc, char *argv[]) {
   reta_window = GTK_WIDGET(gtk_builder_get_object(builder, "retaWindow"));
   ponto_window = GTK_WIDGET(gtk_builder_get_object(builder, "pontoWindow"));
   plgn_window = GTK_WIDGET(gtk_builder_get_object(builder, "poligonoWindow"));
+  curva_window = GTK_WIDGET(gtk_builder_get_object(builder, "curvaWindow"));
 
   /* ---------- MODAIS DE ROTACAO ---------- */
 
@@ -273,6 +289,7 @@ int main (int argc, char *argv[]) {
   btn_ponto = GTK_BUTTON(gtk_builder_get_object(builder, "btnPonto"));
   btn_reta = GTK_BUTTON(gtk_builder_get_object(builder, "btnReta"));
   btn_poligono = GTK_BUTTON(gtk_builder_get_object(builder, "btnPoligono"));
+  btn_curva = GTK_BUTTON(gtk_builder_get_object(builder, "btnCurva"));
 
   g_signal_connect(btn_zoom_in, "clicked", G_CALLBACK(btn_zoom_in_clicked), nullptr);
   g_signal_connect(btn_zoom_out, "clicked", G_CALLBACK(btn_zoom_out_clicked), nullptr);
@@ -283,6 +300,10 @@ int main (int argc, char *argv[]) {
   g_signal_connect(btn_ponto, "clicked", G_CALLBACK(btn_ponto_clicked), nullptr);
   g_signal_connect(btn_reta, "clicked", G_CALLBACK(btn_reta_clicked), nullptr);
   g_signal_connect(btn_poligono, "clicked", G_CALLBACK(btn_poligono_clicked), nullptr);
+  g_signal_connect(btn_curva, "clicked", G_CALLBACK(btn_curva_clicked), nullptr);
+
+  /* ---------- LABELS MODAIS DE INCLUSAO ---------- */
+  lbl_quantidade_ponto_curva = GTK_LABEL(gtk_builder_get_object(builder, "lblQuantidadePontoCurva"));
 
   /* ---------- BOTOES MODAIS DE INCLUSAO ---------- */
 
@@ -294,6 +315,9 @@ int main (int argc, char *argv[]) {
   btn_plgn_incluir = GTK_BUTTON(gtk_builder_get_object(builder, "btnPoligonoIncluir"));
   btn_plgn_add_ponto = GTK_BUTTON(gtk_builder_get_object(builder, "btnAddPontoPoligono"));
   cb_plgn_preenchido =  GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "cbPoligonoPreenchido"));
+  btn_curva_voltar = GTK_BUTTON(gtk_builder_get_object(builder, "btnCurvaVoltar"));
+  btn_curva_incluir = GTK_BUTTON(gtk_builder_get_object(builder, "btnCurvaIncluir"));
+  btn_curva_add_ponto = GTK_BUTTON(gtk_builder_get_object(builder, "btnAddPontoCurva"));
 
   g_signal_connect(btn_reta_voltar, "clicked", G_CALLBACK(btn_reta_voltar_clicked), nullptr);
   g_signal_connect(btn_reta_incluir, "clicked", G_CALLBACK(btn_reta_incluir_clicked), nullptr);
@@ -303,6 +327,9 @@ int main (int argc, char *argv[]) {
   g_signal_connect(btn_plgn_incluir, "clicked", G_CALLBACK(btn_plgn_incluir_clicked), nullptr);
   g_signal_connect(btn_plgn_add_ponto, "clicked", G_CALLBACK(btn_plgn_add_ponto_clicked), nullptr);
   g_signal_connect(cb_plgn_preenchido, "toggled", G_CALLBACK(cb_plgn_preenchido_toggled), nullptr);
+  g_signal_connect(btn_curva_voltar, "clicked", G_CALLBACK(btn_curva_voltar_clicked), nullptr);
+  g_signal_connect(btn_curva_incluir, "clicked", G_CALLBACK(btn_curva_incluir_clicked), nullptr);
+  g_signal_connect(btn_curva_add_ponto, "clicked", G_CALLBACK(btn_curva_add_ponto_clicked), nullptr);
 
   /* ---------- BOTOES MODAIS DE ROTACAO ---------- */
 
@@ -339,6 +366,11 @@ int main (int argc, char *argv[]) {
   entry_poligono_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoX1"));
   entry_poligono_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoY1"));
   entry_poligono_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoZ1"));
+
+  entry_curva_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaNome"));
+  entry_curva_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaX1"));
+  entry_curva_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaY1"));
+  entry_curva_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaZ1"));
 
   /* ---------- ENTRADAS MODAIS DE ROTACAO ---------- */
 
@@ -542,6 +574,42 @@ void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
   controlador->adicionar_poligono(operacao_poligono_t::ADICIONAR_PONTO, "", x1, y1);
 
 }
+
+void btn_curva_clicked(GtkWidget *widget, gpointer data) {
+  // controlador->adicionar_poligono(operacao_poligono_t::CANCELAR, "", 0, 0);
+  gtk_widget_show(curva_window);
+
+}
+void btn_curva_voltar_clicked(GtkWidget *widget, gpointer data) {
+  // controlador->adicionar_poligono(operacao_poligono_t::CANCELAR, "", 0, 0);
+  gtk_widget_hide(curva_window);
+
+}
+
+void btn_curva_incluir_clicked(GtkWidget *widget, gpointer data) {
+  std::string nome = gtk_entry_get_text(entry_curva_nome);
+
+  gtk_entry_set_text(entry_curva_nome,"");
+  gtk_entry_set_text(entry_curva_x1,"");
+  gtk_entry_set_text(entry_curva_y1,"");
+  gtk_entry_set_text(entry_curva_z1,"");
+
+  // controlador->adicionar_curva(operacao_poligono_t::CONCLUIR, nome, 0, 0);
+  // controlador->adicionar_curva(operacao_poligono_t::NOVO, "", 0, 0);
+}
+
+void btn_curva_add_ponto_clicked(GtkWidget *widget, gpointer data) {
+  auto x1 = atof(gtk_entry_get_text(entry_curva_x1));
+  auto y1 = atof(gtk_entry_get_text(entry_curva_y1));
+
+  gtk_entry_set_text(entry_curva_x1,"");
+  gtk_entry_set_text(entry_curva_y1,"");
+  gtk_entry_set_text(entry_curva_z1,"");
+  gtk_label_set_text(lbl_quantidade_ponto_curva, "Quantidade de ponto: 3");
+
+  // controlador->adicionar_curva(operacao_poligono_t::ADICIONAR_PONTO, "", x1, y1);
+}
+
 
 void btn_edit_voltar_clicked(GtkWidget *widget, gpointer data) {
   gtk_widget_hide(edit_window);
