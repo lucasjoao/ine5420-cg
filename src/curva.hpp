@@ -15,7 +15,10 @@ class Curva : public Objeto
             _pontos_controle.push_back(Coordenada(x,y));
         }
 
-        void gerar_curva(double passos) {
+        bool gerar_curva(double passos) {
+            if (_pontos_controle.size() < 3 || ((_pontos_controle.size() - 1) % 3))
+                return false;
+
             double t = 0;
             double distancia_entre_pontos = 1/passos;
 
@@ -44,6 +47,7 @@ class Curva : public Objeto
                     t = t+distancia_entre_pontos;
                 }
             }
+            return true;
         }
 
     coordenadas_t _pontos_controle;

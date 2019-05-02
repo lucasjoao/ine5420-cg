@@ -18,7 +18,7 @@
 
 #include <gtk/gtk.h>
 
-enum operacao_poligono_t {
+enum operacao_obj_t {
     NOVO, ADICIONAR_PONTO, CONCLUIR, CANCELAR
 };
 
@@ -29,13 +29,13 @@ class Controlador {
         Controlador(DisplayFile* display_file, Window *window, Viewport *viewport, GtkListStore* list_store):
             _list_store(list_store),
             _display_file(display_file), _window(window), _viewport(viewport),
-            _coordenada_poligono(new std::vector<Coordenada>()),
+            _coordenada_obj(new std::vector<Coordenada>()),
             _descritor_objeto(new DescritorObjeto()) {}
 
         void adicionar_ponto(const std::string nome,double x, double y);
         void adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2);
-        void adicionar_poligono(operacao_poligono_t operacao, const std::string nome, double x, double y);
-        void adicionar_curva();
+        void adicionar_poligono(operacao_obj_t operacao, const std::string nome, double x, double y);
+        void adicionar_curva(operacao_obj_t operacao, const std::string nome, double x, double y);
 
         void zoom(direcao_zoom_t direca);
         void navagacao(direcao_navegacao_t direcao);
@@ -62,6 +62,8 @@ class Controlador {
         void poligono_preenchido(bool valor);
         bool get_poligono_preenchido();
 
+        size_t numero_pontos_obj();
+
         void salvar_arquivo(std::string filename);
         void carregar_arquivo(std::string filename);
 
@@ -71,7 +73,8 @@ class Controlador {
         Window *_window;
         Viewport *_viewport;
 
-        std::vector<Coordenada> *_coordenada_poligono;
+        std::vector<Coordenada> *_coordenada_obj;
+        size_t _numero_pontos_obj;
 
         GtkListStore * _list_store;
         size_t _objeto_selecionado;
@@ -84,6 +87,10 @@ class Controlador {
 
         void criar_obj_do_arquivo(std::vector<std::string> obj);
 };
+
+size_t Controlador::numero_pontos_obj() {
+    return _numero_pontos_obj;
+}
 
 void Controlador::rotacao_window(double grau) {
     _window->rotacao(grau);
@@ -104,37 +111,35 @@ void Controlador::adicionar_reta(const std::string nome, double x1, double y1, d
 
     atualizar_tela();
     adicionar_objeto_na_tree_view(reta->nome().c_str());
-
 }
 
-void Controlador::adicionar_poligono(operacao_poligono_t operacao, const std::string nome, double x, double y) {
+void Controlador::adicionar_poligono(operacao_obj_t operacao, const std::string nome, double x, double y) {
     Poligono* poligono;
     Objeto* obj;
 
     switch (operacao) {
         case NOVO:
-            if (!_coordenada_poligono->empty())
-                _coordenada_poligono->empty();
+            if (!_coordenada_obj->empty())
+                _coordenada_obj->empty();
 
-            _coordenada_poligono = new std::vector<Coordenada>();
             break;
 
         case ADICIONAR_PONTO:
-            _coordenada_poligono->push_back(Coordenada(x,y));
+            _coordenada_obj->push_back(Coordenada(x,y));
             break;
 
         case CONCLUIR:
-            if (_coordenada_poligono->size() < 1)
+            if (_coordenada_obj->size() < 1)
                 return;
 
             poligono = new Poligono(nome, _poligono_preenchido);
-            for(size_t i = 0; i < _coordenada_poligono->size(); i++) {
+            for(size_t i = 0; i < _coordenada_obj->size(); i++) {
                 poligono->adicionar_coordenada(
-                    _coordenada_poligono->at(i).valor(0), _coordenada_poligono->at(i).valor(1)
+                    _coordenada_obj->at(i).valor(0), _coordenada_obj->at(i).valor(1)
                 );
             }
 
-            _coordenada_poligono->clear();
+            _coordenada_obj->clear();
             _display_file->adicionar_objeto(*poligono);
             obj = poligono;
 
@@ -144,23 +149,53 @@ void Controlador::adicionar_poligono(operacao_poligono_t operacao, const std::st
             break;
 
         case CANCELAR:
-            _coordenada_poligono->clear();
+            _coordenada_obj->clear();
             break;
     }
 }
 
-void Controlador::adicionar_curva() {
-    Curva *c = new Curva("Curva");
-    c->adicionar_ponto_controle(-50,-50);
-    c->adicionar_ponto_controle(50,400);
-    c->adicionar_ponto_controle(400,400);
-    c->adicionar_ponto_controle(400,50);
+void Controlador::adicionar_curva(operacao_obj_t operacao, const std::string nome, double x, double y) {
+    Curva* curva;
+    Objeto* obj;
 
-    c->gerar_curva(100);
-    _display_file->adicionar_objeto(*c);
-    adicionar_objeto_na_tree_view(c->nome().c_str());
+    switch (operacao) {
+        case NOVO:
+            if (!_coordenada_obj->empty())
+                _coordenada_obj->empty();
+                _numero_pontos_obj = 0;
+            break;
+
+        case ADICIONAR_PONTO:
+            _coordenada_obj->push_back(Coordenada(x,y));
+            _numero_pontos_obj++;
+            break;
+
+        case CONCLUIR:
+            curva = new Curva(nome);
+            for(size_t i = 0; i < _coordenada_obj->size(); i++) {
+                curva->adicionar_ponto_controle(
+                    _coordenada_obj->at(i).valor(0), _coordenada_obj->at(i).valor(1)
+                );
+            }
+            _coordenada_obj->clear();
+
+            auto gerou = curva->gerar_curva(100);
+            if (!gerou)
+                return;
+
+            _display_file->adicionar_objeto(*curva);
+            obj = curva;
+
+            adicionar_objeto_na_tree_view(obj->nome().c_str());
+            atualizar_tela();
+            break;
+
+        case CANCELAR:
+            _numero_pontos_obj = 0;
+            _coordenada_obj->clear();
+            break;
+    }
 }
-
 
 void Controlador::zoom(direcao_zoom_t direcao) {
     _window->zoom(direcao, 10);
