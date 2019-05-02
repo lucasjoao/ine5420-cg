@@ -157,7 +157,7 @@ void Controlador::adicionar_poligono(operacao_obj_t operacao, const std::string 
 void Controlador::adicionar_curva(operacao_obj_t operacao, const std::string nome, double x, double y) {
     Curva* curva;
     Objeto* obj;
-
+    bool gerou;
     switch (operacao) {
         case NOVO:
             if (!_coordenada_obj->empty())
@@ -179,7 +179,7 @@ void Controlador::adicionar_curva(operacao_obj_t operacao, const std::string nom
             }
             _coordenada_obj->clear();
 
-            auto gerou = curva->gerar_curva(100);
+            gerou = curva->gerar_curva(100);
             if (!gerou)
                 return;
 

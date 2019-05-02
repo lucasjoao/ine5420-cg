@@ -570,6 +570,7 @@ void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
 
 void btn_curva_clicked(GtkWidget *widget, gpointer data) {
   controlador->adicionar_curva(operacao_obj_t::NOVO, "", 0, 0);
+  gtk_label_set_text(lbl_quantidade_ponto_curva,"Quantidade de ponto: 0");
   gtk_widget_show(curva_window);
 }
 
@@ -585,7 +586,7 @@ void btn_curva_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_curva_x1,"");
   gtk_entry_set_text(entry_curva_y1,"");
   gtk_entry_set_text(entry_curva_z1,"");
-
+  gtk_label_set_text(lbl_quantidade_ponto_curva,"Quantidade de ponto: 0");
   controlador->adicionar_curva(operacao_obj_t::CONCLUIR, nome, 0, 0);
   controlador->adicionar_curva(operacao_obj_t::NOVO, "", 0, 0);
 }

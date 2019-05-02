@@ -87,6 +87,10 @@ Objeto::Objeto(const std::string nome, tipo_t tipo) {
                 apelido += "POLIGONO";
                 break;
 
+            case CURVA_BEZIER:
+                apelido += "CURVA";
+                break;
+
             default:
                 break;
         }
