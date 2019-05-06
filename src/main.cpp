@@ -205,8 +205,13 @@ int main (int argc, char *argv[]) {
   gtk_init(&argc, &argv);
 
   builder = gtk_builder_new();
-  // TODO: add verificacao se pegou arquivo
-  gtk_builder_add_from_file(builder, "src/ui.glade", nullptr);
+  GError *err = nullptr;
+  gtk_builder_add_from_file(builder, "src/ui.glade", &err);
+  if (err != nullptr) {
+    fprintf(stderr, "Não foi possível ler o arquivo: %s\n", err->message);
+    g_error_free(err);
+    return 1;
+  }
 
   main_window = GTK_WIDGET(gtk_builder_get_object(builder, "mainWindow"));
   g_signal_connect(main_window, "destroy", G_CALLBACK(gtk_main_quit), nullptr);
@@ -599,7 +604,7 @@ void btn_curva_add_ponto_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_curva_y1,"");
   gtk_entry_set_text(entry_curva_z1,"");
 
-  
+
   controlador->adicionar_curva(operacao_obj_t::ADICIONAR_PONTO, "", x1, y1);
   std::string text = "Quantidade de ponto: ";
   text += std::to_string(controlador->numero_pontos_obj());
