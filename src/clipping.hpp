@@ -16,12 +16,11 @@ class Clipping {
         const codigo_t _direita = 2;
         const codigo_t _baixo = 4;
         const codigo_t _cima = 8;
+
     public:
+
         Coordenada w_min = Coordenada(-1,-1);
         Coordenada w_max = Coordenada(1, 1);
-
-    public:
-
         void clipping(Objeto& obj, int alg);
 
     private:
@@ -34,6 +33,7 @@ class Clipping {
         /* Liang-Barsky Line Clipping */
         void reta_alg1(Objeto& obj);
 
+        /* Weiler-Atherton Clipping */
         void poligono(Objeto& obj);
 
         void curva(Objeto& obj);
@@ -127,7 +127,7 @@ Coordenada Clipping::calcular_intersecao(Coordenada &p, codigo_t c, double coef_
     auto novo_y = p.valor(y);
 
     if (c & _esquerda) {
-        novo_y = coef_angular*(w_min.valor(x) - p.valor(x)) + p.valor(y);       
+        novo_y = coef_angular*(w_min.valor(x) - p.valor(x)) + p.valor(y);
         novo_x = w_min.valor(x);
     } else if (c &_direita) {
         novo_y = coef_angular*(w_max.valor(x) - p.valor(x)) + p.valor(y);
@@ -149,13 +149,13 @@ codigo_t Clipping::codigo_ponto(Coordenada &c) {
         codigo += _cima;
     else
         if (c.valor(y) < w_min.valor(y))
-            codigo += _baixo; 
+            codigo += _baixo;
 
     if (c.valor(x) > w_max.valor(x))
         codigo += _direita;
     else
         if (c.valor(x) < w_min.valor(x))
-            codigo += _esquerda; 
+            codigo += _esquerda;
 
     return codigo;
 }
@@ -235,7 +235,28 @@ void Clipping::reta_alg1(Objeto& obj) {
     }
 }
 
-void Clipping::poligono(Objeto& obj) {std::cout << "clipping::poligono" << std::endl;}
+void Clipping::poligono(Objeto& obj) {
+    // poligono de recorte é a região do recorte
+    // poligono objeto eh o poligono a ser recortado
+
+    // TODO:
+    // conversar aldo se precisa ser esse
+
+    // problemas:
+    // nao tenho a lista em sentido horario, tenho no sentido da insercao
+    // usar qual tipo de coordenada?
+
+    for (auto coord : obj._coordenadas) {
+        std::cout << coord.valor(0);
+        std::cout << coord.valor(1);
+    }
+
+    // TESTES
+    // exemplos slides
+    // não clipa porque nada aparece
+    // não clipa porque não tem intersecção
+
+}
 
 void Clipping::curva(Objeto& obj)
 {
