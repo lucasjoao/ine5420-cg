@@ -95,7 +95,7 @@ void Clipping::reta_alg0(Objeto& obj) {
     } else if ( (c1 | c2) == 0) {
         obj._visivel = true;
     } else {
-        auto m = Coordenada::coeficiente_anguluar(p1, p2);
+        auto m = Coordenada::coeficiente_angular(p1, p2);
 
         auto novo_p1 = calcular_intersecao(p1, c1, m);
         auto novo_p2 = calcular_intersecao(p2, c2, m);

@@ -31,7 +31,7 @@ class Coordenada {
 
         double angulo();
 
-        static double coeficiente_anguluar(Coordenada &c1, Coordenada &c2);
+        static double coeficiente_angular(Coordenada &c1, Coordenada &c2);
 
     private:
 
@@ -55,18 +55,18 @@ double Coordenada::valor(size_t posicao) {
 }
 
 void Coordenada::carregar(double v[3]) {
-    _coordenada[0] = v[0];    
-    _coordenada[1] = v[1];    
-    _coordenada[2] = v[2];    
+    _coordenada[0] = v[0];
+    _coordenada[1] = v[1];
+    _coordenada[2] = v[2];
 }
 
 void Coordenada::carregar(Coordenada &c) {
-    _coordenada[0] = c.valor(0);    
-    _coordenada[1] = c.valor(1);    
-    _coordenada[2] = c.valor(2);    
+    _coordenada[0] = c.valor(0);
+    _coordenada[1] = c.valor(1);
+    _coordenada[2] = c.valor(2);
 }
 
-double Coordenada::coeficiente_anguluar(Coordenada &c1, Coordenada &c2) {
+double Coordenada::coeficiente_angular(Coordenada &c1, Coordenada &c2) {
     return (c2.valor(y) - c1.valor(y))/(c2.valor(x) - c1.valor(x));
 }
 
@@ -75,7 +75,7 @@ void Coordenada::operator*=(const Transformacao &t) {
     double R[3];
 
     for (int i = 0; i < 3; i++) {
-            R[i] = valor(0)*t.valor(0,i) + valor(1)*t.valor(1,i) + valor(2)*t.valor(2,i); 
+            R[i] = valor(0)*t.valor(0,i) + valor(1)*t.valor(1,i) + valor(2)*t.valor(2,i);
     }
 
     carregar(R);
