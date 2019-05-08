@@ -236,26 +236,42 @@ void Clipping::reta_alg1(Objeto& obj) {
 }
 
 void Clipping::poligono(Objeto& obj) {
-    // poligono de recorte é a região do recorte
-    // poligono objeto eh o poligono a ser recortado
+    int i = 0;
+    Coordenada coord_inicial = obj.coordenada_scn(i); // para saber se jah percorri tudo
+    bool fora_window = codigo_ponto(coord_inicial) != 0; // para saber se sou entrante ou nao
+    bool percorri_tudo = false;
 
-    for (auto coord : obj._coordenadas) {
-        std::cout << coord.valor(0);
-        std::cout << coord.valor(1);
+    // TODO: lista com os extremos da window
+    // TODO: lista com os entrantes
+    // TODO: lista com as coordenadas do obj
+
+    while (!percorri_tudo) {
+        Coordenada c1 = obj.coordenada_scn(i);
+        Coordenada c2 = obj.coordenada_scn(i + 1);
+
+        Reta* reta_tmp = new Reta("tmp", c1, c2);
+        // TODO: verificar isso
+        reta_alg0(*reta_tmp); // para saber se a minha reta corta a window
+
+        if (reta_tmp->visivel()) {
+            Coordenada coord_corte = fora_window ? reta_tmp->coordenada_scn(0) : reta_tmp->coordenada_scn(1);
+            if (fora_window) {
+                // entrante
+                // 	TODO: insiro na lista de entrante conforme se sou entrante ou não
+            }
+            // TODO:
+            // insiro na lista de retas após a primeira coordenada para formar o objeto reta ou antes do c2, por causa da questão
+            // insiro na lista de window em uma posicao x (antes do ponto próximo em sentido horário)
+            //  fazer uma função que faz isso da window
+            fora_window = !fora_window;
+        }
+
+        // TODO: testar ==
+        percorri_tudo = coord_inicial == c2;
+        i += 1;
     }
 
-    // vejo se minha coordenada está dentro ou fora para dizer se é entrante ou não
-    // crio uma lista com os extremos da window
-    // percorro lista de retas do meu objeto até chegar no primeiro ponto
-    // 	crio um obj	para cada reta
-    // 	sei se corta window pelo visivel do alg 0 ou alg 1
-    // 	se for visivel
-    // 		pego uma das coordenadas do algoritmo de reta -> DÚVIDA, PRECISO VERIFICAR QUE É O CERTO???
-    // 		insiro na lista de retas após a primeira coordenada para formar o objeto reta
-    // 		insiro na lista de entrante conforme se sou entrante ou não
-    // 		insiro na lista de window em uma posicao x (antes do ponto próximo em sentido horário)
-    // 			fazer uma função que faz isso
-
+    // TODO:
     // três listas ok, então
 
     // seguir slide 89 e 90

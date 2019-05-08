@@ -17,7 +17,7 @@ class Coordenada {
 
         Coordenada(double x, double y);
 
-        double valor(size_t posicao);
+        double valor(size_t posicao) const;
 
         void alterar(double v, size_t posicao);
 
@@ -25,13 +25,11 @@ class Coordenada {
 
         void carregar(Coordenada &c);
 
+        static double coeficiente_angular(Coordenada &c1, Coordenada &c2);
+
         void operator*=(const Transformacao &t);
 
-        double tamanho();
-
-        double angulo();
-
-        static double coeficiente_angular(Coordenada &c1, Coordenada &c2);
+        bool operator==(const Coordenada &coordenada) const;
 
     private:
 
@@ -50,7 +48,7 @@ void Coordenada::alterar(double v, size_t posicao) {
     _coordenada[posicao] = v;
 }
 
-double Coordenada::valor(size_t posicao) {
+double Coordenada::valor(size_t posicao) const {
     return _coordenada[posicao];
 }
 
@@ -79,6 +77,11 @@ void Coordenada::operator*=(const Transformacao &t) {
     }
 
     carregar(R);
+}
+
+bool Coordenada::operator==(const Coordenada &coordenada) const {
+    return (_coordenada[Coordenada::x] == coordenada.valor(Coordenada::x)) &&
+           (_coordenada[Coordenada::y] == coordenada.valor(Coordenada::y));
 }
 
 #endif
