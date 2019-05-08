@@ -239,23 +239,39 @@ void Clipping::poligono(Objeto& obj) {
     // poligono de recorte é a região do recorte
     // poligono objeto eh o poligono a ser recortado
 
-    // TODO:
-    // conversar aldo se precisa ser esse
-
-    // problemas:
-    // nao tenho a lista em sentido horario, tenho no sentido da insercao
-    // usar qual tipo de coordenada?
-
     for (auto coord : obj._coordenadas) {
         std::cout << coord.valor(0);
         std::cout << coord.valor(1);
     }
 
+    // vejo se minha coordenada está dentro ou fora para dizer se é entrante ou não
+    // crio uma lista com os extremos da window
+    // percorro lista de retas do meu objeto até chegar no primeiro ponto
+    // 	crio um obj	para cada reta
+    // 	sei se corta window pelo visivel do alg 0 ou alg 1
+    // 	se for visivel
+    // 		pego uma das coordenadas do algoritmo de reta -> DÚVIDA, PRECISO VERIFICAR QUE É O CERTO???
+    // 		insiro na lista de retas após a primeira coordenada para formar o objeto reta
+    // 		insiro na lista de entrante conforme se sou entrante ou não
+    // 		insiro na lista de window em uma posicao x (antes do ponto próximo em sentido horário)
+    // 			fazer uma função que faz isso
+
+    // três listas ok, então
+
+    // seguir slide 89 e 90
+
+    // vou ter uma lista de coordenadas que vai ser as novas coordenadas do meu objeto
+
+    // se a lista de coordenadas estiver vazia, então objeto é invisivel
+
+    // devo verificar a quantidade de coordenadas no poligono?
+
+    // tudo deu errado? fazer versão que usa só coisas prontas
+
     // TESTES
     // exemplos slides
     // não clipa porque nada aparece
     // não clipa porque não tem intersecção
-
 }
 
 void Clipping::curva(Objeto& obj)
