@@ -19,8 +19,12 @@ class Clipping {
 
     public:
 
+        /* w_inf_esq */
         Coordenada w_min = Coordenada(-1,-1);
+        /* w_sup_dir */
         Coordenada w_max = Coordenada(1, 1);
+        Coordenada w_sup_esq = Coordenada(-1, 1);
+        Coordenada w_inf_dir = Coordenada(1, -1);
         void clipping(Objeto& obj, int alg);
 
     private:
@@ -235,15 +239,18 @@ void Clipping::reta_alg1(Objeto& obj) {
     }
 }
 
+// perceba que se no poligono houver uma reta que corta duas bordas da window, entao
+// o comportamento desse metodo sera estranho
 void Clipping::poligono(Objeto& obj) {
     int i = 0;
     Coordenada coord_inicial = obj.coordenada_scn(i); // para saber se jah percorri tudo
     bool fora_window = codigo_ponto(coord_inicial) != 0; // para saber se sou entrante ou nao
     bool percorri_tudo = false;
 
-    // TODO: lista com os extremos da window
-    // TODO: lista com os entrantes
-    // TODO: lista com as coordenadas do obj
+    coordenadas_t window{w_sup_esq, w_max, w_inf_dir, w_min};
+    // TODO: confirmar que eh uma copia
+    coordenadas_t poligono = obj._coordenadas_scn;
+    coordenadas_t entrantes;
 
     while (!percorri_tudo) {
         Coordenada c1 = obj.coordenada_scn(i);
@@ -255,14 +262,32 @@ void Clipping::poligono(Objeto& obj) {
 
         if (reta_tmp->visivel()) {
             Coordenada coord_corte = fora_window ? reta_tmp->coordenada_scn(0) : reta_tmp->coordenada_scn(1);
+
             if (fora_window) {
-                // entrante
-                // 	TODO: insiro na lista de entrante conforme se sou entrante ou não
+                entrantes.push_back(coord_corte);
             }
-            // TODO:
-            // insiro na lista de retas após a primeira coordenada para formar o objeto reta ou antes do c2, por causa da questão
-            // insiro na lista de window em uma posicao x (antes do ponto próximo em sentido horário)
-            //  fazer uma função que faz isso da window
+
+            // insiro antes do c2 na lista copia do poligono
+            auto it_poligono = std::find(poligono.begin(), poligono.end(), c2);
+            poligono.insert(it_poligono - 1, coord_corte);
+
+            // insiro antes do proximo vertice da window (sentido horario)
+            if (coord_corte.valor(x) == -1) {
+                // proximo vertice eh o inicial (w_sup_esq), entao basta add no final
+                window.push_back(coord_corte);
+            } else {
+                Coordenada prox_vertice_window;
+                if (coord_corte.valor(y) == -1) {
+                    prox_vertice_window = w_min;
+                } else if (coord_corte.valor(x) == 1) {
+                    prox_vertice_window = w_inf_dir;
+                } else if (coord_corte.valor(y) == 1) {
+                    prox_vertice_window = w_max;
+                }
+                auto it_window = std::find(window.begin(), window.end(), prox_vertice_window);
+                window.insert(it_window - 1, coord_corte);
+            }
+
             fora_window = !fora_window;
         }
 

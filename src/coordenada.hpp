@@ -15,6 +15,8 @@ class Coordenada {
 
     public:
 
+        Coordenada();
+
         Coordenada(double x, double y);
 
         double valor(size_t posicao) const;
@@ -36,6 +38,8 @@ class Coordenada {
         double* _coordenada;
 
 };
+
+Coordenada::Coordenada() {}
 
 Coordenada::Coordenada(double x, double y) {
     _coordenada = new double[Coordenada::dimensao];
