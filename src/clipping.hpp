@@ -262,6 +262,7 @@ void Clipping::poligono(Objeto& obj) {
 
         if (reta_tmp->visivel()) {
             Coordenada coord_corte = fora_window ? reta_tmp->coordenada_scn(0) : reta_tmp->coordenada_scn(1);
+            coord_corte.set_artificial(true);
 
             if (fora_window) {
                 entrantes.push_back(coord_corte);
@@ -299,9 +300,49 @@ void Clipping::poligono(Objeto& obj) {
     // TODO:
     // três listas ok, então
 
-    // seguir slide 89 e 90
+    // TODO:
+    // testar na mão para exemplo mais complexo
+    coordenadas_t novos_vertices;
+    for (auto &coord : entrantes) {
+        Coordenada vertice_encontrado;
+        bool add_in_tmp = false;
+        for (auto i = 0; i < poligono.size(); i++) {
+            if (coord == poligono.at(i)) {
+                add_in_tmp = true;
+                novos_vertices.push_back(poligono.at(i));
+                continue;
+            }
+            // guardar os vertices a partir de coord em dianta da lista de poligono
+            if (add_in_tmp) {
+                novos_vertices.push_back(poligono.at(i));
+                // se encontrar outro artificial, entao mude de lista
+                if (poligono.at(i).is_artificial()) {
+                    vertice_encontrado = poligono.at(i);
+                    break;
+                }
+            }
+        }
 
-    // vou ter uma lista de coordenadas que vai ser as novas coordenadas do meu objeto
+        add_in_tmp = false;
+        for (auto i = 0; i % window.size() < window.size(); i++) {
+            auto i_mod = i % window.size();
+            if (vertice_encontrado == window.at(i_mod)) {
+                add_in_tmp = true;
+                continue;
+            }
+            // guardar os vertices a partir de vertice_encontrado em dianta da lista de window
+            if (add_in_tmp) {
+                novos_vertices.push_back(window.at(i_mod));
+                // se encontrar outro artificial, entao pare
+                if (window.at(i_mod).is_artificial()) {
+                    break;
+                }
+            }
+        }
+    }
+
+    // TODO:
+    // "os vertices percorridos formam o novo poligono"
 
     // se a lista de coordenadas estiver vazia, então objeto é invisivel
 

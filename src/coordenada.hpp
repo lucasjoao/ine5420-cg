@@ -13,8 +13,6 @@ class Coordenada {
         static const size_t z = 2;
         static const size_t dimensao = 3;
 
-    public:
-
         Coordenada();
 
         Coordenada(double x, double y);
@@ -33,9 +31,16 @@ class Coordenada {
 
         bool operator==(const Coordenada &coordenada) const;
 
+        void set_artificial(const bool artificial);
+
+        bool is_artificial() const;
+
     private:
 
         double* _coordenada;
+
+        /* utilizado no algoritmo de clipping de poligono */
+        bool _artificial;
 
 };
 
@@ -46,6 +51,7 @@ Coordenada::Coordenada(double x, double y) {
     _coordenada[Coordenada::x] = x;
     _coordenada[Coordenada::y] = y;
     _coordenada[Coordenada::z] = 1;
+    _artificial = false;
 }
 
 void Coordenada::alterar(double v, size_t posicao) {
@@ -86,6 +92,14 @@ void Coordenada::operator*=(const Transformacao &t) {
 bool Coordenada::operator==(const Coordenada &coordenada) const {
     return (_coordenada[Coordenada::x] == coordenada.valor(Coordenada::x)) &&
            (_coordenada[Coordenada::y] == coordenada.valor(Coordenada::y));
+}
+
+void Coordenada::set_artificial(const bool artificial) {
+    _artificial = artificial;
+}
+
+bool Coordenada::is_artificial() const {
+    return _artificial;
 }
 
 #endif
