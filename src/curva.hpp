@@ -5,10 +5,11 @@
 #include "objeto.hpp"
 #include<vector>
 #include <iostream>
-class Curva : public Objeto 
+
+class CurvaBezier : public Objeto 
 {
     public:
-        Curva(const std::string nome):Objeto(nome, tipo_t::CURVA_BEZIER) {}
+        CurvaBezier(const std::string nome):Objeto(nome, tipo_t::CURVA_BEZIER) {}
 
         /* 3n + 1 pontos precisam ser adicionados, n > 0*/
         void adicionar_ponto_controle(double x, double y) {

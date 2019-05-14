@@ -155,7 +155,7 @@ void Controlador::adicionar_poligono(operacao_obj_t operacao, const std::string 
 }
 
 void Controlador::adicionar_curva(operacao_obj_t operacao, const std::string nome, double x, double y) {
-    Curva* curva;
+    CurvaBezier* curva;
     Objeto* obj;
     bool gerou;
     switch (operacao) {
@@ -171,7 +171,7 @@ void Controlador::adicionar_curva(operacao_obj_t operacao, const std::string nom
             break;
 
         case CONCLUIR:
-            curva = new Curva(nome);
+            curva = new CurvaBezier(nome);
             for(size_t i = 0; i < _coordenada_obj->size(); i++) {
                 curva->adicionar_ponto_controle(
                     _coordenada_obj->at(i).valor(0), _coordenada_obj->at(i).valor(1)
