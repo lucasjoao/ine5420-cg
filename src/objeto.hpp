@@ -7,7 +7,7 @@
 typedef std::vector<Coordenada> coordenadas_t;
 
 enum tipo_t {
-    PONTO, RETA, POLIGONO, CURVA_BEZIER
+    PONTO, RETA, POLIGONO, CURVA_BEZIER, CURVA_BSPLINE
 };
 
 class Clipping;
