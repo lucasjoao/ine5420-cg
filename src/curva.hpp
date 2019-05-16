@@ -74,7 +74,7 @@ class CurvaBSpline : public Objeto
             double t2 = t*t;
             double t3 = t*t2;
 
-            for (size_t i = 0; i < _pontos_controle.size(); i++)
+            for (size_t i = 0; i < _pontos_controle.size()-3; i++)
             {
                 Coordenada p1 = _pontos_controle[i];
                 Coordenada p2 = _pontos_controle[i+1];
@@ -90,15 +90,15 @@ class CurvaBSpline : public Objeto
                 int x = Coordenada::x;
                 int y = Coordenada::y;
 
-                ax = -1/6 * p1.valor(x) + 0.5 * p2.valor(x) -0.5 * p3.valor(x) +1/6 * p4.valor(x);
+                ax = -(1.0/6.0) * p1.valor(x) + 0.5 * p2.valor(x) -0.5 * p3.valor(x) +(1.0/6.0) * p4.valor(x);
 				bx =  0.5 * p1.valor(x) -p2.valor(x) +0.5 * p3.valor(x);
 				cx = -0.5 * p1.valor(x) +0.5 * p3.valor(x);
-				dx =  1/6 * p1.valor(x) +2/3 * p2.valor(x) +1/6 * p3.valor(x);
+				dx =  (1.0/6.0) * p1.valor(x) +(2.0/3.0) * p2.valor(x) +(1.0/6.0) * p3.valor(x);
 
-                ay = -1/6 * p1.valor(y) + 0.5 * p2.valor(y) -0.5 * p3.valor(y) +1/6 * p4.valor(y);
+                ay = -(1.0/6.0) * p1.valor(y) + 0.5 * p2.valor(y) -0.5 * p3.valor(y) +(1.0/6.0) * p4.valor(y);
 				by =  0.5 * p1.valor(y) -p2.valor(y) +0.5 * p3.valor(y);
 				cy = -0.5 * p1.valor(y) +0.5 * p3.valor(y);
-				dy =  1/6 * p1.valor(y) +2/3 * p2.valor(y) +1/6 * p3.valor(y);
+				dy =  (1.0/6.0) * p1.valor(y) +(2.0/3.0) * p2.valor(y) +(1.0/6.0) * p3.valor(y);
 
 				delta_x1  = ax * t3 + bx * t2 + cx * t;
 				delta_x2 = ax * (6 * t3) + bx * (2 * t2);
@@ -112,10 +112,8 @@ class CurvaBSpline : public Objeto
 
                 novo_x = dx; 
                 novo_y = dy;
-
-                _coordenadas.push_back(Coordenada(novo_x, novo_y));
-                for (size_t j = 0; j < passos; j++) {
-
+                    _coordenadas.push_back(Coordenada(novo_x, novo_y));
+                for (size_t j = 0; j < passos+1; j++) {
                 	novo_x += delta_x1;
 					delta_x1 += delta_x2;
 					delta_x2 += delta_x3;

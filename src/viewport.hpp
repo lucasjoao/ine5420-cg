@@ -62,6 +62,7 @@ void Viewport::desenhar(Objeto &obj) {
             desenhar_poligono(obj);
             break;
         case tipo_t::CURVA_BEZIER:
+        case tipo_t::CURVA_BSPLINE:
             desenhar_curva(obj);
 
         default:

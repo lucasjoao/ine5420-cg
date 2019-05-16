@@ -68,6 +68,7 @@ void Clipping::clipping(Objeto& obj, int alg) {
             break;
 
         case tipo_t::CURVA_BEZIER:
+        case tipo_t::CURVA_BSPLINE:
             curva(obj);
             break;
 

@@ -97,6 +97,8 @@ GtkButton* btn_plgn_add_ponto;
 GtkButton* btn_curva_voltar;
 GtkButton* btn_curva_incluir;
 GtkButton* btn_curva_add_ponto;
+GtkRadioButton* radio_curva_bezier;
+GtkRadioButton* radio_curva_bspline;
 
 /* ---------- BOTOES MODAIS DE ROTACAO ---------- */
 
@@ -376,6 +378,8 @@ int main (int argc, char *argv[]) {
   entry_curva_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaX1"));
   entry_curva_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaY1"));
   entry_curva_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaZ1"));
+  radio_curva_bezier = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "radioCurvaBezier"));
+  radio_curva_bspline = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "radioCurvaBSpline"));
 
   /* ---------- ENTRADAS MODAIS DE ROTACAO ---------- */
 
@@ -574,13 +578,13 @@ void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_curva_clicked(GtkWidget *widget, gpointer data) {
-  controlador->adicionar_curva(operacao_obj_t::NOVO, "", 0, 0);
+  controlador->adicionar_curva_novo();
   gtk_label_set_text(lbl_quantidade_ponto_curva,"Quantidade de ponto: 0");
   gtk_widget_show(curva_window);
 }
 
 void btn_curva_voltar_clicked(GtkWidget *widget, gpointer data) {
-  controlador->adicionar_curva(operacao_obj_t::CANCELAR, "", 0, 0);
+  controlador->adicionar_curva_cancelar();
   gtk_widget_hide(curva_window);
 }
 
@@ -592,8 +596,16 @@ void btn_curva_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_curva_y1,"");
   gtk_entry_set_text(entry_curva_z1,"");
   gtk_label_set_text(lbl_quantidade_ponto_curva,"Quantidade de ponto: 0");
-  controlador->adicionar_curva(operacao_obj_t::CONCLUIR, nome, 0, 0);
-  controlador->adicionar_curva(operacao_obj_t::NOVO, "", 0, 0);
+
+  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_curva_bezier))) {
+    controlador->adicionar_curva_concluir(tipo_t::CURVA_BEZIER, nome);
+    std::cout << "CURVA_BEZIER" << std::endl;
+  }
+  else {
+    controlador->adicionar_curva_concluir(tipo_t::CURVA_BSPLINE, nome);
+    std::cout << "CURVA_BSPLINE" << std::endl;
+  }
+  controlador->adicionar_curva_novo();
 }
 
 void btn_curva_add_ponto_clicked(GtkWidget *widget, gpointer data) {
@@ -604,8 +616,7 @@ void btn_curva_add_ponto_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_curva_y1,"");
   gtk_entry_set_text(entry_curva_z1,"");
 
-
-  controlador->adicionar_curva(operacao_obj_t::ADICIONAR_PONTO, "", x1, y1);
+  controlador->adicionar_curva_adicionar_ponto(x1,y1);
   std::string text = "Quantidade de ponto: ";
   text += std::to_string(controlador->numero_pontos_obj());
   gtk_label_set_text(lbl_quantidade_ponto_curva, text.c_str());

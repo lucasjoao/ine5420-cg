@@ -35,7 +35,11 @@ class Controlador {
         void adicionar_ponto(const std::string nome,double x, double y);
         void adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2);
         void adicionar_poligono(operacao_obj_t operacao, const std::string nome, double x, double y);
-        void adicionar_curva(operacao_obj_t operacao, const std::string nome, double x, double y);
+
+        void adicionar_curva_novo();
+        void adicionar_curva_adicionar_ponto(double x, double y);
+        void adicionar_curva_concluir(tipo_t tipo_curva, std::string nome);
+        void adicionar_curva_cancelar();
 
         void zoom(direcao_zoom_t direca);
         void navagacao(direcao_navegacao_t direcao);
@@ -154,47 +158,57 @@ void Controlador::adicionar_poligono(operacao_obj_t operacao, const std::string 
     }
 }
 
-void Controlador::adicionar_curva(operacao_obj_t operacao, const std::string nome, double x, double y) {
-    CurvaBezier* curva;
+void Controlador::adicionar_curva_novo() {
+    if (!_coordenada_obj->empty())
+        _coordenada_obj->empty();
+        _numero_pontos_obj = 0;
+}
+
+void Controlador::adicionar_curva_adicionar_ponto(double x, double y) {
+    _coordenada_obj->push_back(Coordenada(x,y));
+    _numero_pontos_obj++;
+}
+
+void Controlador::adicionar_curva_concluir(tipo_t tipo_curva, std::string nome) {
     Objeto* obj;
     bool gerou;
-    switch (operacao) {
-        case NOVO:
-            if (!_coordenada_obj->empty())
-                _coordenada_obj->empty();
-                _numero_pontos_obj = 0;
-            break;
+    if (tipo_curva == tipo_t::CURVA_BEZIER) {
+        CurvaBezier* curva_bezier = new CurvaBezier(nome);
+        for(size_t i = 0; i < _coordenada_obj->size(); i++) {
+            curva_bezier->adicionar_ponto_controle(
+                _coordenada_obj->at(i).valor(0), _coordenada_obj->at(i).valor(1)
+            );
+        }
 
-        case ADICIONAR_PONTO:
-            _coordenada_obj->push_back(Coordenada(x,y));
-            _numero_pontos_obj++;
-            break;
+        gerou = curva_bezier->gerar_curva(100);
+        if (!gerou)
+            return;
 
-        case CONCLUIR:
-            curva = new CurvaBezier(nome);
-            for(size_t i = 0; i < _coordenada_obj->size(); i++) {
-                curva->adicionar_ponto_controle(
-                    _coordenada_obj->at(i).valor(0), _coordenada_obj->at(i).valor(1)
-                );
-            }
-            _coordenada_obj->clear();
+        obj = curva_bezier;
 
-            gerou = curva->gerar_curva(100);
-            if (!gerou)
-                return;
+    } else {
 
-            _display_file->adicionar_objeto(*curva);
-            obj = curva;
+        CurvaBSpline* curva_bspline = new CurvaBSpline(nome);
+        for(size_t i = 0; i < _coordenada_obj->size(); i++) {
+            curva_bspline->adicionar_ponto_controle(
+                _coordenada_obj->at(i).valor(0), _coordenada_obj->at(i).valor(1)
+            );
+        }
+        gerou = curva_bspline->gerar_curva(100);
+        if (!gerou)
+            return;
 
-            adicionar_objeto_na_tree_view(obj->nome().c_str());
-            atualizar_tela();
-            break;
-
-        case CANCELAR:
-            _numero_pontos_obj = 0;
-            _coordenada_obj->clear();
-            break;
+        obj = curva_bspline;
     }
+    _coordenada_obj->clear();
+    _display_file->adicionar_objeto(*obj);
+    adicionar_objeto_na_tree_view(obj->nome().c_str());
+    atualizar_tela();
+}
+
+void Controlador::adicionar_curva_cancelar(){
+    _numero_pontos_obj = 0;
+    _coordenada_obj->clear();
 }
 
 void Controlador::zoom(direcao_zoom_t direcao) {
