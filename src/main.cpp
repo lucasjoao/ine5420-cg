@@ -597,14 +597,11 @@ void btn_curva_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_curva_z1,"");
   gtk_label_set_text(lbl_quantidade_ponto_curva,"Quantidade de ponto: 0");
 
-  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_curva_bezier))) {
+  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_curva_bezier)))
     controlador->adicionar_curva_concluir(tipo_t::CURVA_BEZIER, nome);
-    std::cout << "CURVA_BEZIER" << std::endl;
-  }
-  else {
+  else
     controlador->adicionar_curva_concluir(tipo_t::CURVA_BSPLINE, nome);
-    std::cout << "CURVA_BSPLINE" << std::endl;
-  }
+
   controlador->adicionar_curva_novo();
 }
 

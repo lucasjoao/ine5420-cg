@@ -88,7 +88,10 @@ Objeto::Objeto(const std::string nome, tipo_t tipo) {
                 break;
 
             case CURVA_BEZIER:
-                apelido += "CURVA";
+                apelido += "CURVA_BEZIER";
+                break;
+            case CURVA_BSPLINE:
+                apelido += "CURVA_BSPLINE";
                 break;
 
             default:
@@ -189,7 +192,6 @@ void Objeto::aplicar_tranformacao(const Transformacao &t) {
 bool Objeto::visivel() {
     return _visivel;
 }
-
 
 bool Objeto::operator==(const Objeto& obj) const {
     return (_nome.compare(obj._nome) == 0) && _tipo == obj._tipo;
