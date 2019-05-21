@@ -246,6 +246,7 @@ void Clipping::poligono(Objeto& obj) {
     Coordenada coord_inicial = obj.coordenada_scn(i); // para saber se jah percorri tudo
     bool fora_window = codigo_ponto(coord_inicial) != 0; // para saber se sou entrante ou nao
     bool percorri_tudo = false;
+    bool continua_igual = true; // indica se o objeto continua igual ao que foi inserido (true) ou se houve clip (false)
     coordenadas_t window{w_sup_esq, w_max, w_inf_dir, w_min};
     // TODO: confirmar que eh uma copia
     coordenadas_t poligono = obj._coordenadas_scn;
@@ -260,7 +261,11 @@ void Clipping::poligono(Objeto& obj) {
         // TODO: verificar isso
         reta_alg0(*reta_tmp); // para saber se a minha reta corta a window
 
-        if (reta_tmp->visivel()) {
+        auto mesmo_c1 = reta_tmp->coordenada_scn(0) == c1;
+        auto mesmo_c2 = reta_tmp->coordenada_scn(1) == c2;
+        continua_igual = mesmo_c1 && mesmo_c2;
+
+        if (reta_tmp->visivel() && (!mesmo_c1 || !mesmo_c2)) {
             Coordenada coord_corte = fora_window ? reta_tmp->coordenada_scn(0) : reta_tmp->coordenada_scn(1);
             coord_corte.set_artificial(true);
 
@@ -342,9 +347,15 @@ void Clipping::poligono(Objeto& obj) {
 
     // TODO:
     // perceba que a implementacao nao contempla multiplos objetos como resultado, ou seja,
-    if (novos_vertices.empty()) {
+    if (continua_igual) {
+        // quando objeto nao tem clipp
+        obj._visivel = true;
+    } else if (novos_vertices.empty()) {
+        // TODO: verificar esse cenario
+        // houve clipp, mas nada visivel
         obj._visivel = false;
     } else {
+        // houve clipping com partes visiveis
         obj._visivel = true;
         obj._coordenadas_scn = novos_vertices;
     }
