@@ -89,11 +89,6 @@ void Clipping::ponto(Objeto& obj) {
 }
 
 void Clipping::reta_alg0(Objeto& obj) {
-    std::cout << "entrei alg0\n";
-    std::cout << "tamanho reta:\n";
-    std::cout << std::to_string(obj.tamanho()) + "\n";
-    std::cout << "tamanho scn reta:\n";
-    std::cout << std::to_string(obj.tamanho_scn()) + "\n";
     auto p1 = obj.coordenada_scn(0);
     auto p2 = obj.coordenada_scn(1);
 
@@ -247,38 +242,25 @@ void Clipping::reta_alg1(Objeto& obj) {
 // perceba que se no poligono houver uma reta que corta duas bordas da window, entao
 // o comportamento desse metodo sera estranho
 void Clipping::poligono(Objeto& obj) {
-    std::cout << obj.tamanho_scn() + "\n";
     int i = 0;
     Coordenada coord_inicial = obj.coordenada_scn(i); // para saber se jah percorri tudo
-    std::cout << "coord_inicial\n";
-    std::cout << std::to_string(coord_inicial.x) + " " + std::to_string(coord_inicial.y) + "\n";
     bool fora_window = codigo_ponto(coord_inicial) != 0; // para saber se sou entrante ou nao
-    std::cout << "fora window: " + std::to_string(fora_window) + "\n";
     bool percorri_tudo = false;
-    std::cout << "percorri tudo: " + std::to_string(percorri_tudo) + "\n";
     coordenadas_t window{w_sup_esq, w_max, w_inf_dir, w_min};
     // TODO: confirmar que eh uma copia
     coordenadas_t poligono = obj._coordenadas_scn;
     coordenadas_t entrantes;
 
     while (!percorri_tudo) {
-        std::cout << std::to_string(i) + "\n";
-        std::cout << obj.tamanho_scn() + "\n";
-        Coordenada c1 = obj.coordenada_scn(i);
-        std::cout << "c1\n";
-        std::cout << std::to_string(c1.x) + " " + std::to_string(c1.y) + "\n";
-        Coordenada c2 = obj.coordenada_scn(i + 1);
-        std::cout << "c2\n";
-        std::cout << std::to_string(c2.x) + " " + std::to_string(c2.y) + "\n";
+        Coordenada c1 = obj.coordenada_scn(i % obj.tamanho_scn());
+        Coordenada c2 = obj.coordenada_scn((i + 1) % obj.tamanho_scn());
 
         Reta* reta_tmp = new Reta("tmp", c1, c2);
-        std::cout << "criei reta\n";
+        reta_tmp->_coordenadas_scn = reta_tmp->_coordenadas;
         // TODO: verificar isso
         reta_alg0(*reta_tmp); // para saber se a minha reta corta a window
-        std::cout << "passei reta_alg0";
 
         if (reta_tmp->visivel()) {
-            std::cout << "uma reta visivel\n";
             Coordenada coord_corte = fora_window ? reta_tmp->coordenada_scn(0) : reta_tmp->coordenada_scn(1);
             coord_corte.set_artificial(true);
 
@@ -310,7 +292,6 @@ void Clipping::poligono(Objeto& obj) {
             fora_window = !fora_window;
         }
 
-        // TODO: testar ==
         percorri_tudo = coord_inicial == c2;
         i += 1;
     }
