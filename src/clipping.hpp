@@ -279,12 +279,13 @@ void Clipping::poligono(Objeto& obj) {
 
             // insiro antes do c2 na lista copia do poligono
             auto it_poligono = std::find(poligono.begin(), poligono.end(), c2);
-            poligono.insert(it_poligono - 1, coord_corte);
+            poligono.insert(it_poligono, coord_corte);
 
             // insiro antes do proximo vertice da window (sentido horario)
             if (coord_corte.valor(x) == -1) {
-                // proximo vertice eh o inicial (w_sup_esq), entao basta add no final
-                window.push_back(coord_corte);
+                // proximo vertice eh o inicial (w_sup_esq), entao basta add apos o final
+                auto it_window = std::find(window.begin(), window.end(), w_min);
+                window.insert(it_window + 1, coord_corte);
             } else {
                 Coordenada prox_vertice_window;
                 if (coord_corte.valor(y) == -1) {
@@ -295,7 +296,7 @@ void Clipping::poligono(Objeto& obj) {
                     prox_vertice_window = w_max;
                 }
                 auto it_window = std::find(window.begin(), window.end(), prox_vertice_window);
-                window.insert(it_window - 1, coord_corte);
+                window.insert(it_window, coord_corte);
             }
 
             fora_window = !fora_window;
@@ -335,11 +336,11 @@ void Clipping::poligono(Objeto& obj) {
             }
             // guardar os vertices a partir de vertice_encontrado em diante da lista de window
             if (add_in_tmp) {
-                novos_vertices.push_back(window.at(i_mod));
                 // se encontrar outro artificial, entao pare
                 if (window.at(i_mod).is_artificial()) {
                     break;
                 }
+                novos_vertices.push_back(window.at(i_mod));
             }
         }
     }
