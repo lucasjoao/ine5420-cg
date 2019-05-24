@@ -281,23 +281,20 @@ void Clipping::poligono(Objeto& obj) {
             auto it_poligono = std::find(poligono.begin(), poligono.end(), c2);
             poligono.insert(it_poligono, coord_corte);
 
-            // insiro antes do proximo vertice da window (sentido horario)
+            Coordenada vertice_anterior_window;
             if (coord_corte.valor(x) == -1) {
                 // proximo vertice eh o inicial (w_sup_esq), entao basta add apos o final
-                auto it_window = std::find(window.begin(), window.end(), w_min);
-                window.insert(it_window + 1, coord_corte);
-            } else {
-                Coordenada prox_vertice_window;
-                if (coord_corte.valor(y) == -1) {
-                    prox_vertice_window = w_min;
-                } else if (coord_corte.valor(x) == 1) {
-                    prox_vertice_window = w_inf_dir;
-                } else if (coord_corte.valor(y) == 1) {
-                    prox_vertice_window = w_max;
-                }
-                auto it_window = std::find(window.begin(), window.end(), prox_vertice_window);
-                window.insert(it_window, coord_corte);
+                vertice_anterior_window = w_min;
+            } else if (coord_corte.valor(y) == -1) {
+                vertice_anterior_window = w_inf_dir;
+            } else if (coord_corte.valor(x) == 1) {
+                vertice_anterior_window = w_max;
+            } else if (coord_corte.valor(y) == 1) {
+                vertice_anterior_window = w_sup_esq;
             }
+
+            auto it_window = std::find(window.begin(), window.end(), vertice_anterior_window);
+            window.insert(it_window + 1, coord_corte);
 
             fora_window = !fora_window;
         }
@@ -310,18 +307,19 @@ void Clipping::poligono(Objeto& obj) {
     for (auto &coord : entrantes) {
         Coordenada vertice_encontrado;
         bool add_in_tmp = false;
-        for (auto i = 0; i < poligono.size(); i++) {
-            if (coord == poligono.at(i)) {
+        for (auto i = 0; i % poligono.size() < poligono.size(); i++) {
+            auto i_mod = i % poligono.size();
+            if (coord == poligono.at(i_mod)) {
                 add_in_tmp = true;
-                novos_vertices.push_back(poligono.at(i));
+                novos_vertices.push_back(poligono.at(i_mod));
                 continue;
             }
             // guardar os vertices a partir de coord em diante da lista de poligono
             if (add_in_tmp) {
-                novos_vertices.push_back(poligono.at(i));
+                novos_vertices.push_back(poligono.at(i_mod));
                 // se encontrar outro artificial, entao mude de lista
-                if (poligono.at(i).is_artificial()) {
-                    vertice_encontrado = poligono.at(i);
+                if (poligono.at(i_mod).is_artificial()) {
+                    vertice_encontrado = poligono.at(i_mod);
                     break;
                 }
             }
