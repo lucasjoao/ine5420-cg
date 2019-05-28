@@ -240,11 +240,10 @@ void Clipping::reta_alg1(Objeto& obj) {
 }
 
 void Clipping::poligono(Objeto& obj) {
-    int i = 0;
-    Coordenada coord_inicial = obj.coordenada_scn(i); // para saber se jah percorri tudo
-
+    int i = 0; // usado para acessar as coordenadas do objeto. Em mod para simular uma lista circular
+    Coordenada coord_inicial = obj.coordenada_scn(i); // auxiliar para definir se ja percorreu tudo
     bool fora_window = codigo_ponto(coord_inicial) != 0; // para saber se sou entrante ou nao
-    bool percorri_tudo = false;
+    bool percorri_tudo = false; // para saber se jah percorri tudo
     bool continua_igual = true; // indica se o objeto continua igual ao que foi inserido (true) ou se houve clip (false)
     bool resultado_visivel = true; // indica se o objeto resultante esta visivel ou nao
 
@@ -252,14 +251,18 @@ void Clipping::poligono(Objeto& obj) {
     coordenadas_t poligono = obj._coordenadas_scn;
     coordenadas_t entrantes;
 
+    /**
+     *   preenchimentos dos vectors necessarios para o algoritmo (entrantes, poligono, window)
+     **/
     while (!percorri_tudo) {
         Coordenada c1 = obj.coordenada_scn(i % obj.tamanho_scn());
         Coordenada c2 = obj.coordenada_scn((i + 1) % obj.tamanho_scn());
 
         Reta* reta_tmp = new Reta("tmp", c1, c2);
-        reta_tmp->_coordenadas_scn = reta_tmp->_coordenadas;
+        reta_tmp->_coordenadas_scn = reta_tmp->_coordenadas; // criacao default de reta nao gera valores scn, mas como usamos esse tipo de valor para criar, pode-se realizar essa copia
         reta_alg0(*reta_tmp); // para saber se a minha reta corta a window
 
+        // mesmo_c1 e mesmo_c2 eh necessario para casos onde nao ha clip
         auto mesmo_c1 = reta_tmp->coordenada_scn(0) == c1;
         auto mesmo_c2 = reta_tmp->coordenada_scn(1) == c2;
         continua_igual = mesmo_c1 && mesmo_c2 && continua_igual;
@@ -290,15 +293,17 @@ void Clipping::poligono(Objeto& obj) {
                 vertice_anterior_window = w_sup_esq;
             }
 
+            // tenho que add apos o vertice_anterior_window
+            // mas se nessa posicao estiver um vertice artificial, entao tenho que add apos o artificial
             auto it_window = std::find(window.begin(), window.end(), vertice_anterior_window);
             auto distance = std::distance(window.begin(), it_window);
-            auto teste = 1;
-            auto index = distance + teste;
+            auto aux = 1;
+            auto index = distance + aux;
             while (index < window.size() && window.at(index).is_artificial()) {
-                teste++;
-                index = distance + teste;
+                aux++;
+                index = distance + aux;
             }
-            window.insert(it_window + teste, coord_corte);
+            window.insert(it_window + aux, coord_corte);
 
             fora_window = !fora_window;
         }
@@ -307,12 +312,17 @@ void Clipping::poligono(Objeto& obj) {
         i += 1;
     }
 
+    /**
+     *   criacao do vector que ira conter os novos vertices do poligono;
+     *   utilizacao de mod como index dos vectors para simular lista circular
+     **/
     coordenadas_t novos_vertices;
     for (auto &coord : entrantes) {
         Coordenada vertice_encontrado;
         bool add_in_tmp = false;
         for (auto i = 0; i % poligono.size() < poligono.size(); i++) {
             auto i_mod = i % poligono.size();
+            // na procura do entrante na lista do poligono
             if (coord == poligono.at(i_mod)) {
                 add_in_tmp = true;
                 novos_vertices.push_back(poligono.at(i_mod));
@@ -336,6 +346,7 @@ void Clipping::poligono(Objeto& obj) {
         add_in_tmp = false;
         for (auto i = 0; i % window.size() < window.size(); i++) {
             auto i_mod = i % window.size();
+            // na procura do vertice encontrado na lista de window
             if (vertice_encontrado == window.at(i_mod)) {
                 add_in_tmp = true;
                 continue;
