@@ -16,8 +16,6 @@ class DisplayFile {
 
         Objeto& objeto(size_t posicao);
 
-        void remover_objeto(const std::string& nome);
-
         size_t tamanho();
 
         void limpar();
@@ -33,10 +31,6 @@ void DisplayFile::adicionar_objeto(Objeto &obj) {
 
 Objeto& DisplayFile::objeto(size_t posicao) {
     return _lista_objetos->at(posicao);
-}
-
-void DisplayFile::remover_objeto(const std::string& nome) {
-    // IMPLEMENTAR
 }
 
 size_t DisplayFile::tamanho() {

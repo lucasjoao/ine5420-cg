@@ -78,6 +78,8 @@ GtkButton* btn_down;
 GtkButton* btn_left;
 GtkButton* btn_right;
 
+GtkButton* btn_clean_screen;
+
 GtkButton* btn_ponto;
 GtkButton* btn_reta;
 GtkButton* btn_poligono;
@@ -159,6 +161,8 @@ void btn_up_clicked(GtkWidget *widget, gpointer data);
 void btn_down_clicked(GtkWidget *widget, gpointer data);
 void btn_left_clicked(GtkWidget *widget, gpointer data);
 void btn_right_clicked(GtkWidget *widget, gpointer data);
+
+void btn_clean_screen_clicked(GtkWidget *widget, gpointer data);
 
 void btn_ponto_clicked(GtkWidget *widget, gpointer data);
 void btn_reta_clicked(GtkWidget *widget, gpointer data);
@@ -293,6 +297,7 @@ int main (int argc, char *argv[]) {
   btn_down = GTK_BUTTON(gtk_builder_get_object(builder, "btnDown"));
   btn_left = GTK_BUTTON(gtk_builder_get_object(builder, "btnLeft"));
   btn_right = GTK_BUTTON(gtk_builder_get_object(builder, "btnRight"));
+  btn_clean_screen = GTK_BUTTON(gtk_builder_get_object(builder, "btnClean"));
   btn_ponto = GTK_BUTTON(gtk_builder_get_object(builder, "btnPonto"));
   btn_reta = GTK_BUTTON(gtk_builder_get_object(builder, "btnReta"));
   btn_poligono = GTK_BUTTON(gtk_builder_get_object(builder, "btnPoligono"));
@@ -304,6 +309,7 @@ int main (int argc, char *argv[]) {
   g_signal_connect(btn_down, "clicked", G_CALLBACK(btn_down_clicked), nullptr);
   g_signal_connect(btn_left, "clicked", G_CALLBACK(btn_left_clicked), nullptr);
   g_signal_connect(btn_right, "clicked", G_CALLBACK(btn_right_clicked), nullptr);
+  g_signal_connect(btn_clean_screen, "clicked", G_CALLBACK(btn_clean_screen_clicked), nullptr);
   g_signal_connect(btn_ponto, "clicked", G_CALLBACK(btn_ponto_clicked), nullptr);
   g_signal_connect(btn_reta, "clicked", G_CALLBACK(btn_reta_clicked), nullptr);
   g_signal_connect(btn_poligono, "clicked", G_CALLBACK(btn_poligono_clicked), nullptr);
@@ -485,6 +491,10 @@ void btn_left_clicked(GtkWidget *widget, gpointer data) {
 
 void btn_right_clicked(GtkWidget *widget, gpointer data) {
   controlador->navagacao(direcao_navegacao_t::RIGHT);
+}
+
+void btn_clean_screen_clicked(GtkWidget *widget, gpointer data) {
+  controlador->limpar_tela();
 }
 
 void btn_ponto_clicked(GtkWidget *widget, gpointer data) {
