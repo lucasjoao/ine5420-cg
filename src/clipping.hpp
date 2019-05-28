@@ -239,15 +239,11 @@ void Clipping::reta_alg1(Objeto& obj) {
     }
 }
 
-// perceba que se no poligono houver uma reta que corta duas bordas da window, entao
-// o comportamento desse metodo sera estranho. Alem disso, essa implementacao nao considera como um
-// posssivel resultado varios poligonos
 void Clipping::poligono(Objeto& obj) {
     int i = 0;
     Coordenada coord_inicial = obj.coordenada_scn(i); // para saber se jah percorri tudo
 
     bool fora_window = codigo_ponto(coord_inicial) != 0; // para saber se sou entrante ou nao
-    std::cout << "começo fora da window? " + std::to_string(fora_window) + "\n";
     bool percorri_tudo = false;
     bool continua_igual = true; // indica se o objeto continua igual ao que foi inserido (true) ou se houve clip (false)
     bool resultado_visivel = true; // indica se o objeto resultante esta visivel ou nao
@@ -258,9 +254,7 @@ void Clipping::poligono(Objeto& obj) {
 
     while (!percorri_tudo) {
         Coordenada c1 = obj.coordenada_scn(i % obj.tamanho_scn());
-        std::cout << "c1: (x) " + std::to_string(c1.valor(x)) + " (y) " + std::to_string(c1.valor(y)) + "\n";
         Coordenada c2 = obj.coordenada_scn((i + 1) % obj.tamanho_scn());
-        std::cout << "c2: (x) " + std::to_string(c2.valor(x)) + " (y) " + std::to_string(c2.valor(y)) + "\n";
 
         Reta* reta_tmp = new Reta("tmp", c1, c2);
         reta_tmp->_coordenadas_scn = reta_tmp->_coordenadas;
@@ -275,9 +269,6 @@ void Clipping::poligono(Objeto& obj) {
         if (reta_tmp->visivel() && (!mesmo_c1 || !mesmo_c2)) {
             Coordenada coord_corte = fora_window ? reta_tmp->coordenada_scn(0) : reta_tmp->coordenada_scn(1);
             coord_corte.set_artificial(true);
-            std::cout << "reta_tmp coord 0: (x) " + std::to_string(reta_tmp->coordenada_scn(0).valor(x)) + " (y) " + std::to_string(reta_tmp->coordenada_scn(0).valor(y)) + "\n";
-            std::cout << "reta_tmp coord 1: (x) " + std::to_string(reta_tmp->coordenada_scn(1).valor(x)) + " (y) " + std::to_string(reta_tmp->coordenada_scn(1).valor(y)) + "\n";
-            std::cout << "cc: (x) " + std::to_string(coord_corte.valor(x)) + " (y) " +std:: to_string(coord_corte.valor(y)) + "\n";
 
             if (fora_window) {
                 entrantes.push_back(coord_corte);
@@ -316,43 +307,22 @@ void Clipping::poligono(Objeto& obj) {
         i += 1;
     }
 
-    std::cout << "entrantes size: " + std::to_string(entrantes.size()) + "\n";
-    for (auto &ent : entrantes) {
-        std::cout << "entrante: (x) " + std::to_string(ent.valor(x)) + " (y) " + std::to_string(ent.valor(y)) + "\n";
-    }
-
-    std::cout << "poligono size: " + std::to_string(poligono.size()) + "\n";
-    for (auto &pol : poligono) {
-        std::cout << "poligono: (x) " + std::to_string(pol.valor(x)) + " (y) " + std::to_string(pol.valor(y)) + "\n";
-        // std::cout << "artificial: " + std::to_string(pol.is_artificial()) + "\n";
-    }
-
-    std::cout << "window size: " + std::to_string(window.size()) + "\n";
-    for (auto &win : window) {
-        std::cout << "window: (x) " + std::to_string(win.valor(x)) + " (y) " + std::to_string(win.valor(y)) + "\n";
-    }
-
     coordenadas_t novos_vertices;
     for (auto &coord : entrantes) {
         Coordenada vertice_encontrado;
         bool add_in_tmp = false;
-        std::cout << "iteração\n";
         for (auto i = 0; i % poligono.size() < poligono.size(); i++) {
             auto i_mod = i % poligono.size();
-            std::cout << "me procurando na lista de poligono\n";
             if (coord == poligono.at(i_mod)) {
-                std::cout << "me encontrei\n";
                 add_in_tmp = true;
                 novos_vertices.push_back(poligono.at(i_mod));
                 continue;
             }
             // guardar os vertices a partir de coord em diante da lista de poligono
             if (add_in_tmp) {
-                std::cout << "add na nova\n";
                 novos_vertices.push_back(poligono.at(i_mod));
                 // se encontrar outro artificial, entao mude de lista
                 if (poligono.at(i_mod).is_artificial()) {
-                    std::cout << "vamos mudar de lista\n";
                     vertice_encontrado = poligono.at(i_mod);
                     break;
                 }
@@ -366,9 +336,7 @@ void Clipping::poligono(Objeto& obj) {
         add_in_tmp = false;
         for (auto i = 0; i % window.size() < window.size(); i++) {
             auto i_mod = i % window.size();
-            std::cout << "me procurando na lista de window\n";
             if (vertice_encontrado == window.at(i_mod)) {
-                std::cout << "me encontrei\n";
                 add_in_tmp = true;
                 continue;
             }
@@ -376,7 +344,6 @@ void Clipping::poligono(Objeto& obj) {
             if (add_in_tmp) {
                 // se encontrar outro artificial, entao pare
                 if (window.at(i_mod).is_artificial()) {
-                    std::cout << "fechou para esse entrante\n";
                     break;
                 }
                 novos_vertices.push_back(window.at(i_mod));
@@ -384,15 +351,8 @@ void Clipping::poligono(Objeto& obj) {
         }
     }
 
-    std::cout << "novos_vertices size: " + std::to_string(novos_vertices.size()) + "\n";
-    for (auto &nv : novos_vertices) {
-        std::cout << "novos_vertices: (x) " + std::to_string(nv.valor(x)) + " (y) " + std::to_string(nv.valor(y)) + "\n";
-    }
-
-    std::cout << "vou printar agora\n";
     if (continua_igual) {
         // quando objeto nao tem clipp
-        std::cout << "sem clip, resultado visivel: " + std::to_string(resultado_visivel) + "\n";
         obj._visivel = resultado_visivel;
     } else {
         // houve clipping com partes visiveis
