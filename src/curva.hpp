@@ -66,8 +66,8 @@ class CurvaBSpline : public Objeto
     public:
         CurvaBSpline(const std::string nome):Objeto(nome, tipo_t::CURVA_BSPLINE) {}
 
-        void adicionar_ponto_controle(double x, double y) {
-            _pontos_controle.push_back(Coordenada(x,y));
+        void adicionar_ponto_controle(Coordenada c) {
+            _pontos_controle.push_back(c);
         }
 
         bool gerar_curva(double passos) {
@@ -88,12 +88,15 @@ class CurvaBSpline : public Objeto
 
                 double ax,bx,cx,dx;
                 double ay,by,cy,dy;
+                double az,bz,cz,dz;
 
                 double delta_x3, delta_x2, delta_x1;
                 double delta_y3, delta_y2, delta_y1;
+                double delta_z3, delta_z2, delta_z1;
 
                 int x = Coordenada::x;
                 int y = Coordenada::y;
+                int z = Coordenada::z;
 
                 ax = -(1.0/6.0) * p1.valor(x) + 0.5 * p2.valor(x) -0.5 * p3.valor(x) +(1.0/6.0) * p4.valor(x);
 				bx =  0.5 * p1.valor(x) -p2.valor(x) +0.5 * p3.valor(x);
@@ -105,6 +108,12 @@ class CurvaBSpline : public Objeto
 				cy = -0.5 * p1.valor(y) +0.5 * p3.valor(y);
 				dy =  (1.0/6.0) * p1.valor(y) +(2.0/3.0) * p2.valor(y) +(1.0/6.0) * p3.valor(y);
 
+                az = -(1.0/6.0) * p1.valor(z) + 0.5 * p2.valor(z) -0.5 * p3.valor(z) +(1.0/6.0) * p4.valor(z);
+				bz =  0.5 * p1.valor(z) -p2.valor(z) +0.5 * p3.valor(z);
+				cz = -0.5 * p1.valor(z) +0.5 * p3.valor(z);
+				dz =  (1.0/6.0) * p1.valor(z) +(2.0/3.0) * p2.valor(z) +(1.0/6.0) * p3.valor(z);
+
+
 				delta_x1  = ax * t3 + bx * t2 + cx * t;
 				delta_x2 = ax * (6 * t3) + bx * (2 * t2);
 				delta_x3 = ax * (6 * t3);
@@ -113,11 +122,17 @@ class CurvaBSpline : public Objeto
 				delta_y2 = ay * (6 * t3) + by * (2 * t2);
 				delta_y3 = ay * (6 * t3);
 
-                double novo_x, novo_y;
+				delta_z1 = az * t3 + bz * t2 + cz * t;
+				delta_z2 = az * (6 * t3) + bz * (2 * t2);
+				delta_z3 = az * (6 * t3);
+
+                double novo_x, novo_y, novo_z;
 
                 novo_x = dx; 
                 novo_y = dy;
-                    _coordenadas.push_back(Coordenada(novo_x, novo_y));
+                novo_z = dz;
+                _coordenadas.push_back(Coordenada(novo_x, novo_y, novo_z));
+
                 for (size_t j = 0; j < passos+1; j++) {
                 	novo_x += delta_x1;
 					delta_x1 += delta_x2;
@@ -127,7 +142,11 @@ class CurvaBSpline : public Objeto
 					delta_y1 += delta_y2;
 					delta_y2 += delta_y3;
 
-                    _coordenadas.push_back(Coordenada(novo_x, novo_y));
+					novo_z += delta_z1;
+					delta_z1 += delta_z2;
+					delta_z2 += delta_z3;
+
+                    _coordenadas.push_back(Coordenada(novo_x, novo_y, novo_z));
                 }
             }
             return true;

@@ -186,9 +186,7 @@ void Controlador::adicionar_curva_concluir(tipo_t tipo_curva, std::string nome) 
 
         CurvaBSpline* curva_bspline = new CurvaBSpline(nome);
         for(size_t i = 0; i < _coordenada_obj->size(); i++) {
-            curva_bspline->adicionar_ponto_controle(
-                _coordenada_obj->at(i).valor(0), _coordenada_obj->at(i).valor(1)
-            );
+            curva_bspline->adicionar_ponto_controle(_coordenada_obj->at(i));
         }
         gerou = curva_bspline->gerar_curva(100);
         if (!gerou)
