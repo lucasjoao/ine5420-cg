@@ -11,11 +11,14 @@ class Coordenada {
         static const size_t x = 0;
         static const size_t y = 1;
         static const size_t z = 2;
-        static const size_t dimensao = 3;
+        static const size_t w = 3;
+        static const size_t dimensao = 4;
 
         Coordenada();
 
         Coordenada(double x, double y);
+
+        Coordenada(double x, double y, double z);
 
         double valor(size_t posicao) const;
 
@@ -51,6 +54,16 @@ Coordenada::Coordenada(double x, double y) {
     _coordenada[Coordenada::x] = x;
     _coordenada[Coordenada::y] = y;
     _coordenada[Coordenada::z] = 1;
+    _coordenada[Coordenada::w] = 1;
+    _artificial = false;
+}
+
+Coordenada::Coordenada(double x, double y, double z) {
+    _coordenada = new double[Coordenada::dimensao];
+    _coordenada[Coordenada::x] = x;
+    _coordenada[Coordenada::y] = y;
+    _coordenada[Coordenada::z] = z;
+    _coordenada[Coordenada::w] = 1;
     _artificial = false;
 }
 
@@ -72,12 +85,12 @@ void Coordenada::carregar(Coordenada &c) {
     _coordenada[0] = c.valor(0);
     _coordenada[1] = c.valor(1);
     _coordenada[2] = c.valor(2);
+    _coordenada[3] = c.valor(3);
 }
 
 double Coordenada::coeficiente_angular(Coordenada &c1, Coordenada &c2) {
     return (c2.valor(y) - c1.valor(y))/(c2.valor(x) - c1.valor(x));
 }
-
 
 void Coordenada::operator*=(const Transformacao &t) {
     double R[3];
