@@ -138,9 +138,7 @@ void Controlador::adicionar_poligono(operacao_obj_t operacao, const std::string 
 
             poligono = new Poligono(nome, _poligono_preenchido);
             for(size_t i = 0; i < _coordenada_obj->size(); i++) {
-                poligono->adicionar_coordenada(
-                    _coordenada_obj->at(i).valor(0), _coordenada_obj->at(i).valor(1)
-                );
+                poligono->adicionar_coordenada(_coordenada_obj->at(i));
             }
 
             _coordenada_obj->clear();

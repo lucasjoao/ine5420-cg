@@ -14,8 +14,8 @@ class Poligono : public Objeto {
                 set_preenchido(preenchido);
             }
 
-        void adicionar_coordenada(double x, double y) {
-            _coordenadas.push_back(Coordenada(x,y));
+        void adicionar_coordenada(Coordenada c) {
+            _coordenadas.push_back(c);
         }
 };
 
