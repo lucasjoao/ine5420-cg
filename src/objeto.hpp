@@ -130,31 +130,39 @@ Coordenada Objeto::coordenada_scn(size_t posicao) {
 Coordenada Objeto::centro() {
     double x = 0;
     double y = 0;
+    double z = 0;
+
     size_t tamanho = this->tamanho();
 
     for(size_t i = 0; i < tamanho; i++) {
         x += _coordenadas[i].valor(Coordenada::x);
         y += _coordenadas[i].valor(Coordenada::y);
+        z += _coordenadas[i].valor(Coordenada::z);
     }
 
     x = x/tamanho;
     y = y/tamanho;
-    return Coordenada(x,y);
+    z = z/tamanho;
+    return Coordenada(x,y,z);
 }
 
 Coordenada Objeto::centro_scn() {
     double x = 0;
     double y = 0;
+    double z = 0;
     size_t tamanho = this->tamanho_scn();
 
     for(size_t i = 0; i < tamanho; i++) {
         x += _coordenadas_scn[i].valor(Coordenada::x);
         y += _coordenadas_scn[i].valor(Coordenada::y);
+        z += _coordenadas_scn[i].valor(Coordenada::z);
+
     }
 
     x = x/tamanho;
     y = y/tamanho;
-    return Coordenada(x,y);
+    z = z/tamanho;
+    return Coordenada(x,y,z);
 }
 
 size_t Objeto::tamanho() {
@@ -178,7 +186,11 @@ void Objeto::reset_scn() {
 
     for (size_t i = 0; i < tamanho(); i++) {
         _coordenadas_scn.push_back(
-            Coordenada(_coordenadas[i].valor(Coordenada::x), _coordenadas[i].valor(Coordenada::y))
+            Coordenada(
+                _coordenadas[i].valor(Coordenada::x), 
+                _coordenadas[i].valor(Coordenada::y), 
+                _coordenadas[i].valor(Coordenada::z)
+            )
         );
     }
 }
