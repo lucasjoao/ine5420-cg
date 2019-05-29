@@ -173,9 +173,7 @@ void Controlador::adicionar_curva_concluir(tipo_t tipo_curva, std::string nome) 
     if (tipo_curva == tipo_t::CURVA_BEZIER) {
         CurvaBezier* curva_bezier = new CurvaBezier(nome);
         for(size_t i = 0; i < _coordenada_obj->size(); i++) {
-            curva_bezier->adicionar_ponto_controle(
-                _coordenada_obj->at(i).valor(0), _coordenada_obj->at(i).valor(1)
-            );
+            curva_bezier->adicionar_ponto_controle(_coordenada_obj->at(i));
         }
 
         gerou = curva_bezier->gerar_curva(100);

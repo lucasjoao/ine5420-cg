@@ -12,8 +12,8 @@ class CurvaBezier : public Objeto
         CurvaBezier(const std::string nome):Objeto(nome, tipo_t::CURVA_BEZIER) {}
 
         /* 3n + 1 pontos precisam ser adicionados, n > 0*/
-        void adicionar_ponto_controle(double x, double y) {
-            _pontos_controle.push_back(Coordenada(x,y));
+        void adicionar_ponto_controle(Coordenada c) {
+            _pontos_controle.push_back(c);
         }
 
         bool gerar_curva(double passos) {
@@ -23,9 +23,10 @@ class CurvaBezier : public Objeto
             double t = 0;
             double distancia_entre_pontos = 1/passos;
 
-            double cx, cy, bx, by, ax, ay;
+            double cx, cy, cz, bx, by, bz, ax, ay, az;
             int x = Coordenada::x;
             int y = Coordenada::y;
+            int z = Coordenada::z;
 
             for (int i = 0; i+1 < _pontos_controle.size(); i+=3) {
                 Coordenada p1 = _pontos_controle[i];
@@ -35,16 +36,20 @@ class CurvaBezier : public Objeto
 
                 cx = 3*(p2.valor(x)- p1.valor(x));
                 cy = 3*(p2.valor(y)- p1.valor(y));
+                cz = 3*(p2.valor(z)- p1.valor(z));
                 bx = 3*(p3.valor(x)- p2.valor(x)) - cx;
                 by = 3*(p3.valor(y)- p2.valor(y)) - cy;
+                bz = 3*(p3.valor(z)- p2.valor(z)) - cz;
                 ax = (p4.valor(x) - p1.valor(x)) - (cx+bx);
                 ay = (p4.valor(y) - p1.valor(y)) - (cy+by);
+                az = (p4.valor(z) - p1.valor(z)) - (cz+bz);
 
-                double novo_x, novo_y;
+                double novo_x, novo_y, novo_z;
                 for (size_t j = 0; j < passos+1; j++) {
                     novo_x = p1.valor(x) + t*(cx+t*(bx+t*ax));
                     novo_y = p1.valor(y) + t*(cy+t*(by+t*ay));
-                    _coordenadas.push_back(Coordenada(novo_x, novo_y));
+                    novo_z = p1.valor(z) + t*(cz+t*(bz+t*az));
+                    _coordenadas.push_back(Coordenada(novo_x, novo_y, novo_z));
                     t = t+distancia_entre_pontos;
                 }
             }
