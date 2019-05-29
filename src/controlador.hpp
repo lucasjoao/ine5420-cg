@@ -34,7 +34,11 @@ class Controlador {
 
         void adicionar_ponto(const std::string nome,double x, double y, double z);
         void adicionar_reta(const std::string nome, double x1, double y1, double z1, double x2, double y2, double z2);
-        void adicionar_poligono(operacao_obj_t operacao, const std::string nome, double x, double y);
+
+        void adicionar_poligono_novo();
+        void adicionar_poligono_adicionar_ponto(double x, double y, double z);
+        void adicionar_poligono_concluir(std::string nome);
+        void adicionar_poligono_cancelar();
 
         void adicionar_curva_novo();
         void adicionar_curva_adicionar_ponto(double x, double y);
@@ -117,44 +121,39 @@ void Controlador::adicionar_reta(const std::string nome, double x1, double y1, d
     adicionar_objeto_na_tree_view(reta.nome().c_str());
 }
 
-void Controlador::adicionar_poligono(operacao_obj_t operacao, const std::string nome, double x, double y) {
-    Poligono* poligono;
-    Objeto* obj;
-
-    switch (operacao) {
-        case NOVO:
-            if (!_coordenada_obj->empty())
-                _coordenada_obj->empty();
-
-            break;
-
-        case ADICIONAR_PONTO:
-            _coordenada_obj->push_back(Coordenada(x,y));
-            break;
-
-        case CONCLUIR:
-            if (_coordenada_obj->size() < 1)
-                return;
-
-            poligono = new Poligono(nome, _poligono_preenchido);
-            for(size_t i = 0; i < _coordenada_obj->size(); i++) {
-                poligono->adicionar_coordenada(_coordenada_obj->at(i));
-            }
-
-            _coordenada_obj->clear();
-            _display_file->adicionar_objeto(*poligono);
-            obj = poligono;
-
-            adicionar_objeto_na_tree_view(obj->nome().c_str());
-            atualizar_tela();
-
-            break;
-
-        case CANCELAR:
-            _coordenada_obj->clear();
-            break;
-    }
+void Controlador::adicionar_poligono_novo()
+{
+    if (!_coordenada_obj->empty())
+        _coordenada_obj->empty();
 }
+
+void Controlador::adicionar_poligono_adicionar_ponto(double x, double y, double z)
+{
+    _coordenada_obj->push_back(Coordenada(x,y,z));
+}
+
+void Controlador::adicionar_poligono_concluir(std::string nome)
+{
+    if (_coordenada_obj->size() < 1)
+        return;
+
+    Poligono poligono = Poligono(nome, _poligono_preenchido);
+    for(size_t i = 0; i < _coordenada_obj->size(); i++) {
+        poligono.adicionar_coordenada(_coordenada_obj->at(i));
+    }
+
+    _coordenada_obj->clear();
+    _display_file->adicionar_objeto((Objeto&)poligono);
+
+    adicionar_objeto_na_tree_view(poligono.nome().c_str());
+    atualizar_tela();
+}
+
+void Controlador::adicionar_poligono_cancelar()
+{
+    _coordenada_obj->clear();
+}
+
 
 void Controlador::adicionar_curva_novo() {
     if (!_coordenada_obj->empty())

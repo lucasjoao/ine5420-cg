@@ -508,7 +508,7 @@ void btn_reta_clicked(GtkWidget *widget, gpointer data) {
 void btn_poligono_clicked(GtkWidget *widget, gpointer data) {
   // evitar valores incorretos provenientes de arquivos
   gtk_toggle_button_set_active(cb_plgn_preenchido, controlador->get_poligono_preenchido());
-  controlador->adicionar_poligono(operacao_obj_t::NOVO, "", 0, 0);
+  controlador->adicionar_poligono_novo();
   gtk_widget_show(plgn_window);
 }
 
@@ -521,7 +521,7 @@ void btn_ponto_voltar_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_plgn_voltar_clicked(GtkWidget *widget, gpointer data) {
-  controlador->adicionar_poligono(operacao_obj_t::CANCELAR, "", 0, 0);
+  controlador->adicionar_poligono_cancelar();
   gtk_widget_hide(plgn_window);
 }
 
@@ -569,22 +569,21 @@ void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_poligono_y1,"");
   gtk_entry_set_text(entry_poligono_z1,"");
 
-  controlador->adicionar_poligono(operacao_obj_t::CONCLUIR, nome, 0, 0);
-  controlador->adicionar_poligono(operacao_obj_t::NOVO, "", 0, 0);
-
+  controlador->adicionar_poligono_concluir(nome);
+  controlador->adicionar_poligono_cancelar();
 }
 
 void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
 
   auto x1 = atof(gtk_entry_get_text(entry_poligono_x1));
   auto y1 = atof(gtk_entry_get_text(entry_poligono_y1));
+  auto z1 = atof(gtk_entry_get_text(entry_poligono_z1));
 
   gtk_entry_set_text(entry_poligono_x1,"");
   gtk_entry_set_text(entry_poligono_y1,"");
   gtk_entry_set_text(entry_poligono_z1,"");
 
-  controlador->adicionar_poligono(operacao_obj_t::ADICIONAR_PONTO, "", x1, y1);
-
+  controlador->adicionar_poligono_adicionar_ponto(x1, y1, z1);
 }
 
 void btn_curva_clicked(GtkWidget *widget, gpointer data) {
