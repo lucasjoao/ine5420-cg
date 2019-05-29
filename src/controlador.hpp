@@ -33,7 +33,7 @@ class Controlador {
             _descritor_objeto(new DescritorObjeto()) {}
 
         void adicionar_ponto(const std::string nome,double x, double y, double z);
-        void adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2);
+        void adicionar_reta(const std::string nome, double x1, double y1, double z1, double x2, double y2, double z2);
         void adicionar_poligono(operacao_obj_t operacao, const std::string nome, double x, double y);
 
         void adicionar_curva_novo();
@@ -109,12 +109,12 @@ void Controlador::adicionar_ponto(const std::string nome, double x, double y, do
     adicionar_objeto_na_tree_view(obj.nome().c_str());
 }
 
-void Controlador::adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2) {
-    auto reta = new Reta(nome, Coordenada(x1,y1), Coordenada(x2,y2));
-    _display_file->adicionar_objeto(*reta);
+void Controlador::adicionar_reta(const std::string nome, double x1, double y1, double z1, double x2, double y2, double z2) {
+    Objeto reta = Reta(nome, Coordenada(x1,y1,z1), Coordenada(x2,y2,z2));
+    _display_file->adicionar_objeto(reta);
 
     atualizar_tela();
-    adicionar_objeto_na_tree_view(reta->nome().c_str());
+    adicionar_objeto_na_tree_view(reta.nome().c_str());
 }
 
 void Controlador::adicionar_poligono(operacao_obj_t operacao, const std::string nome, double x, double y) {

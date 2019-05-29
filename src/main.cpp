@@ -529,10 +529,11 @@ void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
   std::string nome = gtk_entry_get_text(entry_reta_nome);
   auto x1 = atof(gtk_entry_get_text(entry_reta_inicio_x1));
   auto y1 = atof(gtk_entry_get_text(entry_reta_inicio_y1));
+  auto z1 = atof(gtk_entry_get_text(entry_reta_inicio_z1));
 
   auto x2 = atof(gtk_entry_get_text(entry_reta_final_x1));
   auto y2 = atof(gtk_entry_get_text(entry_reta_final_y1));
-
+  auto z2 = atof(gtk_entry_get_text(entry_reta_final_z1));
 
   gtk_entry_set_text(entry_reta_nome,"");
   gtk_entry_set_text(entry_reta_inicio_x1,"");
@@ -542,8 +543,7 @@ void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_reta_final_y1,"");
   gtk_entry_set_text(entry_reta_final_z1,"");
 
-
-  controlador->adicionar_reta(nome, x1, y1, x2, y2);
+  controlador->adicionar_reta(nome, x1, y1, z1, x2, y2, z2);
 }
 
 void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
