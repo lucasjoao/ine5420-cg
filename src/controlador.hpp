@@ -32,7 +32,7 @@ class Controlador {
             _coordenada_obj(new std::vector<Coordenada>()),
             _descritor_objeto(new DescritorObjeto()) {}
 
-        void adicionar_ponto(const std::string nome,double x, double y);
+        void adicionar_ponto(const std::string nome,double x, double y, double z);
         void adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2);
         void adicionar_poligono(operacao_obj_t operacao, const std::string nome, double x, double y);
 
@@ -101,12 +101,12 @@ void Controlador::rotacao_window(double grau) {
     atualizar_tela();
 }
 
-void Controlador::adicionar_ponto(const std::string nome, double x, double y) {
-    auto obj = new Ponto(nome, Coordenada(x,y));
-    _display_file->adicionar_objeto(*obj);
+void Controlador::adicionar_ponto(const std::string nome, double x, double y, double z) {
+    Objeto obj = Ponto(nome, Coordenada(x,y,z));
+    _display_file->adicionar_objeto(obj);
 
     atualizar_tela();
-    adicionar_objeto_na_tree_view(obj->nome().c_str());
+    adicionar_objeto_na_tree_view(obj.nome().c_str());
 }
 
 void Controlador::adicionar_reta(const std::string nome, double x1, double y1, double x2, double y2) {
@@ -385,34 +385,34 @@ void Controlador::carregar_arquivo(std::string filename) {
 // ver DescritorObjeto::descreve_objeto
 void Controlador::criar_obj_do_arquivo(std::vector<std::string> obj) {
 
-    if (obj.at(0) == _descritor_objeto->ponto) {
+    // if (obj.at(0) == _descritor_objeto->ponto) {
 
-        auto point = _descritor_objeto->split_line_in_vector(obj.at(2));
-        adicionar_ponto(obj.at(1), point.at(0), point.at(1));
+    //     auto point = _descritor_objeto->split_line_in_vector(obj.at(2));
+    //     adicionar_ponto(obj.at(1), point.at(0), point.at(1));
 
-    } else if (obj.at(0) == _descritor_objeto->reta) {
+    // } else if (obj.at(0) == _descritor_objeto->reta) {
 
-        auto point0 = _descritor_objeto->split_line_in_vector(obj.at(2));
-        auto point1 = _descritor_objeto->split_line_in_vector(obj.at(3));
-        adicionar_reta(obj.at(1), point0.at(0), point0.at(1),
-                       point1.at(0), point1.at(1));
+    //     auto point0 = _descritor_objeto->split_line_in_vector(obj.at(2));
+    //     auto point1 = _descritor_objeto->split_line_in_vector(obj.at(3));
+    //     adicionar_reta(obj.at(1), point0.at(0), point0.at(1),
+    //                    point1.at(0), point1.at(1));
 
-    } else if (obj.at(0) == _descritor_objeto->poligono) {
+    // } else if (obj.at(0) == _descritor_objeto->poligono) {
 
-        adicionar_poligono(NOVO, "", 0, 0);
+    //     adicionar_poligono(NOVO, "", 0, 0);
 
-        // lembrar que:
-        // primeiro vertice sempre iniciara na posicao 2 do vetor obj
-        // e terminara na antepenultima posicao do vetor obj
-        for (size_t i = 2; i < obj.size() - 2; i++) {
-            auto point = _descritor_objeto->split_line_in_vector(obj.at(i));
-            adicionar_poligono(ADICIONAR_PONTO, "", point.at(0), point.at(1));
-        }
-        poligono_preenchido(obj.at(obj.size() - 2) == "1");
+    //     // lembrar que:
+    //     // primeiro vertice sempre iniciara na posicao 2 do vetor obj
+    //     // e terminara na antepenultima posicao do vetor obj
+    //     for (size_t i = 2; i < obj.size() - 2; i++) {
+    //         auto point = _descritor_objeto->split_line_in_vector(obj.at(i));
+    //         adicionar_poligono(ADICIONAR_PONTO, "", point.at(0), point.at(1));
+    //     }
+    //     poligono_preenchido(obj.at(obj.size() - 2) == "1");
 
-        adicionar_poligono(CONCLUIR, obj.at(1), 0, 0);
+    //     adicionar_poligono(CONCLUIR, obj.at(1), 0, 0);
 
-    }
+    // }
 }
 
 #endif

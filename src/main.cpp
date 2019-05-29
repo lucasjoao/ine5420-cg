@@ -550,14 +550,14 @@ void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
   std::string nome = gtk_entry_get_text(entry_ponto_nome);
   auto x1 = atof(gtk_entry_get_text(entry_ponto_x1));
   auto y1 = atof(gtk_entry_get_text(entry_ponto_y1));
+  auto z1 = atof(gtk_entry_get_text(entry_ponto_z1));
 
   gtk_entry_set_text(entry_ponto_nome,"");
   gtk_entry_set_text(entry_ponto_x1,"");
   gtk_entry_set_text(entry_ponto_y1,"");
   gtk_entry_set_text(entry_ponto_z1,"");
 
-  controlador->adicionar_ponto(nome, x1, y1);
-
+  controlador->adicionar_ponto(nome, x1, y1, z1);
 }
 
 void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
