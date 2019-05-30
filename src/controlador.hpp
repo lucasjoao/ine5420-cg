@@ -59,7 +59,7 @@ class Controlador {
         void adicionar_objeto_na_tree_view(const char* nome);
 
         void selecionar_objeto(const char* nome);
-        void editar_objeto_translacao(double x, double y);
+        void editar_objeto_translacao(double Dx, double Dy, double Dz);
         void editar_objeto_escalonamento(double x, double y);
         void editar_objeto_rotacao_entorno_centro_mundo(double grau);
         void editar_objeto_rotacao_entorno_centro_objeto(double grau);
@@ -224,7 +224,7 @@ void Controlador::gerar_descricao_scn() {
     auto r = Transformacao();
     auto angulo = _window->angulo();
 
-    d.translacao(-wc.valor(Coordenada::x), -wc.valor(Coordenada::y));
+    d.translacao(-wc.valor(Coordenada::x), -wc.valor(Coordenada::y), -wc.valor(Coordenada::z));
     r.rotacao(-angulo);
     s.escalonamento_natural(0, 0, largura, altura);
 
@@ -280,11 +280,11 @@ void Controlador::selecionar_objeto(const char* nome) {
     }
 }
 
-void Controlador::editar_objeto_translacao(double Dx, double Dy) {
+void Controlador::editar_objeto_translacao(double Dx, double Dy, double Dz) {
 
     auto obj = _display_file->objeto(_objeto_selecionado);
     auto t = Transformacao();
-    t.translacao(Dx,Dy);
+    t.translacao(Dx,Dy,Dz);
 
     obj.aplicar_tranformacao(t);
     atualizar_tela();

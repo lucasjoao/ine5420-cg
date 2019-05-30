@@ -6,20 +6,22 @@
 #include "coordenada.hpp"
 
 class Transformacao {
-    const double _identidade [3][3] = {{1,0,0}, {0,1,0}, {0,0,1}};
-
+    const double _identidade [4][4] = {{1,0,0,0}, 
+                                       {0,1,0,0}, 
+                                       {0,0,1,0},
+                                       {0,0,0,1}};
     public:
-        Transformacao(): _matriz{{1,0,0}, {0,1,0}, {0,0,1}} {}
+        Transformacao(): _matriz{{1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1}} {}
 
         void identidade();
 
-        void carragar(const double matriz[3][3]);
+        void carragar(const double matriz[4][4]);
 
-        void translacao(double Dx, double Dy);
+        void translacao(double Dx, double Dy, double Dz);
 
         void escalonamento(double Sx, double Sy);
 
-        void escalonamento_natural(double Cx, double Cy , double Sx, double Sy);
+        void escalonamento_natural(double Cx, double Cy, double Sx, double Sy);
 
         void rotacao(double grau);
 
@@ -30,7 +32,7 @@ class Transformacao {
         void operator*=(const Transformacao &t);
 
     private:
-        double _matriz[3][3];
+        double _matriz[4][4];
 
 };
 
@@ -38,9 +40,9 @@ void Transformacao::escalonamento_natural(double Cx, double Cy , double Sx, doub
     auto s = Transformacao();
     auto d = Transformacao();
     s.escalonamento(Sx, Sy);
-    d.translacao(Cx, Cy);
+    d.translacao(Cx, Cy, 1);
 
-    translacao(-Cx, -Cy);
+    translacao(-Cx, -Cy, 1);
 
     *this *= s;
     *this *= d;
@@ -51,18 +53,19 @@ void Transformacao::identidade() {
     carragar(_identidade);
 }
 
-void Transformacao::carragar(const double matriz[3][3]) {
-    for(int i = 0; i < 3; i++) {
-        for(int j = 0; j < 3; j++) {
+void Transformacao::carragar(const double matriz[4][4]) {
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
             _matriz[i][j] = matriz[i][j];
         }
     }
 }
 
-void Transformacao::translacao(double Dx, double Dy) {
+void Transformacao::translacao(double Dx, double Dy, double Dz) {
     identidade();
-    _matriz[2][0] = Dx;
-    _matriz[2][1] = Dy;
+    _matriz[3][0] = Dx;
+    _matriz[3][1] = Dy;
+    _matriz[3][2] = Dz;
 }
 
 void Transformacao::escalonamento(double Sx, double Sy) {
@@ -88,8 +91,8 @@ void Transformacao::rotacao_em_torno_ponto(double grau, double Dx, double Dy) {
     auto d = Transformacao();
 
     r.rotacao(grau);
-    d.translacao(Dx, Dy);
-    translacao(-Dx, -Dy);
+    d.translacao(Dx, Dy, 1);
+    translacao(-Dx, -Dy, 1);
 
     *this *= r;
     *this *= d;
@@ -101,11 +104,11 @@ double Transformacao::valor(size_t i, size_t j) const {
 }
 
 void Transformacao::operator*=(const Transformacao &t) {
-    double R[3][3];
+    double R[4][4];
 
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            R[i][j] = _matriz[i][0]*t._matriz[0][j] + _matriz[i][1]*t._matriz[1][j] + _matriz[i][2]*t._matriz[2][j]; 
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            R[i][j] = _matriz[i][0]*t._matriz[0][j] + _matriz[i][1]*t._matriz[1][j] + _matriz[i][2]*t._matriz[2][j] + _matriz[i][3]*t._matriz[3][j]; 
         }
     }
     carragar(R);

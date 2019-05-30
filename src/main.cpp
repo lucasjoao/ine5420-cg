@@ -54,8 +54,11 @@ GtkButton* btn_rot_pnt;
 
 GtkEntry* entry_translacao_x;
 GtkEntry* entry_translacao_y;
+GtkEntry* entry_translacao_z;
+
 GtkEntry* entry_escalonamento_x;
 GtkEntry* entry_escalonamento_y;
+GtkEntry* entry_escalonamento_z;
 
 /* ---------- MODAIS DE ROTACAO ---------- */
 GtkWidget *rot_mundo_window;
@@ -273,8 +276,11 @@ int main (int argc, char *argv[]) {
 
   entry_translacao_x = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoX"));
   entry_translacao_y = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoY"));
+  entry_translacao_z = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoZ"));
+
   entry_escalonamento_x = GTK_ENTRY(gtk_builder_get_object(builder, "entryEscalonamentoX"));
   entry_escalonamento_y = GTK_ENTRY(gtk_builder_get_object(builder, "entryEscalonamentoY"));
+  entry_escalonamento_z = GTK_ENTRY(gtk_builder_get_object(builder, "entryEscalonamentoZ"));
 
   /* ---------- MODAIS DE INCLUSAO ---------- */
 
@@ -638,12 +644,13 @@ void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
 
   auto Dx = atof(gtk_entry_get_text(entry_translacao_x));
   auto Dy = atof(gtk_entry_get_text(entry_translacao_y));
+  auto Dz = atof(gtk_entry_get_text(entry_translacao_z));
 
   auto Sx = atof(gtk_entry_get_text(entry_escalonamento_x));
   auto Sy = atof(gtk_entry_get_text(entry_escalonamento_y));
 
-  if (Dx != 0 || Dy != 0) {
-    controlador->editar_objeto_translacao(Dx, Dy);
+  if (Dx != 0 || Dy != 0 || Dz) {
+    controlador->editar_objeto_translacao(Dx, Dy, Dz);
   }
 
   if (Sx != 0 || Sy != 0) {
@@ -652,6 +659,7 @@ void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
 
   gtk_entry_set_text(entry_translacao_x,"");
   gtk_entry_set_text(entry_translacao_y,"");
+  gtk_entry_set_text(entry_translacao_z,"");
 
   gtk_entry_set_text(entry_escalonamento_x,"");
   gtk_entry_set_text(entry_escalonamento_y,"");
