@@ -41,7 +41,7 @@ class Controlador {
         void adicionar_poligono_cancelar();
 
         void adicionar_curva_novo();
-        void adicionar_curva_adicionar_ponto(double x, double y);
+        void adicionar_curva_adicionar_ponto(double x, double y, double z);
         void adicionar_curva_concluir(tipo_t tipo_curva, std::string nome);
         void adicionar_curva_cancelar();
 
@@ -161,8 +161,8 @@ void Controlador::adicionar_curva_novo() {
         _numero_pontos_obj = 0;
 }
 
-void Controlador::adicionar_curva_adicionar_ponto(double x, double y) {
-    _coordenada_obj->push_back(Coordenada(x,y));
+void Controlador::adicionar_curva_adicionar_ponto(double x, double y, double z) {
+    _coordenada_obj->push_back(Coordenada(x,y,z));
     _numero_pontos_obj++;
 }
 

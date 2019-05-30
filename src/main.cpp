@@ -617,12 +617,13 @@ void btn_curva_incluir_clicked(GtkWidget *widget, gpointer data) {
 void btn_curva_add_ponto_clicked(GtkWidget *widget, gpointer data) {
   auto x1 = atof(gtk_entry_get_text(entry_curva_x1));
   auto y1 = atof(gtk_entry_get_text(entry_curva_y1));
+  auto z1 = atof(gtk_entry_get_text(entry_curva_z1));
 
   gtk_entry_set_text(entry_curva_x1,"");
   gtk_entry_set_text(entry_curva_y1,"");
   gtk_entry_set_text(entry_curva_z1,"");
 
-  controlador->adicionar_curva_adicionar_ponto(x1,y1);
+  controlador->adicionar_curva_adicionar_ponto(x1,y1,z1);
   std::string text = "Quantidade de ponto: ";
   text += std::to_string(controlador->numero_pontos_obj());
   gtk_label_set_text(lbl_quantidade_ponto_curva, text.c_str());
