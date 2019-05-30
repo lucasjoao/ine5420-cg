@@ -101,7 +101,7 @@ size_t Controlador::numero_pontos_obj() {
 }
 
 void Controlador::rotacao_window(double grau) {
-    _window->rotacao(grau);
+    // _window->rotacao(grau);
     atualizar_tela();
 }
 
@@ -215,27 +215,13 @@ void Controlador::navagacao(direcao_navegacao_t direcao) {
 }
 
 void Controlador::gerar_descricao_scn() {
+    auto t = _window->projecao_paralela();
 
-    // auto wc = _window->centro();
-    // auto altura = (2/_window->altura());
-    // auto largura = (2/_window->largura());
-    // auto d = Transformacao();
-    // auto s = Transformacao();
-    // auto r = Transformacao();
-    // auto angulo = _window->angulo();
-
-    // d.translacao(-wc.valor(Coordenada::x), -wc.valor(Coordenada::y), -wc.valor(Coordenada::z));
-    // r.rotacao(-angulo);
-    // s.escalonamento_natural(0, 0, 0, largura, altura, 1);
-
-    // d *= r;
-    // d *= s;
-
-    // for(size_t i = 0; i < _display_file->tamanho(); i++) {
-    //     Objeto& obj = _display_file->objeto(i);
-    //     obj.reset_scn();
-    //     obj.aplicar_tranformacao_scn(d);
-    // }
+    for(size_t i = 0; i < _display_file->tamanho(); i++) {
+        Objeto& obj = _display_file->objeto(i);
+        obj.reset_scn();
+        obj.aplicar_tranformacao_scn(t);
+    }
 }
 
 void Controlador::redesenhar() {
@@ -303,21 +289,21 @@ void Controlador::editar_objeto_escalonamento(double Sx, double Sy, double Sz) {
 }
 
 void Controlador::editar_objeto_rotacao_entorno_centro_objeto(double grau) {
-    auto obj = _display_file->objeto(_objeto_selecionado);
-    auto c = obj.centro();
+    // auto obj = _display_file->objeto(_objeto_selecionado);
+    // auto c = obj.centro();
 
-    editar_objeto_rotacao_entorno_centro_ponto(grau, c.valor(Coordenada::x), c.valor(Coordenada::y));
+    // editar_objeto_rotacao_entorno_centro_ponto(grau, c.valor(Coordenada::x), c.valor(Coordenada::y));
 }
 
 void Controlador::editar_objeto_rotacao_entorno_centro_mundo(double grau) {
-    editar_objeto_rotacao_entorno_centro_ponto(grau, 0, 0);
+    // editar_objeto_rotacao_entorno_centro_ponto(grau, 0, 0);
 }
 
 void Controlador::editar_objeto_rotacao_entorno_centro_ponto(double grau, double Dx, double Dy) {
-    auto obj = _display_file->objeto(_objeto_selecionado);
-    auto t = Transformacao::rotacao_em_torno_ponto(grau, Dx, Dy);
-    obj.aplicar_tranformacao(t);
-    atualizar_tela();
+    // auto obj = _display_file->objeto(_objeto_selecionado);
+    // auto t = Transformacao::rotacao_em_torno_ponto(grau, Dx, Dy);
+    // obj.aplicar_tranformacao(t);
+    // atualizar_tela();
 }
 
 void Controlador::adicionar_objeto_na_tree_view(const char* nome) {

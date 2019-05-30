@@ -19,13 +19,13 @@ class Window {
 
         Window(Coordenada origem, double altura, double largura): 
             _centro(Coordenada(origem.valor(Coordenada::x) + (largura/2), origem.valor(Coordenada::y) + (altura/2))),
-            _angulo(0), _altura(altura), _largura(largura) {}
+            _altura(altura), _largura(largura) {}
 
         void navagacao(direcao_navegacao_t direcao, double escalar);
 
         void zoom(direcao_zoom_t direcao, double escalar);
 
-        void rotacao(double grau);
+        void rotacao(double grau_x, double grau_y, double grau_z);
 
         Coordenada centro();
 
@@ -33,12 +33,16 @@ class Window {
 
         double largura();
 
-        double angulo();
+        void reset_angulo();
+
+        Transformacao projecao_paralela();
 
     private:
 
         Coordenada _centro;
-        double _angulo;
+        double _angulo_x{0};
+        double _angulo_y{0};
+        double _angulo_z{0};
         double _altura;
         double _largura;
 };
@@ -94,10 +98,20 @@ void Window::zoom(direcao_zoom_t direcao, double escalar) {
     }
 }
 
-void Window::rotacao(double grau) {
-    _angulo += grau;
-    if (_angulo >= 360) {
-        _angulo -= 360;
+void Window::rotacao(double grau_x, double grau_y, double grau_z) {
+    _angulo_x += grau_x;
+    if (_angulo_x >= 360) {
+        _angulo_x -= 360;
+    }
+
+    _angulo_y += grau_y;
+    if (_angulo_y >= 360) {
+        _angulo_y -= 360;
+    }
+
+    _angulo_z += grau_z;
+    if (_angulo_z >= 360) {
+        _angulo_z -= 360;
     }
 }
 
@@ -105,8 +119,34 @@ Coordenada Window::centro() {
     return _centro;
 }
 
-double Window::angulo() {
-    return _angulo;
+void Window::reset_angulo() {
+    _angulo_x = 0;
+    _angulo_y = 0;
+    _angulo_z = 0;
+}
+
+Transformacao Window::projecao_paralela() {
+    /* Passo 1,2,3.1 Projecao paralela*/
+    auto wc = centro();
+    auto altura = (2/_altura);
+    auto largura = (2/_largura);
+    auto profundidade = (4/(altura+largura));
+
+    int x = Coordenada::x;
+    int y = Coordenada::y;
+    int z = Coordenada::z;
+
+    /* Translade VRP para origem */
+    auto to = Transformacao::translacao(-wc.valor(x), -wc.valor(y), -wc.valor(z));
+
+    /* Rotacione o Mundo em torno do eixo X e Y  */
+    auto rx = Transformacao::rotacao_eixo_x(-_angulo_x);
+    auto ry = Transformacao::rotacao_eixo_y(-_angulo_y);
+
+    /* Matriz de Escalonamento para Coordenada normalizada*/
+    auto cn = Transformacao::escalonamento(altura, largura, profundidade);
+
+    return to * rx * ry * cn;
 }
 
 #endif

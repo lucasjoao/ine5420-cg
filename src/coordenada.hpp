@@ -16,6 +16,8 @@ class Coordenada {
 
         Coordenada();
 
+        Coordenada(double C[4]);
+
         Coordenada(double x, double y);
 
         Coordenada(double x, double y, double z);
@@ -31,6 +33,10 @@ class Coordenada {
         static double coeficiente_angular(Coordenada &c1, Coordenada &c2);
 
         void operator*=(const Transformacao &t);
+
+        Coordenada operator*(const Transformacao &t);
+
+        Coordenada operator*(const Coordenada &t);
 
         bool operator==(const Coordenada &coordenada) const;
 
@@ -48,6 +54,10 @@ class Coordenada {
 };
 
 Coordenada::Coordenada() {}
+
+Coordenada::Coordenada(double C[4]) { 
+    carregar(C);
+}
 
 Coordenada::Coordenada(double x, double y) {
     _coordenada = new double[Coordenada::dimensao];
@@ -75,10 +85,11 @@ double Coordenada::valor(size_t posicao) const {
     return _coordenada[posicao];
 }
 
-void Coordenada::carregar(double v[3]) {
+void Coordenada::carregar(double v[4]) {
     _coordenada[0] = v[0];
     _coordenada[1] = v[1];
     _coordenada[2] = v[2];
+    _coordenada[3] = v[3];
 }
 
 void Coordenada::carregar(Coordenada &c) {
@@ -93,14 +104,25 @@ double Coordenada::coeficiente_angular(Coordenada &c1, Coordenada &c2) {
 }
 
 void Coordenada::operator*=(const Transformacao &t) {
-    double R[3];
+    double R[4];
 
-    for (int i = 0; i < 3; i++) {
-            R[i] = valor(0)*t.valor(0,i) + valor(1)*t.valor(1,i) + valor(2)*t.valor(2,i);
+    for (int i = 0; i < 4; i++) {
+            R[i] = valor(0)*t.valor(0,i) + valor(1)*t.valor(1,i) + valor(2)*t.valor(2,i) + valor(3)*t.valor(3,i);
     }
 
     carregar(R);
 }
+
+Coordenada Coordenada::operator*(const Transformacao &t) {
+    double R[4];
+
+    for (int i = 0; i < 4; i++) {
+            R[i] = valor(0)*t.valor(0,i) + valor(1)*t.valor(1,i) + valor(2)*t.valor(2,i) + valor(3)*t.valor(3,i);
+    }
+
+    return Coordenada(R);
+}
+
 
 bool Coordenada::operator==(const Coordenada &coordenada) const {
     return (_coordenada[Coordenada::x] == coordenada.valor(Coordenada::x)) &&
@@ -113,6 +135,14 @@ void Coordenada::set_artificial(const bool artificial) {
 
 bool Coordenada::is_artificial() const {
     return _artificial;
+}
+
+Coordenada Coordenada::operator*(const Coordenada &b){
+    double cx = valor(y)*b.valor(z) - valor(z)*b.valor(y);
+    double cy = valor(z)*b.valor(x) - valor(x)*b.valor(z);
+    double cz = valor(x)*b.valor(y) - valor(y)*b.valor(x);
+
+    return Coordenada(cx,cy,cz);
 }
 
 #endif

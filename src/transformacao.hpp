@@ -33,7 +33,7 @@ class Transformacao {
 
         static Transformacao rotacao_eixo_z(double grau);
 
-        static Transformacao rotacao_em_torno_ponto(double grau, double Dx, double Dy);
+        static Transformacao rotacao_em_torno_ponto(double grau, double Dx, double Dy, double Dz, double eixoAx, double eixoAy, double eixoAz);
 
         double valor(size_t i, size_t j) const;
 
@@ -83,7 +83,7 @@ Transformacao Transformacao::escalonamento(double Sx, double Sy, double Sz) {
 }
 
 Transformacao Transformacao::rotacao_eixo_x(double grau) {
-    grau = grau * M_PI/180;
+    // grau = grau * M_PI/180;
 
     Transformacao t;
 
@@ -95,8 +95,6 @@ Transformacao Transformacao::rotacao_eixo_x(double grau) {
 }
 
 Transformacao Transformacao::rotacao_eixo_y(double grau) {
-    grau = grau * M_PI/180;
-
     Transformacao t;
 
     t._matriz[0][0] = cos(grau);
@@ -107,8 +105,6 @@ Transformacao Transformacao::rotacao_eixo_y(double grau) {
 }
 
 Transformacao Transformacao::rotacao_eixo_z(double grau) {
-    grau = grau * M_PI/180;
-
     Transformacao t;
 
     t._matriz[0][0] = cos(grau);
@@ -118,17 +114,23 @@ Transformacao Transformacao::rotacao_eixo_z(double grau) {
     return t;
 }
 
-Transformacao Transformacao::rotacao_em_torno_ponto(double grau, double Dx, double Dy) {
-    // auto r = Transformacao();
-    // auto d = Transformacao();
+Transformacao Transformacao::rotacao_em_torno_ponto(double grau, double Dx, double Dy, double Dz, double eixoAx, double eixoAy, double eixoAz) {
+    Transformacao t1 = Transformacao::translacao(-Dx, -Dy, -Dz);
 
-    // r.rotacao_eixo_z(grau);
-    // d.translacao(Dx, Dy, 1);
-    // translacao(-Dx, -Dy, 1);
+    Transformacao t2 = Transformacao::translacao(Dx, Dy, Dz);
 
-    // *this *= r;
-    // *this *= d;
-    return Transformacao();
+    double d = sqrt(eixoAx * eixoAx + eixoAz * eixoAz);
+
+    double ang_eixo_y = atan(eixoAx/eixoAz);
+    double ang_eixo_x = atan(eixoAy/d);
+
+    auto ry = Transformacao::rotacao_eixo_y(-ang_eixo_y);
+    auto rx = Transformacao::rotacao_eixo_x(ang_eixo_x);
+    auto rz = Transformacao::rotacao_eixo_z(grau);
+    auto iry = Transformacao::rotacao_eixo_y(ang_eixo_y);
+    auto irx = Transformacao::rotacao_eixo_x(-ang_eixo_x);
+
+    return t1 * ry * rx * rz * iry * irx;
 }
 
 
