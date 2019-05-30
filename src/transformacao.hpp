@@ -19,9 +19,9 @@ class Transformacao {
 
         void translacao(double Dx, double Dy, double Dz);
 
-        void escalonamento(double Sx, double Sy);
+        void escalonamento(double Sx, double Sy, double Sz);
 
-        void escalonamento_natural(double Cx, double Cy, double Sx, double Sy);
+        void escalonamento_natural(double Cx, double Cy, double Cz, double Sx, double Sy, double Sz);
 
         void rotacao(double grau);
 
@@ -36,18 +36,17 @@ class Transformacao {
 
 };
 
-void Transformacao::escalonamento_natural(double Cx, double Cy , double Sx, double Sy) {
+void Transformacao::escalonamento_natural(double Cx, double Cy, double Cz, double Sx, double Sy, double Sz) {
     auto s = Transformacao();
     auto d = Transformacao();
-    s.escalonamento(Sx, Sy);
-    d.translacao(Cx, Cy, 1);
+    s.escalonamento(Sx, Sy, Sz);
+    d.translacao(Cx, Cy, Cz);
 
-    translacao(-Cx, -Cy, 1);
+    translacao(-Cx, -Cy, -Cz);
 
     *this *= s;
     *this *= d;
 }
-
 
 void Transformacao::identidade() {
     carragar(_identidade);
@@ -68,10 +67,11 @@ void Transformacao::translacao(double Dx, double Dy, double Dz) {
     _matriz[3][2] = Dz;
 }
 
-void Transformacao::escalonamento(double Sx, double Sy) {
+void Transformacao::escalonamento(double Sx, double Sy, double Sz) {
     identidade();
     _matriz[0][0] = Sx;
     _matriz[1][1] = Sy;
+    _matriz[2][2] = Sz;
 }
 
 void Transformacao::rotacao(double grau) {

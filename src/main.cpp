@@ -648,13 +648,14 @@ void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
 
   auto Sx = atof(gtk_entry_get_text(entry_escalonamento_x));
   auto Sy = atof(gtk_entry_get_text(entry_escalonamento_y));
+  auto Sz = atof(gtk_entry_get_text(entry_escalonamento_z));
 
   if (Dx != 0 || Dy != 0 || Dz) {
     controlador->editar_objeto_translacao(Dx, Dy, Dz);
   }
 
   if (Sx != 0 || Sy != 0) {
-    controlador->editar_objeto_escalonamento(Sx, Sy);
+    controlador->editar_objeto_escalonamento(Sx, Sy, Sz);
   }
 
   gtk_entry_set_text(entry_translacao_x,"");
@@ -663,6 +664,7 @@ void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
 
   gtk_entry_set_text(entry_escalonamento_x,"");
   gtk_entry_set_text(entry_escalonamento_y,"");
+  gtk_entry_set_text(entry_escalonamento_z,"");
 
   gtk_widget_hide(edit_window);
 }

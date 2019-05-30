@@ -60,7 +60,7 @@ class Controlador {
 
         void selecionar_objeto(const char* nome);
         void editar_objeto_translacao(double Dx, double Dy, double Dz);
-        void editar_objeto_escalonamento(double x, double y);
+        void editar_objeto_escalonamento(double Sx, double Sy, double Sz);
         void editar_objeto_rotacao_entorno_centro_mundo(double grau);
         void editar_objeto_rotacao_entorno_centro_objeto(double grau);
         void editar_objeto_rotacao_entorno_centro_ponto(double grau, double x, double y);
@@ -226,7 +226,7 @@ void Controlador::gerar_descricao_scn() {
 
     d.translacao(-wc.valor(Coordenada::x), -wc.valor(Coordenada::y), -wc.valor(Coordenada::z));
     r.rotacao(-angulo);
-    s.escalonamento_natural(0, 0, largura, altura);
+    s.escalonamento_natural(0, 0, 0, largura, altura, 1);
 
     d *= r;
     d *= s;
@@ -290,13 +290,16 @@ void Controlador::editar_objeto_translacao(double Dx, double Dy, double Dz) {
     atualizar_tela();
 }
 
-void Controlador::editar_objeto_escalonamento(double Sx, double Sy) {
+void Controlador::editar_objeto_escalonamento(double Sx, double Sy, double Sz) {
 
     auto obj = _display_file->objeto(_objeto_selecionado);
     auto c = obj.centro();
     auto t = Transformacao();
 
-    t.escalonamento_natural(c.valor(Coordenada::x), c.valor(Coordenada::y),Sx, Sy);
+    t.escalonamento_natural(
+        c.valor(Coordenada::x), c.valor(Coordenada::y), c.valor(Coordenada::z), Sx, Sy, Sz
+    );
+    
     obj.aplicar_tranformacao(t);
 
     atualizar_tela();
