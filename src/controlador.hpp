@@ -216,26 +216,26 @@ void Controlador::navagacao(direcao_navegacao_t direcao) {
 
 void Controlador::gerar_descricao_scn() {
 
-    auto wc = _window->centro();
-    auto altura = (2/_window->altura());
-    auto largura = (2/_window->largura());
-    auto d = Transformacao();
-    auto s = Transformacao();
-    auto r = Transformacao();
-    auto angulo = _window->angulo();
+    // auto wc = _window->centro();
+    // auto altura = (2/_window->altura());
+    // auto largura = (2/_window->largura());
+    // auto d = Transformacao();
+    // auto s = Transformacao();
+    // auto r = Transformacao();
+    // auto angulo = _window->angulo();
 
-    d.translacao(-wc.valor(Coordenada::x), -wc.valor(Coordenada::y), -wc.valor(Coordenada::z));
-    r.rotacao(-angulo);
-    s.escalonamento_natural(0, 0, 0, largura, altura, 1);
+    // d.translacao(-wc.valor(Coordenada::x), -wc.valor(Coordenada::y), -wc.valor(Coordenada::z));
+    // r.rotacao(-angulo);
+    // s.escalonamento_natural(0, 0, 0, largura, altura, 1);
 
-    d *= r;
-    d *= s;
+    // d *= r;
+    // d *= s;
 
-    for(size_t i = 0; i < _display_file->tamanho(); i++) {
-        Objeto& obj = _display_file->objeto(i);
-        obj.reset_scn();
-        obj.aplicar_tranformacao_scn(d);
-    }
+    // for(size_t i = 0; i < _display_file->tamanho(); i++) {
+    //     Objeto& obj = _display_file->objeto(i);
+    //     obj.reset_scn();
+    //     obj.aplicar_tranformacao_scn(d);
+    // }
 }
 
 void Controlador::redesenhar() {
@@ -283,8 +283,7 @@ void Controlador::selecionar_objeto(const char* nome) {
 void Controlador::editar_objeto_translacao(double Dx, double Dy, double Dz) {
 
     auto obj = _display_file->objeto(_objeto_selecionado);
-    auto t = Transformacao();
-    t.translacao(Dx,Dy,Dz);
+    auto t = Transformacao::translacao(Dx,Dy,Dz);
 
     obj.aplicar_tranformacao(t);
     atualizar_tela();
@@ -294,9 +293,7 @@ void Controlador::editar_objeto_escalonamento(double Sx, double Sy, double Sz) {
 
     auto obj = _display_file->objeto(_objeto_selecionado);
     auto c = obj.centro();
-    auto t = Transformacao();
-
-    t.escalonamento_natural(
+    auto t = Transformacao::escalonamento_natural(
         c.valor(Coordenada::x), c.valor(Coordenada::y), c.valor(Coordenada::z), Sx, Sy, Sz
     );
     
@@ -318,8 +315,7 @@ void Controlador::editar_objeto_rotacao_entorno_centro_mundo(double grau) {
 
 void Controlador::editar_objeto_rotacao_entorno_centro_ponto(double grau, double Dx, double Dy) {
     auto obj = _display_file->objeto(_objeto_selecionado);
-    auto t = Transformacao();
-    t.rotacao_em_torno_ponto(grau, Dx, Dy);
+    auto t = Transformacao::rotacao_em_torno_ponto(grau, Dx, Dy);
     obj.aplicar_tranformacao(t);
     atualizar_tela();
 }
