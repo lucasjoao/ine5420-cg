@@ -23,7 +23,11 @@ class Transformacao {
 
         void escalonamento_natural(double Cx, double Cy, double Cz, double Sx, double Sy, double Sz);
 
-        void rotacao(double grau);
+        void rotacao_eixo_x(double grau);
+
+        void rotacao_eixo_y(double grau);
+
+        void rotacao_eixo_z(double grau);
 
         void rotacao_em_torno_ponto(double grau, double Dx, double Dy);
 
@@ -74,23 +78,44 @@ void Transformacao::escalonamento(double Sx, double Sy, double Sz) {
     _matriz[2][2] = Sz;
 }
 
-void Transformacao::rotacao(double grau) {
+void Transformacao::rotacao_eixo_x(double grau) {
+    grau = grau * M_PI/180;
+
+    identidade();
+
+    _matriz[1][1] = cos(grau);
+    _matriz[1][2] = sin(grau);
+    _matriz[2][2] = -sin(grau);
+    _matriz[2][2] = cos(grau);
+}
+
+void Transformacao::rotacao_eixo_y(double grau) {
     grau = grau * M_PI/180;
 
     identidade();
 
     _matriz[0][0] = cos(grau);
-    _matriz[0][1] = -sin(grau);
-    _matriz[1][0] = sin(grau);
-    _matriz[1][1] = cos(grau);
+    _matriz[0][2] = -sin(grau);
+    _matriz[2][0] = sin(grau);
+    _matriz[2][2] = cos(grau);
+}
 
+void Transformacao::rotacao_eixo_z(double grau) {
+    grau = grau * M_PI/180;
+
+    identidade();
+
+    _matriz[0][0] = cos(grau);
+    _matriz[0][1] = sin(grau);
+    _matriz[1][0] = -sin(grau);
+    _matriz[1][1] = cos(grau);
 }
 
 void Transformacao::rotacao_em_torno_ponto(double grau, double Dx, double Dy) {
     auto r = Transformacao();
     auto d = Transformacao();
 
-    r.rotacao(grau);
+    r.rotacao_eixo_z(grau);
     d.translacao(Dx, Dy, 1);
     translacao(-Dx, -Dy, 1);
 
