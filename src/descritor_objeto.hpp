@@ -9,11 +9,10 @@ class DescritorObjeto {
 
   public:
 
-    const std::string end_of_object = "\t\t\t FIM OBJETO \t\t\t";
-    const std::string ponto = "pon";
-    const std::string reta = "ret";
-    const std::string poligono = "pol";
-    const std::string vertice = "ver ";
+    const std::string ponto = "p";
+    const std::string reta = "l";
+    const std::string poligono = "f";
+    const std::string vertice = "v";
 
     std::string descreve_objeto(Objeto obj);
 
@@ -23,6 +22,15 @@ class DescritorObjeto {
 
   std::string DescritorObjeto::descreve_objeto(Objeto obj) {
     std::string text;
+
+    for(size_t i = 0; i < obj.tamanho(); i++) {
+      auto coordenada = obj.coordenada(i);
+      text += vertice;
+      text += std::to_string(coordenada.valor(0)) + " ";
+      text += std::to_string(coordenada.valor(1)) + " ";
+      // TODO: verificar necessidade próxima linha
+      text += std::to_string(coordenada.valor(2)) + "\n";
+    }
 
     switch (obj.tipo()) {
       case PONTO:
@@ -38,17 +46,13 @@ class DescritorObjeto {
         break;
     }
 
-    text += "\n" + obj.nome() + "\n";
-
-    for(size_t i = 0; i < obj.tamanho(); i++) {
-      auto coordenada = obj.coordenada(i);
-      text += vertice;
-      text += std::to_string(coordenada.valor(0)) + " ";
-      text += std::to_string(coordenada.valor(1)) + "\n";
+    // TODO; implementar ideia do contador que fiz no papel
+    // TODO: lembrar de resetar contador no controlador
+    for (size_t i = 0; i < obj.tamanho(); i++) {
+      text += " " + std::to_string(i);
     }
 
-    text += obj.preenchido() ? "1\n" : "0\n";
-    text += end_of_object + "\n";
+    text += "\n o " + obj.nome() + "\n";
 
     return text;
   }

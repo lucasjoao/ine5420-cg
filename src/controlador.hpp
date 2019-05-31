@@ -282,7 +282,7 @@ void Controlador::editar_objeto_escalonamento(double Sx, double Sy, double Sz) {
     auto t = Transformacao::escalonamento_natural(
         c.valor(Coordenada::x), c.valor(Coordenada::y), c.valor(Coordenada::z), Sx, Sy, Sz
     );
-    
+
     obj.aplicar_tranformacao(t);
 
     atualizar_tela();
@@ -339,6 +339,7 @@ void Controlador::salvar_arquivo(std::string filename) {
     file.close();
 }
 
+// TODO: alterar esse método
 void Controlador::carregar_arquivo(std::string filename) {
     limpar_tela();
 
