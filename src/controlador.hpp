@@ -366,27 +366,28 @@ void Controlador::carregar_arquivo(std::string filename) {
 }
 
 void Controlador::criar_obj_do_arquivo(std::vector<std::string> obj) {
-    auto tamanho = obj.size();
-    auto linha_do_tipo = tamanho - 2;
-    auto nome_objeto = obj.at(tamanho - 1).substr(2, tamanho - 2);
+    int tamanho = obj.size();
+    std::string tipo_objeto = obj.at(tamanho - 2).substr(0, 1);
+    std::string linha_nome_objeto = obj.at(tamanho - 1);
+    std::string nome_objeto = linha_nome_objeto.substr(2, linha_nome_objeto.size() - 2);
 
-    if (obj.at(linha_do_tipo) == _descritor_objeto->ponto) {
+    if (tipo_objeto == _descritor_objeto->ponto) {
 
         auto point = _descritor_objeto->split_line_in_vector(obj.at(0));
         adicionar_ponto(nome_objeto, point.at(0), point.at(1), point.at(2));
 
-    } else if (obj.at(linha_do_tipo) == _descritor_objeto->reta) {
+    } else if (tipo_objeto == _descritor_objeto->reta) {
 
         auto point0 = _descritor_objeto->split_line_in_vector(obj.at(0));
         auto point1 = _descritor_objeto->split_line_in_vector(obj.at(1));
         adicionar_reta(nome_objeto, point0.at(0), point0.at(1), point0.at(2),
                        point1.at(0), point1.at(1), point1.at(2));
 
-    } else if (obj.at(linha_do_tipo) == _descritor_objeto->poligono) {
+    } else if (tipo_objeto == _descritor_objeto->poligono) {
 
         adicionar_poligono_novo();
 
-        for (size_t i = 0; i < linha_do_tipo; i++) {
+        for (size_t i = 0; i < tamanho - 2; i++) {
             auto point = _descritor_objeto->split_line_in_vector(obj.at(i));
             adicionar_poligono_adicionar_ponto(point.at(0), point.at(1), point.at(2));
         }
