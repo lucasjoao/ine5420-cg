@@ -337,6 +337,8 @@ void Controlador::salvar_arquivo(std::string filename) {
     }
 
     file.close();
+
+    _descritor_objeto->zera_contador_de_linha();
 }
 
 // TODO: alterar esse método
@@ -350,13 +352,13 @@ void Controlador::carregar_arquivo(std::string filename) {
 
     // obj ira possuir todas as linhas do arquivo que representam um objeto
     std::vector<std::string> obj;
-    while (getline(file, line)) {
-        obj.push_back(line);
-        if (line.find(_descritor_objeto->end_of_object) != std::string::npos) {
-            criar_obj_do_arquivo(obj);
-            obj.clear();
-        }
-    }
+    // while (getline(file, line)) {
+    //     obj.push_back(line);
+    //     if (line.find(_descritor_objeto->end_of_object) != std::string::npos) {
+    //         criar_obj_do_arquivo(obj);
+    //         obj.clear();
+    //     }
+    // }
 
     file.close();
 }

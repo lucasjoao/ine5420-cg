@@ -13,11 +13,15 @@ class DescritorObjeto {
     const std::string reta = "l";
     const std::string poligono = "f";
     const std::string vertice = "v";
+    const std::string objeto = "o";
+
+    size_t contador_de_linha = 0;
 
     std::string descreve_objeto(Objeto obj);
 
     std::vector<double> split_line_in_vector(std::string line);
 
+    void zera_contador_de_linha();
 };
 
   std::string DescritorObjeto::descreve_objeto(Objeto obj) {
@@ -25,11 +29,11 @@ class DescritorObjeto {
 
     for(size_t i = 0; i < obj.tamanho(); i++) {
       auto coordenada = obj.coordenada(i);
-      text += vertice;
+      text += vertice + " ";
       text += std::to_string(coordenada.valor(0)) + " ";
       text += std::to_string(coordenada.valor(1)) + " ";
-      // TODO: verificar necessidade próxima linha
       text += std::to_string(coordenada.valor(2)) + "\n";
+      contador_de_linha++;
     }
 
     switch (obj.tipo()) {
@@ -46,13 +50,12 @@ class DescritorObjeto {
         break;
     }
 
-    // TODO; implementar ideia do contador que fiz no papel
-    // TODO: lembrar de resetar contador no controlador
-    for (size_t i = 0; i < obj.tamanho(); i++) {
+    size_t max = contador_de_linha + 1;
+    for (size_t i = max - obj.tamanho(); i < max; i++) {
       text += " " + std::to_string(i);
     }
 
-    text += "\n o " + obj.nome() + "\n";
+    text += "\n" + objeto + " " + obj.nome() + "\n";
 
     return text;
   }
@@ -66,6 +69,10 @@ class DescritorObjeto {
     linestream >> tipo >> x >> y;
     std::vector<double> result {atof(x.c_str()), atof(y.c_str())};
     return result;
+  }
+
+  void DescritorObjeto::zera_contador_de_linha() {
+    contador_de_linha = 0;
   }
 
 #endif
