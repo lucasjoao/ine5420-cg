@@ -67,9 +67,6 @@ class Controlador {
 
         void selecionar_algoritmo_clipping_reta(int alg);
 
-        // TODO:
-        // proximos dois metodos nao sao usados se nao ha transmissao de poligonos preenchidos via arquivo
-        // como isso ainda eh uma duvida, entao eles serao mantidos enquanto a pendencia nao for resolvida
         void poligono_preenchido(bool valor);
         bool get_poligono_preenchido();
 
