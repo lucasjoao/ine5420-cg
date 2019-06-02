@@ -793,20 +793,20 @@
         </child>
         <child>
           <object class="GtkButton" id="btnImport">
-            <property name="label" translatable="yes">Limpar tela e
-abrir arquivo</property>
+            <property name="label" translatable="yes">Abrir .obj</property>
+            <property name="height_request">40</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
           </object>
           <packing>
-            <property name="x">5</property>
+            <property name="x">10</property>
             <property name="y">552</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="btnSave">
-            <property name="label" translatable="yes">Salvar arquivo</property>
+            <property name="label" translatable="yes">Salvar .obj</property>
             <property name="height_request">40</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -814,7 +814,7 @@ abrir arquivo</property>
             <property name="margin_bottom">13</property>
           </object>
           <packing>
-            <property name="x">105</property>
+            <property name="x">110</property>
             <property name="y">552</property>
           </packing>
         </child>
@@ -877,14 +877,14 @@ abrir arquivo</property>
         </child>
         <child>
           <object class="GtkButton" id="btnClean">
-            <property name="label" translatable="yes">Limpar tela</property>
+            <property name="label" translatable="yes">Limpar</property>
             <property name="height_request">40</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
           </object>
           <packing>
-            <property name="x">210</property>
+            <property name="x">215</property>
             <property name="y">552</property>
           </packing>
         </child>
