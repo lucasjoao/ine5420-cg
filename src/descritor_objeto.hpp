@@ -65,9 +65,10 @@ class DescritorObjeto {
     std::string tipo;
     std::string x;
     std::string y;
+    std::string z;
 
-    linestream >> tipo >> x >> y;
-    std::vector<double> result {atof(x.c_str()), atof(y.c_str())};
+    linestream >> tipo >> x >> y >> z;
+    std::vector<double> result {atof(x.c_str()), atof(y.c_str()), atof(z.c_str())};
     return result;
   }
 

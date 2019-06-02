@@ -67,6 +67,9 @@ class Controlador {
 
         void selecionar_algoritmo_clipping_reta(int alg);
 
+        // TODO:
+        // proximos dois metodos nao sao usados se nao ha transmissao de poligonos preenchidos via arquivo
+        // como isso ainda eh uma duvida, entao eles serao mantidos enquanto a pendencia nao for resolvida
         void poligono_preenchido(bool valor);
         bool get_poligono_preenchido();
 
@@ -341,7 +344,6 @@ void Controlador::salvar_arquivo(std::string filename) {
     _descritor_objeto->zera_contador_de_linha();
 }
 
-// TODO: alterar esse método
 void Controlador::carregar_arquivo(std::string filename) {
     limpar_tela();
 
@@ -352,54 +354,46 @@ void Controlador::carregar_arquivo(std::string filename) {
 
     // obj ira possuir todas as linhas do arquivo que representam um objeto
     std::vector<std::string> obj;
-    // while (getline(file, line)) {
-    //     obj.push_back(line);
-    //     if (line.find(_descritor_objeto->end_of_object) != std::string::npos) {
-    //         criar_obj_do_arquivo(obj);
-    //         obj.clear();
-    //     }
-    // }
+    while (getline(file, line)) {
+        obj.push_back(line);
+        if (line.substr(0, 1) == _descritor_objeto->objeto) {
+            criar_obj_do_arquivo(obj);
+            obj.clear();
+        }
+    }
 
     file.close();
 }
 
-// vector obj
-// posicao 0 possui o seu tipo
-// posicao 1 possui o nome do objeto
-// posicao 2 ate antepenultima possui os vertices
-// penultima posicao indica se eh preenchido (1) ou nao (0) - so para poligonos
-// ultima posicao possui um indicador de fim do objeto
-// ver DescritorObjeto::descreve_objeto
 void Controlador::criar_obj_do_arquivo(std::vector<std::string> obj) {
+    auto tamanho = obj.size();
+    auto linha_do_tipo = tamanho - 2;
+    auto nome_objeto = obj.at(tamanho - 1).substr(2, tamanho - 2);
 
-    // if (obj.at(0) == _descritor_objeto->ponto) {
+    if (obj.at(linha_do_tipo) == _descritor_objeto->ponto) {
 
-    //     auto point = _descritor_objeto->split_line_in_vector(obj.at(2));
-    //     adicionar_ponto(obj.at(1), point.at(0), point.at(1));
+        auto point = _descritor_objeto->split_line_in_vector(obj.at(0));
+        adicionar_ponto(nome_objeto, point.at(0), point.at(1), point.at(2));
 
-    // } else if (obj.at(0) == _descritor_objeto->reta) {
+    } else if (obj.at(linha_do_tipo) == _descritor_objeto->reta) {
 
-    //     auto point0 = _descritor_objeto->split_line_in_vector(obj.at(2));
-    //     auto point1 = _descritor_objeto->split_line_in_vector(obj.at(3));
-    //     adicionar_reta(obj.at(1), point0.at(0), point0.at(1),
-    //                    point1.at(0), point1.at(1));
+        auto point0 = _descritor_objeto->split_line_in_vector(obj.at(0));
+        auto point1 = _descritor_objeto->split_line_in_vector(obj.at(1));
+        adicionar_reta(nome_objeto, point0.at(0), point0.at(1), point0.at(2),
+                       point1.at(0), point1.at(1), point1.at(2));
 
-    // } else if (obj.at(0) == _descritor_objeto->poligono) {
+    } else if (obj.at(linha_do_tipo) == _descritor_objeto->poligono) {
 
-    //     adicionar_poligono(NOVO, "", 0, 0);
+        adicionar_poligono_novo();
 
-    //     // lembrar que:
-    //     // primeiro vertice sempre iniciara na posicao 2 do vetor obj
-    //     // e terminara na antepenultima posicao do vetor obj
-    //     for (size_t i = 2; i < obj.size() - 2; i++) {
-    //         auto point = _descritor_objeto->split_line_in_vector(obj.at(i));
-    //         adicionar_poligono(ADICIONAR_PONTO, "", point.at(0), point.at(1));
-    //     }
-    //     poligono_preenchido(obj.at(obj.size() - 2) == "1");
+        for (size_t i = 0; i < linha_do_tipo; i++) {
+            auto point = _descritor_objeto->split_line_in_vector(obj.at(i));
+            adicionar_poligono_adicionar_ponto(point.at(0), point.at(1), point.at(2));
+        }
 
-    //     adicionar_poligono(CONCLUIR, obj.at(1), 0, 0);
+        adicionar_poligono_concluir(nome_objeto);
 
-    // }
+    }
 }
 
 #endif
