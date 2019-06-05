@@ -44,6 +44,8 @@ class DescritorObjeto {
         text += reta;
         break;
       case POLIGONO:
+      case CURVA_BEZIER:
+      case CURVA_BSPLINE:
         text += poligono;
         break;
       default:

@@ -389,7 +389,14 @@ void Controlador::criar_obj_do_arquivo(std::vector<std::string> obj) {
             adicionar_poligono_adicionar_ponto(point.at(0), point.at(1), point.at(2));
         }
 
+        // necessario fazer esquema de armazenar se era preenchido ou nao por causa das curvas
+        // curvas sempre tem que ser adicionadas como poligonos nao preenchidos
+        // com isso, agora todos os poligonos importados sao nao preenchidos, ja que nao ha como
+        // diferenciar se eh uma curva ou nao
+        bool old_poligono_preenchido = _poligono_preenchido;
+        _poligono_preenchido = false;
         adicionar_poligono_concluir(nome_objeto);
+        _poligono_preenchido = old_poligono_preenchido;
 
     }
 }
