@@ -9,20 +9,32 @@ class DescritorObjeto {
 
   public:
 
-    const std::string end_of_object = "\t\t\t FIM OBJETO \t\t\t";
-    const std::string ponto = "pon";
-    const std::string reta = "ret";
-    const std::string poligono = "pol";
-    const std::string vertice = "ver ";
+    const std::string ponto = "p";
+    const std::string reta = "l";
+    const std::string poligono = "f";
+    const std::string vertice = "v";
+    const std::string objeto = "o";
+
+    size_t contador_de_linha = 0;
 
     std::string descreve_objeto(Objeto obj);
 
     std::vector<double> split_line_in_vector(std::string line);
 
+    void zera_contador_de_linha();
 };
 
   std::string DescritorObjeto::descreve_objeto(Objeto obj) {
     std::string text;
+
+    for(size_t i = 0; i < obj.tamanho(); i++) {
+      auto coordenada = obj.coordenada(i);
+      text += vertice + " ";
+      text += std::to_string(coordenada.valor(0)) + " ";
+      text += std::to_string(coordenada.valor(1)) + " ";
+      text += std::to_string(coordenada.valor(2)) + "\n";
+      contador_de_linha++;
+    }
 
     switch (obj.tipo()) {
       case PONTO:
@@ -32,23 +44,20 @@ class DescritorObjeto {
         text += reta;
         break;
       case POLIGONO:
+      case CURVA_BEZIER:
+      case CURVA_BSPLINE:
         text += poligono;
         break;
       default:
         break;
     }
 
-    text += "\n" + obj.nome() + "\n";
-
-    for(size_t i = 0; i < obj.tamanho(); i++) {
-      auto coordenada = obj.coordenada(i);
-      text += vertice;
-      text += std::to_string(coordenada.valor(0)) + " ";
-      text += std::to_string(coordenada.valor(1)) + "\n";
+    size_t max = contador_de_linha + 1;
+    for (size_t i = max - obj.tamanho(); i < max; i++) {
+      text += " " + std::to_string(i);
     }
 
-    text += obj.preenchido() ? "1\n" : "0\n";
-    text += end_of_object + "\n";
+    text += "\n" + objeto + " " + obj.nome() + "\n";
 
     return text;
   }
@@ -59,9 +68,14 @@ class DescritorObjeto {
     std::string x;
     std::string y;
 
+
     linestream >> tipo >> x >> y;
     std::vector<double> result {atof(x.c_str()), atof(y.c_str())};
     return result;
+  }
+
+  void DescritorObjeto::zera_contador_de_linha() {
+    contador_de_linha = 0;
   }
 
 #endif

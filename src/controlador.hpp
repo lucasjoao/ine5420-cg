@@ -359,6 +359,8 @@ void Controlador::salvar_arquivo(std::string filename) {
     }
 
     file.close();
+
+    _descritor_objeto->zera_contador_de_linha();
 }
 
 void Controlador::carregar_arquivo(std::string filename) {
@@ -373,7 +375,7 @@ void Controlador::carregar_arquivo(std::string filename) {
     std::vector<std::string> obj;
     while (getline(file, line)) {
         obj.push_back(line);
-        if (line.find(_descritor_objeto->end_of_object) != std::string::npos) {
+        if (line.substr(0, 1) == _descritor_objeto->objeto) {
             criar_obj_do_arquivo(obj);
             obj.clear();
         }
@@ -382,41 +384,41 @@ void Controlador::carregar_arquivo(std::string filename) {
     file.close();
 }
 
-// vector obj
-// posicao 0 possui o seu tipo
-// posicao 1 possui o nome do objeto
-// posicao 2 ate antepenultima possui os vertices
-// penultima posicao indica se eh preenchido (1) ou nao (0) - so para poligonos
-// ultima posicao possui um indicador de fim do objeto
-// ver DescritorObjeto::descreve_objeto
 void Controlador::criar_obj_do_arquivo(std::vector<std::string> obj) {
+    int tamanho = obj.size();
+    std::string tipo_objeto = obj.at(tamanho - 2).substr(0, 1);
+    std::string linha_nome_objeto = obj.at(tamanho - 1);
+    std::string nome_objeto = linha_nome_objeto.substr(2, linha_nome_objeto.size() - 2);
 
-    if (obj.at(0) == _descritor_objeto->ponto) {
+    if (tipo_objeto == _descritor_objeto->ponto) {
 
-        auto point = _descritor_objeto->split_line_in_vector(obj.at(2));
-        adicionar_ponto(obj.at(1), point.at(0), point.at(1));
+        auto point = _descritor_objeto->split_line_in_vector(obj.at(0));
+        adicionar_ponto(nome_objeto, point.at(0), point.at(1));
 
-    } else if (obj.at(0) == _descritor_objeto->reta) {
+    } else if (tipo_objeto == _descritor_objeto->reta) {
 
-        auto point0 = _descritor_objeto->split_line_in_vector(obj.at(2));
-        auto point1 = _descritor_objeto->split_line_in_vector(obj.at(3));
-        adicionar_reta(obj.at(1), point0.at(0), point0.at(1),
+        auto point0 = _descritor_objeto->split_line_in_vector(obj.at(0));
+        auto point1 = _descritor_objeto->split_line_in_vector(obj.at(1));
+        adicionar_reta(nome_objeto, point0.at(0), point0.at(1),
                        point1.at(0), point1.at(1));
 
-    } else if (obj.at(0) == _descritor_objeto->poligono) {
+    } else if (tipo_objeto == _descritor_objeto->poligono) {
 
         adicionar_poligono(NOVO, "", 0, 0);
 
-        // lembrar que:
-        // primeiro vertice sempre iniciara na posicao 2 do vetor obj
-        // e terminara na antepenultima posicao do vetor obj
-        for (size_t i = 2; i < obj.size() - 2; i++) {
+        for (size_t i = 0; i < tamanho - 2; i++) {
             auto point = _descritor_objeto->split_line_in_vector(obj.at(i));
             adicionar_poligono(ADICIONAR_PONTO, "", point.at(0), point.at(1));
         }
-        poligono_preenchido(obj.at(obj.size() - 2) == "1");
 
+        // necessario fazer esquema de armazenar se era preenchido ou nao por causa das curvas
+        // curvas sempre tem que ser adicionadas como poligonos nao preenchidos
+        // com isso, agora todos os poligonos importados sao nao preenchidos, ja que nao ha como
+        // diferenciar se eh uma curva ou nao
+        bool old_poligono_preenchido = _poligono_preenchido;
+        _poligono_preenchido = false;
         adicionar_poligono(CONCLUIR, obj.at(1), 0, 0);
+        _poligono_preenchido = old_poligono_preenchido;
 
     }
 }

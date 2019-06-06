@@ -8,6 +8,13 @@
 GtkBuilder *builder;
 GtkWidget *main_window;
 
+/* ---------- CONSOLE PARA LOG ---------- */
+
+GtkWidget *txtConsole;
+GtkScrolledWindow *scrolledConsole;
+
+void show_mensagem_console(std::string msg);
+
 /* ----------- ESCOLHA DO CLIPPING DE RETA ------------ */
 
 GtkToggleButton *cb_alg_liang_barsky;
@@ -54,6 +61,7 @@ GtkButton* btn_rot_pnt;
 
 GtkEntry* entry_translacao_x;
 GtkEntry* entry_translacao_y;
+
 GtkEntry* entry_escalonamento_x;
 GtkEntry* entry_escalonamento_y;
 
@@ -120,26 +128,21 @@ GtkLabel* lbl_quantidade_ponto_curva;
 GtkEntry* entry_ponto_nome;
 GtkEntry* entry_ponto_x1;
 GtkEntry* entry_ponto_y1;
-GtkEntry* entry_ponto_z1;
 
 GtkEntry* entry_reta_nome;
 GtkEntry* entry_reta_inicio_x1;
 GtkEntry* entry_reta_inicio_y1;
-GtkEntry* entry_reta_inicio_z1;
 GtkEntry* entry_reta_final_x1;
 GtkEntry* entry_reta_final_y1;
-GtkEntry* entry_reta_final_z1;
 
 GtkEntry* entry_poligono_nome;
 GtkEntry* entry_poligono_x1;
 GtkEntry* entry_poligono_y1;
-GtkEntry* entry_poligono_z1;
 GtkToggleButton *cb_plgn_preenchido;
 
 GtkEntry* entry_curva_nome;
 GtkEntry* entry_curva_x1;
 GtkEntry* entry_curva_y1;
-GtkEntry* entry_curva_z1;
 
 /* ---------- ENTRADAS MODAIS DE ROTACAO ---------- */;
 GtkEntry* entry_rot_mundo;
@@ -228,6 +231,11 @@ int main (int argc, char *argv[]) {
 
   gtk_widget_show(main_window);
 
+  /* ---------- CONSOLE PARA LOG ---------- */
+
+  txtConsole = GTK_WIDGET(gtk_builder_get_object(builder, "txtConsole"));
+  scrolledConsole = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder, "scrolledConsole"));
+
   /* ---------- ARQUIVOS ---------- */
   btn_save_file = GTK_BUTTON(gtk_builder_get_object(builder, "btnSave"));
   btn_load_file = GTK_BUTTON(gtk_builder_get_object(builder, "btnImport"));
@@ -273,6 +281,7 @@ int main (int argc, char *argv[]) {
 
   entry_translacao_x = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoX"));
   entry_translacao_y = GTK_ENTRY(gtk_builder_get_object(builder, "entryTranslacaoY"));
+
   entry_escalonamento_x = GTK_ENTRY(gtk_builder_get_object(builder, "entryEscalonamentoX"));
   entry_escalonamento_y = GTK_ENTRY(gtk_builder_get_object(builder, "entryEscalonamentoY"));
 
@@ -365,25 +374,20 @@ int main (int argc, char *argv[]) {
   entry_ponto_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoNome"));
   entry_ponto_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoX1"));
   entry_ponto_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoY1"));
-  entry_ponto_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoZ1"));
 
   entry_reta_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaNome"));
   entry_reta_inicio_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaInicioX1"));
   entry_reta_inicio_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaInicioY1"));
-  entry_reta_inicio_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaInicioZ1"));
   entry_reta_final_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalX1"));
   entry_reta_final_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalY1"));
-  entry_reta_final_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalZ1"));
 
   entry_poligono_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoNome"));
   entry_poligono_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoX1"));
   entry_poligono_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoY1"));
-  entry_poligono_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoZ1"));
 
   entry_curva_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaNome"));
   entry_curva_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaX1"));
   entry_curva_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaY1"));
-  entry_curva_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaZ1"));
   radio_curva_bezier = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "radioCurvaBezier"));
   radio_curva_bspline = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "radioCurvaBSpline"));
 
@@ -415,6 +419,13 @@ int main (int argc, char *argv[]) {
   return 0;
 }
 
+void show_mensagem_console(std::string msg) {
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(txtConsole));
+  GtkTextIter end;
+  gtk_text_buffer_get_end_iter(buffer, &end);
+  gtk_text_buffer_insert(buffer, &end, msg.c_str(), -1);
+}
+
 void btn_save_file_clicked(GtkWidget *widget, gpointer data) {
   GtkWidget *dialog;
   GtkFileChooser *chooser;
@@ -438,6 +449,7 @@ void btn_save_file_clicked(GtkWidget *widget, gpointer data) {
   }
 
   gtk_widget_destroy(dialog);
+  show_mensagem_console("Arquivo .obj salvo!\n");
 }
 
 void btn_load_file_clicked(GtkWidget *widget, gpointer data) {
@@ -459,6 +471,7 @@ void btn_load_file_clicked(GtkWidget *widget, gpointer data) {
   }
 
   gtk_widget_destroy(dialog);
+  show_mensagem_console("Tela 'limpada' e arquivo .obj carregado!\n");
 }
 
 void btn_rotacao_window_ok_clicked(GtkWidget *widget, gpointer data) {
@@ -466,35 +479,43 @@ void btn_rotacao_window_ok_clicked(GtkWidget *widget, gpointer data) {
 
   if (grau) {
     controlador->rotacao_window(grau);
+    show_mensagem_console("Window rotacionada " + std::to_string(grau) + " graus!\n");
   }
 }
 
 void btn_zoom_in_clicked(GtkWidget *widget, gpointer data) {
   controlador->zoom(direcao_zoom_t::IN);
+  show_mensagem_console("Zoom in realizado!\n");
 }
 
 void btn_zoom_out_clicked(GtkWidget *widget, gpointer data) {
   controlador->zoom(direcao_zoom_t::OUT);
+  show_mensagem_console("Zoom out realizado!\n");
 }
 
 void btn_up_clicked(GtkWidget *widget, gpointer data) {
   controlador->navagacao(direcao_navegacao_t::UP);
+  show_mensagem_console("Movimentação para cima realizada!\n");
 }
 
 void btn_down_clicked(GtkWidget *widget, gpointer data) {
   controlador->navagacao(direcao_navegacao_t::DOWN);
+  show_mensagem_console("Movimentação para baixo realizada!\n");
 }
 
 void btn_left_clicked(GtkWidget *widget, gpointer data) {
   controlador->navagacao(direcao_navegacao_t::LEFT);
+  show_mensagem_console("Movimentação para esquerda realizada!\n");
 }
 
 void btn_right_clicked(GtkWidget *widget, gpointer data) {
   controlador->navagacao(direcao_navegacao_t::RIGHT);
+  show_mensagem_console("Movimentação para direita realizada!\n");
 }
 
 void btn_clean_screen_clicked(GtkWidget *widget, gpointer data) {
   controlador->limpar_tela();
+  show_mensagem_console("Tela 'limpada' com sucesso!\n");
 }
 
 void btn_ponto_clicked(GtkWidget *widget, gpointer data) {
@@ -533,17 +554,14 @@ void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
   auto x2 = atof(gtk_entry_get_text(entry_reta_final_x1));
   auto y2 = atof(gtk_entry_get_text(entry_reta_final_y1));
 
-
   gtk_entry_set_text(entry_reta_nome,"");
   gtk_entry_set_text(entry_reta_inicio_x1,"");
   gtk_entry_set_text(entry_reta_inicio_y1,"");
-  gtk_entry_set_text(entry_reta_inicio_z1,"");
   gtk_entry_set_text(entry_reta_final_x1,"");
   gtk_entry_set_text(entry_reta_final_y1,"");
-  gtk_entry_set_text(entry_reta_final_z1,"");
-
 
   controlador->adicionar_reta(nome, x1, y1, x2, y2);
+  show_mensagem_console("Reta adicionada!\n");
 }
 
 void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
@@ -554,10 +572,9 @@ void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_ponto_nome,"");
   gtk_entry_set_text(entry_ponto_x1,"");
   gtk_entry_set_text(entry_ponto_y1,"");
-  gtk_entry_set_text(entry_ponto_z1,"");
 
   controlador->adicionar_ponto(nome, x1, y1);
-
+  show_mensagem_console("Ponto adicionado!\n");
 }
 
 void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
@@ -567,11 +584,10 @@ void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_poligono_nome,"");
   gtk_entry_set_text(entry_poligono_x1,"");
   gtk_entry_set_text(entry_poligono_y1,"");
-  gtk_entry_set_text(entry_poligono_z1,"");
 
   controlador->adicionar_poligono(operacao_obj_t::CONCLUIR, nome, 0, 0);
   controlador->adicionar_poligono(operacao_obj_t::NOVO, "", 0, 0);
-
+  show_mensagem_console("Polígono adicionado!\n");
 }
 
 void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
@@ -581,10 +597,9 @@ void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
 
   gtk_entry_set_text(entry_poligono_x1,"");
   gtk_entry_set_text(entry_poligono_y1,"");
-  gtk_entry_set_text(entry_poligono_z1,"");
 
   controlador->adicionar_poligono(operacao_obj_t::ADICIONAR_PONTO, "", x1, y1);
-
+  show_mensagem_console("Ponto adicionado para compor o polígono!\n");
 }
 
 void btn_curva_clicked(GtkWidget *widget, gpointer data) {
@@ -594,7 +609,7 @@ void btn_curva_clicked(GtkWidget *widget, gpointer data) {
 }
 
 void btn_curva_voltar_clicked(GtkWidget *widget, gpointer data) {
-  controlador->adicionar_curva_cancelar();
+  controlador->adicionar_poligono(operacao_obj_t::CANCELAR, "", 0, 0);
   gtk_widget_hide(curva_window);
 }
 
@@ -604,13 +619,14 @@ void btn_curva_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_curva_nome,"");
   gtk_entry_set_text(entry_curva_x1,"");
   gtk_entry_set_text(entry_curva_y1,"");
-  gtk_entry_set_text(entry_curva_z1,"");
   gtk_label_set_text(lbl_quantidade_ponto_curva,"Quantidade de ponto: 0");
 
-  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_curva_bezier)))
+  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_curva_bezier))) {
     controlador->adicionar_curva_concluir(tipo_t::CURVA_BEZIER, nome);
-  else
+  } else {
     controlador->adicionar_curva_concluir(tipo_t::CURVA_BSPLINE, nome);
+    show_mensagem_console("Curva bspline adicionada!\n");
+  }
 
   controlador->adicionar_curva_novo();
 }
@@ -621,7 +637,6 @@ void btn_curva_add_ponto_clicked(GtkWidget *widget, gpointer data) {
 
   gtk_entry_set_text(entry_curva_x1,"");
   gtk_entry_set_text(entry_curva_y1,"");
-  gtk_entry_set_text(entry_curva_z1,"");
 
   controlador->adicionar_curva_adicionar_ponto(x1,y1);
   std::string text = "Quantidade de ponto: ";
@@ -657,6 +672,7 @@ void btn_edit_confirmar_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_escalonamento_y,"");
 
   gtk_widget_hide(edit_window);
+  show_mensagem_console("Edição realizada com sucesso!\n");
 }
 
 void btn_rot_mundo_clicked(GtkWidget *widget, gpointer data) {
@@ -684,6 +700,7 @@ void btn_rot_mundo_rotacionar_clicked(GtkWidget *widget, gpointer data) {
   controlador->editar_objeto_rotacao_entorno_centro_mundo(graus);
   gtk_entry_set_text(entry_rot_mundo, "");
   gtk_widget_hide(rot_mundo_window);
+  show_mensagem_console("Objeto rotacionado em torno do centro do mundo " + std::to_string(graus) + " graus!\n");
 }
 
 void btn_rot_obj_voltar_clicked(GtkWidget *widget, gpointer data) {
@@ -696,6 +713,7 @@ void btn_rot_obj_rotacionar_clicked(GtkWidget *widget, gpointer data) {
   controlador->editar_objeto_rotacao_entorno_centro_objeto(graus);
   gtk_entry_set_text(entry_rot_obj, "");
   gtk_widget_hide(rot_obj_window);
+  show_mensagem_console("Objeto rotacionado em torno do centro do objeto " + std::to_string(graus) + " graus!\n");
 }
 
 void btn_rot_pnt_voltar_clicked(GtkWidget *widget, gpointer data) {
@@ -715,6 +733,7 @@ void btn_rot_pnt_rotacionar_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_rot_pnt_y1, "");
 
   gtk_widget_hide(rot_pnt_window);
+  show_mensagem_console("Objeto rotacionado em torno de um ponto " + std::to_string(graus) + " graus!\n");
 }
 
 

@@ -139,8 +139,10 @@ void Viewport::desenhar_poligono(Objeto &obj) {
         cairo_line_to(cairo, c1.valor(0) + 10, c1.valor(1) + 10);
     }
 
-    // fecha o poligono
-    cairo_line_to(cairo, c0.valor(0) + 10, c0.valor(1) + 10);
+    // fecha o poligono quando se trata realmente de um poligono
+    if (obj.tamanho_scn() < 100) {
+        cairo_line_to(cairo, c0.valor(0) + 10, c0.valor(1) + 10);
+    }
 
     // se o poligono eh de dois pontos ou menos, entao nao desenha com fill
     if (obj.preenchido() && obj.tamanho_scn() > 2) {
@@ -166,7 +168,7 @@ void Viewport::desenhar_curva(Objeto &obj) {
         cairo_line_to(cairo, c1.valor(0) + 10, c1.valor(1) + 10);
     }
     cairo_stroke(cairo);
-} 
+}
 
 Coordenada Viewport::transformada_viewport(Coordenada &c) {
 
