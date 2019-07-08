@@ -128,21 +128,26 @@ GtkLabel* lbl_quantidade_ponto_curva;
 GtkEntry* entry_ponto_nome;
 GtkEntry* entry_ponto_x1;
 GtkEntry* entry_ponto_y1;
+GtkEntry* entry_ponto_z1;
 
 GtkEntry* entry_reta_nome;
 GtkEntry* entry_reta_inicio_x1;
 GtkEntry* entry_reta_inicio_y1;
+GtkEntry* entry_reta_inicio_z1;
 GtkEntry* entry_reta_final_x1;
 GtkEntry* entry_reta_final_y1;
+GtkEntry* entry_reta_final_z1;
 
 GtkEntry* entry_poligono_nome;
 GtkEntry* entry_poligono_x1;
 GtkEntry* entry_poligono_y1;
+GtkEntry* entry_poligono_z1;
 GtkToggleButton *cb_plgn_preenchido;
 
 GtkEntry* entry_curva_nome;
 GtkEntry* entry_curva_x1;
 GtkEntry* entry_curva_y1;
+GtkEntry* entry_curva_z1;
 
 /* ---------- ENTRADAS MODAIS DE ROTACAO ---------- */;
 GtkEntry* entry_rot_mundo;
@@ -374,20 +379,25 @@ int main (int argc, char *argv[]) {
   entry_ponto_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoNome"));
   entry_ponto_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoX1"));
   entry_ponto_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoY1"));
+  entry_ponto_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPontoZ1"));
 
   entry_reta_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaNome"));
   entry_reta_inicio_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaInicioX1"));
   entry_reta_inicio_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaInicioY1"));
+  entry_reta_inicio_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaInicioZ1"));
   entry_reta_final_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalX1"));
   entry_reta_final_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalY1"));
+  entry_reta_final_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryRetaFinalZ1"));
 
   entry_poligono_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoNome"));
   entry_poligono_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoX1"));
   entry_poligono_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoY1"));
+  entry_poligono_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryPoligonoZ1"));
 
   entry_curva_nome = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaNome"));
   entry_curva_x1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaX1"));
   entry_curva_y1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaY1"));
+  entry_curva_z1 = GTK_ENTRY(gtk_builder_get_object(builder, "entryCurvaZ1"));
   radio_curva_bezier = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "radioCurvaBezier"));
   radio_curva_bspline = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "radioCurvaBSpline"));
 
@@ -557,8 +567,10 @@ void btn_reta_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_reta_nome,"");
   gtk_entry_set_text(entry_reta_inicio_x1,"");
   gtk_entry_set_text(entry_reta_inicio_y1,"");
+  gtk_entry_set_text(entry_reta_inicio_z1,"");
   gtk_entry_set_text(entry_reta_final_x1,"");
   gtk_entry_set_text(entry_reta_final_y1,"");
+  gtk_entry_set_text(entry_reta_final_z1,"");
 
   controlador->adicionar_reta(nome, x1, y1, x2, y2);
   show_mensagem_console("Reta adicionada!\n");
@@ -572,6 +584,7 @@ void btn_ponto_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_ponto_nome,"");
   gtk_entry_set_text(entry_ponto_x1,"");
   gtk_entry_set_text(entry_ponto_y1,"");
+  gtk_entry_set_text(entry_ponto_z1,"");
 
   controlador->adicionar_ponto(nome, x1, y1);
   show_mensagem_console("Ponto adicionado!\n");
@@ -584,6 +597,7 @@ void btn_plgn_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_poligono_nome,"");
   gtk_entry_set_text(entry_poligono_x1,"");
   gtk_entry_set_text(entry_poligono_y1,"");
+  gtk_entry_set_text(entry_poligono_z1,"");
 
   controlador->adicionar_poligono(operacao_obj_t::CONCLUIR, nome, 0, 0);
   controlador->adicionar_poligono(operacao_obj_t::NOVO, "", 0, 0);
@@ -597,6 +611,7 @@ void btn_plgn_add_ponto_clicked(GtkWidget *widget, gpointer data) {
 
   gtk_entry_set_text(entry_poligono_x1,"");
   gtk_entry_set_text(entry_poligono_y1,"");
+  gtk_entry_set_text(entry_poligono_z1,"");
 
   controlador->adicionar_poligono(operacao_obj_t::ADICIONAR_PONTO, "", x1, y1);
   show_mensagem_console("Ponto adicionado para compor o polígono!\n");
@@ -619,6 +634,7 @@ void btn_curva_incluir_clicked(GtkWidget *widget, gpointer data) {
   gtk_entry_set_text(entry_curva_nome,"");
   gtk_entry_set_text(entry_curva_x1,"");
   gtk_entry_set_text(entry_curva_y1,"");
+  gtk_entry_set_text(entry_curva_z1,"");
   gtk_label_set_text(lbl_quantidade_ponto_curva,"Quantidade de ponto: 0");
 
   if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio_curva_bezier))) {
@@ -637,6 +653,7 @@ void btn_curva_add_ponto_clicked(GtkWidget *widget, gpointer data) {
 
   gtk_entry_set_text(entry_curva_x1,"");
   gtk_entry_set_text(entry_curva_y1,"");
+  gtk_entry_set_text(entry_curva_z1,"");
 
   controlador->adicionar_curva_adicionar_ponto(x1,y1);
   std::string text = "Quantidade de ponto: ";

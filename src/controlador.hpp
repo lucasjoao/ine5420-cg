@@ -417,7 +417,7 @@ void Controlador::criar_obj_do_arquivo(std::vector<std::string> obj) {
         // diferenciar se eh uma curva ou nao
         bool old_poligono_preenchido = _poligono_preenchido;
         _poligono_preenchido = false;
-        adicionar_poligono(CONCLUIR, obj.at(1), 0, 0);
+        adicionar_poligono(CONCLUIR, nome_objeto, 0, 0);
         _poligono_preenchido = old_poligono_preenchido;
 
     }
